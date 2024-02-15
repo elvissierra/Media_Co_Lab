@@ -1,3 +1,5 @@
 /.venv
 /examples.txt
 /.env
+__pycache__
+/.python-version
