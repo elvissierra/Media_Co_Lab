@@ -85,11 +85,11 @@ WSGI_APPLICATION = "test_system.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "testsystemdb",  # env("DB_NAME"),
-        "USER": "pgusername",  # env("DB_USER"),
-        "PASSWORD": "urawizard*",  # env("DB_PASSWORD"),
-        "HOST": "database-2.caqjqpz4iiwz.us-east-2.rds.amazonaws.com",  # env("DB_HOST"),
-        "PORT": "5432",  # env("DB_PORT"),
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
 }
 
