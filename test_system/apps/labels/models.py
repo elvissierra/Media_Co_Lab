@@ -38,9 +38,3 @@ class Label(models.Model):
                 return ValidationError("Invalid input.")
         else:
             self.custom_preset_type == None
-
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        self.layer_width = self.bottom_depth - self.top_depth
-        super().save(*args, **kwargs)
