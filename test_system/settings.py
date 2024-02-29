@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "test_system.apps.users",
     "test_system.apps.teams",
     "test_system.apps.organizations",
+    "test_system.apps.medias"
 ]
 
 MIDDLEWARE = [

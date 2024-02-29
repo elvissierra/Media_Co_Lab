@@ -24,5 +24,5 @@ urlpatterns = [
     path("api/labels/", include("test_system.apis.labels.urls")),
     path("api/organizations/", include("test_system.apis.organizations.urls")),
     path("api/labels/", include("test_system.apis.labels.urls")),
-    path("api/medias/", include("test_system.apis.files.urls")),
+    path("api/medias/", include("test_system.apis.medias.urls")),
 ]
