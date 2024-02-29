@@ -27,7 +27,7 @@ class Label(models.Model):
         max_length=255, choices=PresetTypes.choices, blank=False, null=False
     )
     custom_preset_type = models.CharField(max_length=255, null=True, blank=True)
-    preset_tag = models.Choices(max_length=255 , choices=PresetTags.choices, null=False, blank=False)
+    preset_tag = models.CharField(max_length=255 , choices=PresetTags.choices, null=False, blank=False)
     
 
     def clean(self):
