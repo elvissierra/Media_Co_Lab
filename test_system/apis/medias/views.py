@@ -7,7 +7,7 @@ from rest_framework import status
 
 class MediasGetCreateView(APIView):
     def get (self, request, format=None):
-        medias = Medias.get_object.all(request)
+        medias = Medias.objects.all()
         serializer = MediasSerializer(medias, many=True)
         return Response(serializer.data)
     
