@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from test_system.apps.medias.models import Medias
 
 class PresetTypes(models.TextChoices):
     ART = "art"
@@ -28,7 +28,7 @@ class Label(models.Model):
     )
     custom_preset_type = models.CharField(max_length=255, null=True, blank=True)
     preset_tag = models.CharField(max_length=255 , choices=PresetTags.choices, null=False, blank=False)
-    
+    medias = models.ForeignKey(Medias, related_name= "labels", on_delete=models.CASCADE)
 
     def clean(self):
         if self.preset_type == PresetTypes.CUSTOM:

@@ -8,6 +8,5 @@ class Medias(models.Model):
     title = models.CharField(max_length=255)
     id = models.UUIDField(default= uuid.uuid4, primary_key=True)
     description = models.CharField(max_length=255)
-    label = models.ForeignKey(Label, related_name="medias", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name="medias", on_delete=models.CASCADE)
 
