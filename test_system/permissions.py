@@ -1,6 +1,12 @@
 from rest_framework.permissions import BasePermission
 from datetime import datetime
 
+#allowed to create
+
+#allowed to label
+
+#allowed to delete/remove
+
 class OrganizationPermission(BasePermission):
 
     def has_permission(self, request, view):
