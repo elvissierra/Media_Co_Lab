@@ -4,9 +4,11 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from test_system.permissions import ObjectPermission
 
 
 class UsersGetCreateView(APIView):
+
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -21,6 +23,8 @@ class UsersGetCreateView(APIView):
 
 
 class UserGetUpdateDeleteView(APIView):
+    permission_classes=[ObjectPermission]
+
     def get_object(self, user_id):
         try:
             return User.objects.get(id=user_id)
