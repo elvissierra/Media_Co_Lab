@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
 from test_system.apps.medias.models import Medias
+from test_system.apps.users.models import CustomUser
 
 class PresetTypes(models.TextChoices):
     ART = "art"
@@ -22,7 +23,7 @@ class PresetTags(models.TextChoices):
 class Label(models.Model):
     title = models.CharField(max_length=255)
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    user = models.CharField(max_length=255, blank=False, null=False)
+    user = models.ForeignKey(CustomUser, related_name="labels", on_delete=models.CASCADE)
     preset_type = models.CharField(
         max_length=255, choices=PresetTypes.choices, blank=False, null=False
     )
