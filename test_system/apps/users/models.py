@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(user=self._db)
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password, **extra_fields):
@@ -29,14 +29,16 @@ class CustomUser(AbstractUser):
         Organization,
         related_name="users",
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
-    objects= UserManager
+    objects= UserManager()
 
     username = None
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["name"]
 
     def __str__(self):
         return self.email

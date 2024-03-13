@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     "test_system.apps.users",
     "test_system.apps.teams",
     "test_system.apps.organizations",
-    "test_system.apps.medias"
+    "test_system.apps.medias",
+    "django_extensions"
 ]
 
 MIDDLEWARE = [
@@ -95,6 +96,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -114,6 +116,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
