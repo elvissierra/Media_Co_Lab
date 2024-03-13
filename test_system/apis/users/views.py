@@ -1,5 +1,5 @@
 from test_system.apps.users.models import CustomUser
-from test_system.apis.users.serializers import UserSerializer, UserRegisterSerializer
+from test_system.apis.users.serializers import UserSerializer, UserRegistrationSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +15,7 @@ class UsersGetCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = UserRegisterSerializer(data=request.data)
+        serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
