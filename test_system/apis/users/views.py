@@ -1,5 +1,5 @@
 from test_system.apps.users.models import CustomUser
-from test_system.apis.users.serializers import UserSerializer, UserRegistrationSerializer
+from test_system.apis.users.serializers import UserSerializer, UserRegistrationSerializer, UsersGetSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,7 +11,7 @@ class UsersGetCreateView(APIView):
 
     def get(self, request, format=None):
         users = CustomUser.objects.all()
-        serializer = UserSerializer(users, many=True)
+        serializer = UsersGetSerializer(users, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -38,7 +38,7 @@ class UserGetUpdateDeleteView(APIView):
 
     def put(self, request, user_id, format=None):
         user = self.get_object(user_id)
-        serializer = UserRegisterSerializer(user, data=request.data)
+        serializer = UserRegistrationSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
