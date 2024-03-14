@@ -2,7 +2,7 @@ from rest_framework import serializers
 from test_system.apps.users.models import CustomUser
 from test_system.apps.organizations.models import Organization
 
-class UserRegistrationSerializer(serializers.BaseSerializer):
+class UserRegistrationSerializer(serializers.ModelSerializer):
     organization_id = serializers.UUIDField(write_only=True)
 
     class Meta:
@@ -30,12 +30,12 @@ class UsersGetSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
         def to_representation(self, instance):
-            rm_data = super().to_representation(instance)
+            data = super().to_representation(instance)
             if not self.context("request").user.is_superuser:
                 sensitive_fields = ["password", "last_login", "is_superuser", "is_staff", "is_active", "date_joined", "email", "groups"]
                 for field in sensitive_fields:
-                    rm_data.pop(field, None)
-            return rm_data
+                    data.pop(field, None)
+            return data
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
