@@ -8,8 +8,32 @@ from test_system.permissions import ObjectPermission
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate
+from rest_framework.authentication import TokenAuthentication
 
+
+#user login
+class LoginView(APIView):
+    def post(self, request, format=None):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response ({
+                    "token": token.key,
+                    "user_id": user.pk,
+                    "email": user.email
+            })
+        else:
+            return Response({"error": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+class LogoutView(APIView):
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request, format=None):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
 
 class UsersGetCreateView(APIView):
 
