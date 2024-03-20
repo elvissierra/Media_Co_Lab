@@ -8,10 +8,11 @@ from test_system.permissions import ObjectPermission
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.authentication import TokenAuthentication
-
+from rest_framework.permissions import AllowAny
 
 #user login
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request, format=None):
         email = request.data.get("email")
         password = request.data.get("password")

@@ -22,7 +22,8 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     team = models.ForeignKey(Team, related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
     organization = models.ForeignKey(
@@ -33,12 +34,7 @@ class CustomUser(AbstractUser):
         blank=True,
     )
     objects= UserManager()
-
-    username = None
     email = models.EmailField(unique=True)
-
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name"]
 
     def __str__(self):
         return self.email
