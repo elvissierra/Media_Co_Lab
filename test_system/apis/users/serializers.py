@@ -7,9 +7,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["name", "id", "team", "organization_id"]
+        fields = ["first_name", "last_name", "id", "team", "organization_id"]
 
-    def validate_org_id(self, value):
+    def validate_organization_id(self, value):
         try:
             organization = Organization.objects.get(id=value)
             if not organization.is_approved:
