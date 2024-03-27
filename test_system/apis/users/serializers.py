@@ -7,7 +7,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["first_name", "last_name", "id", "team", "organization_id"]
+        fields = ["first_name", "last_name", "id", "team", "organization_id", "email"]
 
     def validate_organization_id(self, value):
         try:
@@ -18,7 +18,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Organization doesnt yet exist.")
         return value
 
-    def create_user(self, validated_data):
+    def create(self, validated_data):
         organization_id = validated_data.pop("organization_id")
         organization = Organization.objects.get(id=organization_id)
         user = CustomUser.objects.create_user(**validated_data, organization=organization)

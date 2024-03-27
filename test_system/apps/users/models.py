@@ -6,12 +6,14 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(self, username, email, password=None, organization=None, **extra_fields):
         if not email:
             raise ValueError("The email must be provided.")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        if organization is not None:
+            user.organization = organization
         user.save(using=self.db)
         return user
 
@@ -29,7 +31,7 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=255)
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     team = models.ForeignKey(Team, related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
-    organization = models.ForeignKey( Organization, related_name="users", on_delete=models.CASCADE, null=True, blank=True,)
+    organization = models.ForeignKey(Organization, related_name="users", on_delete=models.CASCADE, null=True, blank=True,)
     email = models.EmailField(unique=True)
 
     objects= UserManager()
