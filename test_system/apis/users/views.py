@@ -11,6 +11,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny
 
 #user login
+"""
 class LoginView(APIView):
     permission_classes = [AllowAny]
     def post(self, request, format=None):
@@ -33,7 +34,7 @@ class LogoutView(APIView):
     def post(self, request, format=None):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
-
+"""
 class UsersGetCreateView(APIView):
 
     def get(self, request, format=None):
@@ -49,7 +50,7 @@ class UsersGetCreateView(APIView):
 
 
 class UserGetUpdateDeleteView(APIView):
-    permission_classes=[ObjectPermission]
+    #permission_classes=[ObjectPermission]
 
     def get_object(self, user_id):
         try:

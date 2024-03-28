@@ -33,7 +33,9 @@ class CustomUser(AbstractUser):
     team = models.ForeignKey(Team, related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
     organization = models.ForeignKey(Organization, related_name="users", on_delete=models.CASCADE, null=True, blank=True,)
     email = models.EmailField(unique=True)
-
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
     objects= UserManager()
 
     def __str__(self):

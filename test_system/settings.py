@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework.authtoken",
+    #"rest_framework.authtoken",
     "test_system.apps.labels",
     "test_system.apps.users",
     "test_system.apps.teams",
@@ -83,11 +83,11 @@ TEMPLATES = [
 WSGI_APPLICATION = "test_system.wsgi.application"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES":[
-        "rest_framework.authentication.TokenAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
-    ),
+    #"DEFAULT_AUTHENTICATION_CLASSES":[
+    #   "rest_framework.authentication.TokenAuthentication",
+    #],
+    #"DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
+    #),
 }
 
 # Database
