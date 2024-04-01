@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     "test_system.apps.teams",
     "test_system.apps.organizations",
     "test_system.apps.medias",
-    "django_extensions"
+    "django_extensions",
+    "test_system"
 ]
 
 MIDDLEWARE = [
