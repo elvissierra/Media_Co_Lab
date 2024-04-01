@@ -9,32 +9,28 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny
+from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 #user login
-"""
 class LoginView(APIView):
-    permission_classes = [AllowAny]
-    def post(self, request, format=None):
-        email = request.data.get("email")
-        password = request.data.get("password")
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({
-                "token": token.key,
-                "user_id": user.pk,
-                "email": user.email
-            })
-        else:
-            return Response({"error": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
-
-class LogoutView(APIView):
     authentication_classes = [TokenAuthentication]
 
-    def post(self, request, format=None):
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-"""
+    def post(self, request):
+        username_or_email = request.data.get("username")
+        password = request.data.get("password")
+        User = get_user_model()
+
+        try:
+            user = User.objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            if user.check_password(password):
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({"token": token.key})
+            else:
+                return Response({"error": "Invalid credentials."}, status = status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED)
+
 class UsersGetCreateView(APIView):
 
     def get(self, request, format=None):
