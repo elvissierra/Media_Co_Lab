@@ -11,6 +11,7 @@ class UserManager(BaseUserManager):
             raise ValueError("The email must be provided.")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+        user.username = email
         user.set_password(password)
         if organization is not None:
             user.organization = organization
@@ -36,7 +37,12 @@ class CustomUser(AbstractUser):
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
     objects= UserManager()
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.email
