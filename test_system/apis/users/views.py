@@ -6,9 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import AllowAny
 
 #user login
 class LoginView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
         email = request.data.get("email")
@@ -25,13 +27,9 @@ class LoginView(APIView):
         except User.DoesNotExist:
             return Response({"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED)
 
-class UsersGetCreateView(APIView):
-
-    def get(self, request, format=None):
-        users = CustomUser.objects.all()
-        serializer = UsersGetSerializer(users, many=True)
-        return Response(serializer.data)
-
+class UserCreateView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request, format=None):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -40,7 +38,6 @@ class UsersGetCreateView(APIView):
 
 
 class UserGetUpdateDeleteView(APIView):
-    #permission_classes=[ObjectPermission]
 
     def get_object(self, user_id):
         try:
