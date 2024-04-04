@@ -7,7 +7,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["first_name", "last_name", "id", "team", "organization_id", "email"]
+        fields = ["first_name", "last_name", "id", "team", "organization_id", "email", "password"]
+        extra_kwargs = {"password": {"write_only": True}}
 
     def validate_organization_id(self, value):
         try:
@@ -21,7 +22,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         organization_id = validated_data.pop("organization_id")
         organization = Organization.objects.get(id=organization_id)
+        #password = validated_data.pop("password")
         user = CustomUser.objects.create_user(**validated_data, organization=organization)
+        #user.set_password(password)
+        #user.save()
         return user
     
 class UsersGetSerializer(serializers.ModelSerializer):

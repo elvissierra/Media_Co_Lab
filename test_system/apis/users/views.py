@@ -17,12 +17,12 @@ class LoginView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def post(self, request):
-        username_or_email = request.data.get("username")
+        email = request.data.get("email")
         password = request.data.get("password")
         User = get_user_model()
 
         try:
-            user = User.objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            user = User.objects.get(email=email)
             if user.check_password(password):
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({"token": token.key})
