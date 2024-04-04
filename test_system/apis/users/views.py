@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
+#from rest_framework.authentication import TokenAuthentication
 
 #user login
 class LoginView(APIView):
@@ -35,7 +36,15 @@ class UserCreateView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    
+class UsersGetView(APIView):
+    #authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+    
+    def get(self, request, format=None):
+        users = CustomUser.objects.all()
+        serializer = UsersGetSerializer(users, many=True)
+        return Response(serializer.data)
 
 class UserGetUpdateDeleteView(APIView):
 
@@ -52,7 +61,7 @@ class UserGetUpdateDeleteView(APIView):
 
     def put(self, request, user_id, format=None):
         user = self.get_object(user_id)
-        serializer = UserRegistrationSerializer(user, data=request.data)
+        serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

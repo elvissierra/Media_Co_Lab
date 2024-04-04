@@ -22,10 +22,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         organization_id = validated_data.pop("organization_id")
         organization = Organization.objects.get(id=organization_id)
-        #password = validated_data.pop("password")
         user = CustomUser.objects.create_user(**validated_data, organization=organization)
-        #user.set_password(password)
-        #user.save()
         return user
     
 class UsersGetSerializer(serializers.ModelSerializer):
@@ -35,11 +32,12 @@ class UsersGetSerializer(serializers.ModelSerializer):
 
         def to_representation(self, instance):
             data = super().to_representation(instance)
-            if not self.context("request").user.is_superuser:
+            request = self.context.get('request')
+            if request and not request.user.is_superuser:
                 sensitive_fields = ["password", "last_login", "is_superuser", "is_staff", "is_active", "date_joined", "email", "groups"]
                 for field in sensitive_fields:
                     data.pop(field, None)
-            return data
+            return data                                                
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
