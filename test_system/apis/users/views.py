@@ -4,17 +4,11 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from test_system.permissions import ObjectPermission
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
-from django.db.models import Q
 
 #user login
 class LoginView(APIView):
-    authentication_classes = [TokenAuthentication]
 
     def post(self, request):
         email = request.data.get("email")

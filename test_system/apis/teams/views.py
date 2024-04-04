@@ -7,6 +7,7 @@ from rest_framework import status
 
 
 class TeamsGetCreateView(APIView):
+
     def get(self, request, format=None):
         team = Team.objects.all()
         serializer = TeamSerializer(team, many=True)
