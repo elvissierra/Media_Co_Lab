@@ -4,7 +4,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class OrganizationsGetView(APIView):
@@ -14,8 +14,9 @@ class OrganizationsGetView(APIView):
         organization = Organization.objects.all()
         serializer = OrganizationSerializer(organization, many=True)
         return Response(serializer.data)
-
+    
 class OrganizationCreateView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         serializer = OrganizationSerializer(data=request.data)
