@@ -4,13 +4,18 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 
 
-class OrganizationsGetCreateView(APIView):
+class OrganizationsGetView(APIView):
+    permission_classes = [IsAdminUser]
+
     def get(self, request, format=None):
         organization = Organization.objects.all()
         serializer = OrganizationSerializer(organization, many=True)
         return Response(serializer.data)
+
+class OrganizationCreateView(APIView):
 
     def post(self, request, format=None):
         serializer = OrganizationSerializer(data=request.data)

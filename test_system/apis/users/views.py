@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAdminUser
-#from rest_framework.authentication import TokenAuthentication
 
 #user login
 class LoginView(APIView):
@@ -38,7 +37,6 @@ class UserCreateView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class UsersGetView(APIView):
-    #authentication_classes = [TokenAuthentication]
     permission_classes = [IsAdminUser]
     
     def get(self, request, format=None):
