@@ -11,7 +11,7 @@ class OrganizationsGetView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request, format=None):
-        organization = Organization.objects.all()
+        organization = Organization.objects.filter(id = request.user.organization.id)
         serializer = OrganizationSerializer(organization, many=True)
         return Response(serializer.data)
     
