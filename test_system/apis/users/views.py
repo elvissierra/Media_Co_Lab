@@ -54,7 +54,7 @@ class UserGetUpdateDeleteView(APIView):
 
     def get(self, request, user_id, format=None):
         user = self.get_object(user_id)
-        serializer = UserSerializer(user)
+        serializer = UsersGetSerializer(user)
         return Response(serializer.data)
 
     def put(self, request, user_id, format=None):

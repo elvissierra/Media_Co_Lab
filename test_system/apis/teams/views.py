@@ -7,10 +7,10 @@ from rest_framework import status
 
 
 class TeamsGetCreateView(APIView):
-
-    def get(self, request, format=None):
-        team = Team.objects.all()
-        serializer = TeamSerializer(team, many=True)
+    
+    def get(self, request, format=None): 
+        teams = Team.objects.filter(organization_id = request.user.organization.id)
+        serializer = TeamSerializer(teams, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
