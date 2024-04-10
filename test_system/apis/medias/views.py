@@ -10,7 +10,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 class MediasGetCreateView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     def get (self, request, format=None):
-        medias = Medias.objects.all()
+        medias = Medias.objects.filter(team_id = request.team.id)
         serializer = MediasSerializer(medias, many=True)
         return Response(serializer.data)
     
