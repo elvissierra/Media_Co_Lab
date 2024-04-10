@@ -11,7 +11,7 @@ class Medias(models.Model):
     description = models.CharField(max_length=255)
     user = models.ForeignKey(CustomUser, related_name="medias", on_delete=models.CASCADE)
     size = models.IntegerField(default=0)
-    team = models.ForeignKey(Team, related_name="teams", on_delete=models.CASCADE, null=True)
+    team = models.ForeignKey(Team, related_name="teams", on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if self.content:
