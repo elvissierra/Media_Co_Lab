@@ -3,4 +3,3 @@ examples.txt
 .env
 __pycache__
 migrations
-Dockerfile
