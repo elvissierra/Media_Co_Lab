@@ -16,3 +16,7 @@ class ObjectPermission(BasePermission):
         user_id = request.parser_context.get("kwargs", {}).get("user_id")
         return request.user.id == user_id
     
+class IsMediaOwner(BasePermission):
+    def is_owner(self, request, view):
+        user_id = request.parser_context.get("kwargs", {}).get("user_id")
+        return request.user.id == user_id
