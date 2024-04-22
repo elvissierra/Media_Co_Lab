@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from test_system.apps.labels.models import Label
 from test_system.apis.labels.serializers import LabelSerializer
 from django.http import Http404
@@ -25,26 +26,23 @@ class LabelsGetCreateView(APIView):
 class LabelGetUpdateDeleteView(APIView):
     permission_classes=[IsLabelOwner]
     
-    def get_object(self, label_id):
-        try:
-            return Label.objects.get(id=label_id)
-        except Label.DoesNotExist:
-            return Http404
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return []
+        return super().get_permissions()
 
     def get(self, request, label_id, format=None):
-        label = self.get_object(label_id)
-        serializer = LabelSerializer(label)
-        return Response(serializer.data)
+        label = get_object_or_404(Label, id=label_id)
+        return Response(LabelSerializer(label, context={"request": request}).data)
 
     def put(self, request, label_id, format=None):
-        label = self.get_object(label_id)
+        label = get_object_or_404(Label, id=label_id)
         serializer = LabelSerializer(label, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, label_id):
-        label = self.get_object(label_id)
+        label = get_object_or_404(Label, id=label_id)
         label.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(LabelSerializer(label).data)
