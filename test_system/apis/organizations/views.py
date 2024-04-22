@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
+from test_system.permissions import OrganizationPermission
 
 class OrganizationsGetView(APIView):
     permission_classes = [IsAdminUser]
@@ -27,6 +27,8 @@ class OrganizationCreateView(APIView):
 
 
 class OrganizationGetUpdateDeleteView(APIView):
+    permission_classes= [OrganizationPermission]
+
     def get_object(self, organization_id):
         try:
             return Organization.objects.get(id=organization_id)

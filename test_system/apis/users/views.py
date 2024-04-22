@@ -45,6 +45,7 @@ class UsersGetView(APIView):
         return Response(serializer.data)
 
 class UserGetUpdateDeleteView(APIView):
+    permission_classes= []
 
     def get_object(self, user_id):
         try:

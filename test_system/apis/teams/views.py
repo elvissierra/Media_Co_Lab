@@ -4,6 +4,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from test_system.permissions import TeamPermission
 
 
 class TeamsGetCreateView(APIView):
@@ -22,6 +23,8 @@ class TeamsGetCreateView(APIView):
 
 
 class TeamGetUpdateDeleteView(APIView):
+    permission_classes= [TeamPermission]
+
     def get_object(self, team_id):
         try:
             return Team.objects.get(id=team_id)
