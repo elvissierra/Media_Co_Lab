@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from test_system.apps.users.models import CustomUser
 from test_system.apis.users.serializers import UserSerializer, UserRegistrationSerializer, UsersGetSerializer
 from django.http import Http404
@@ -7,6 +8,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAdminUser
+from test_system.permissions import IsUser
 
 #user login
 class LoginView(APIView):
@@ -45,21 +47,17 @@ class UsersGetView(APIView):
         return Response(serializer.data)
 
 class UserGetUpdateDeleteView(APIView):
-    permission_classes= []
-
-    def get_object(self, user_id):
-        try:
-            return CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Http404
+    permission_classes= [IsUser]
 
     def get(self, request, user_id, format=None):
-        user = self.get_object(user_id)
+        user = get_object_or_404(CustomUser, id=user_id)
+        self.check_object_permissions(request, user)
         serializer = UsersGetSerializer(user)
         return Response(serializer.data)
 
     def put(self, request, user_id, format=None):
-        user = self.get_object(user_id)
+        user = get_object_or_404(CustomUser, id=user_id)
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -67,6 +65,7 @@ class UserGetUpdateDeleteView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, user_id):
-        user = self.get_object(user_id)
+        user = get_object_or_404(CustomUser, id=user_id)
+        self.check_object_permissions(request, user)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
