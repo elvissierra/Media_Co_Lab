@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from permissions import IsMediaOwner
+from test_system.permissions import IsMediaOwner
 
 class MediasGetCreateView(APIView):
     parser_classes = [MultiPartParser, FormParser]
