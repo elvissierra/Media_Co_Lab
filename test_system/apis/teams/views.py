@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from test_system.apps.teams.models import Team
 from test_system.apis.teams.serializers import TeamSerializer
 from django.http import Http404
@@ -25,19 +26,15 @@ class TeamsGetCreateView(APIView):
 class TeamGetUpdateDeleteView(APIView):
     permission_classes= [TeamPermission]
 
-    def get_object(self, team_id):
-        try:
-            return Team.objects.get(id=team_id)
-        except Team.DoesNotExist:
-            return Http404
-
     def get(self, request, team_id, format=None):
-        team = self.get_object(team_id)
+        team = get_object_or_404(Team, id=team_id)
+        self.check_object_permissions(request, team)
         serializer = TeamSerializer(team)
         return Response(serializer.data)
 
     def put(self, request, team_id, format=None):
         team = self.get_object(team_id)
+        self.check_object_permissions(request, team)
         serializer = TeamSerializer(team, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -46,5 +43,6 @@ class TeamGetUpdateDeleteView(APIView):
 
     def delete(self, request, team_id):
         team = self.get_object(team_id)
+        self.check_object_permissions(request, team)
         team.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
