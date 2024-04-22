@@ -11,7 +11,7 @@ class TeamPermission(BasePermission):
         team_id = request.parser_context.get("kwargs", {}).get("team_id")
         return request.user.team.id == team_id
     
-class ObjectPermission(BasePermission):
+class IsLabelOwner(BasePermission):
     def is_owner(self, request, view):
         user_id = request.parser_context.get("kwargs", {}).get("user_id")
         return request.user.id == user_id

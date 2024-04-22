@@ -4,7 +4,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from test_system.permissions import TeamPermission
+from test_system.permissions import IsLabelOwner, TeamPermission
 
 class LabelsGetCreateView(APIView):
     permission_classes=[TeamPermission]
@@ -23,7 +23,7 @@ class LabelsGetCreateView(APIView):
 
 
 class LabelGetUpdateDeleteView(APIView):
-    permission_classes=[TeamPermission]
+    permission_classes=[IsLabelOwner]
     
     def get_object(self, label_id):
         try:
