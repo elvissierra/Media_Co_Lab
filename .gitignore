@@ -1,7 +1,8 @@
-.venv
-examples.txt
 .env
+.venv
 __pycache__
-migrations
 Dockerfile
+examples.txt
+migrations
 snyk
+staticfiles
