@@ -30,4 +30,7 @@ urlpatterns = [
     path("api/organizations/", include("test_system.apis.organizations.urls")),
     path("api/labels/", include("test_system.apis.labels.urls")),
     path("api/medias/", include("test_system.apis.medias.urls")),
-] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
