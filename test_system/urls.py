@@ -23,7 +23,6 @@ from test_system.apis.users.views import LoginView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/login/", LoginView.as_view(), name="login"),
-    #path("api/logout/", LogoutView.as_view(), name="logout"),
     path("api/users/", include("test_system.apis.users.urls")),
     path("api/teams/", include("test_system.apis.teams.urls")),
     path("api/labels/", include("test_system.apis.labels.urls")),
