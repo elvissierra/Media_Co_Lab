@@ -38,4 +38,4 @@ class Label(models.Model):
             if not self.custom_preset_type.isalnum():
                 return ValidationError("Invalid input.")
         else:
-            self.custom_preset_type == None
+            self.custom_preset_type is None
