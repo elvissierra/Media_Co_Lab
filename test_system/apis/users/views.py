@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.users.models import CustomUser
 from test_system.apis.users.serializers import UserSerializer, UserRegistrationSerializer, UsersGetSerializer
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
