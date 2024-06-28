@@ -28,6 +28,7 @@ class LoginView(APIView):
         except User.DoesNotExist:
             return Response({"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED)
 
+#methods
 class UserCreateView(APIView):
     permission_classes = [AllowAny]
     
