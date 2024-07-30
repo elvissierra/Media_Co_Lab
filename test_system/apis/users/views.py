@@ -4,13 +4,14 @@ from test_system.apis.users.serializers import UserSerializer, UserRegistrationS
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authtoken.models import Token
+from knox.models import AuthToken
+from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAdminUser
 from test_system.permissions import IsUser
 
 #user login
-class LoginView(APIView):
+class LoginView(KnoxLoginView):
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -21,7 +22,7 @@ class LoginView(APIView):
         try:
             user = User.objects.get(email=email)
             if user.check_password(password):
-                token, created = Token.objects.get_or_create(user=user)
+                _, token = AuthToken.objects.create(user)
                 return Response({"token": token.key})
             else:
                 return Response({"error": "Invalid credentials."}, status = status.HTTP_401_UNAUTHORIZED)
