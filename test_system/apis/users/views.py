@@ -23,7 +23,7 @@ class LoginView(KnoxLoginView):
             user = User.objects.get(email=email)
             if user.check_password(password):
                 _, token = AuthToken.objects.create(user)
-                return Response({"token": token.key})
+                return Response({"token": token})
             else:
                 return Response({"error": "Invalid credentials."}, status = status.HTTP_401_UNAUTHORIZED)
         except User.DoesNotExist:
