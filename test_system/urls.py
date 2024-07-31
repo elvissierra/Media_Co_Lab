@@ -20,10 +20,10 @@ from django.contrib import admin
 from django.urls import path, include
 from test_system.apis.users.views import LoginView
 from knox import views as knox_views
+from test_system import swagger
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    #path("api/auth/login/", LoginView.as_view(), name="login"),
     path("api/auth/login/", LoginView.as_view(), name="knox_login"),
     path("api/auth/logout/", knox_views.LogoutView.as_view(), name="knox_logout"),
     path("api/auth/logoutall/", knox_views.LogoutAllView.as_view(), name="knox_logoutall"),
@@ -37,4 +37,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+    urlpatterns.extend(swagger.urlpatterns)
