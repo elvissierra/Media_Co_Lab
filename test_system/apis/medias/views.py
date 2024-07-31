@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
 from test_system.apis.medias.serializers import MediasSerializer
-from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
