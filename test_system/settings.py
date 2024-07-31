@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "knox",
-    #"rest_framework.authtoken",
     "test_system.apps.labels",
     "test_system.apps.users",
     "test_system.apps.teams",
