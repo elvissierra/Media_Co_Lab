@@ -14,6 +14,6 @@ class Medias(models.Model):
     team = models.ForeignKey(Team, related_name="teams", on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        if self.content:
-            self.size = self.content.size
+        if self.content and hasattr(self.content, "file"):
+            self.size = self.content.file.size
         super(Medias, self).save(*args, **kwargs)
