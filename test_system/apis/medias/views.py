@@ -9,7 +9,7 @@ from test_system.permissions import IsMediaOwner
 
 class MediasGetCreateView(APIView):
     parser_classes = [MultiPartParser, FormParser]
-    def get (self, request, format=None):
+    def get (self, request):
         medias = Medias.objects.filter(team_id = request.team.id)
         serializer = MediasSerializer(medias, many=True)
         return Response(serializer.data)
