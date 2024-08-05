@@ -9,6 +9,7 @@ from test_system.permissions import IsMediaOwner
 
 class MediasGetCreateView(APIView):
     parser_classes = [MultiPartParser, FormParser]
+    
     def get (self, request):
         medias = Medias.objects.filter(team_id = request.team.id)
         serializer = MediasSerializer(medias, many=True)
@@ -17,7 +18,8 @@ class MediasGetCreateView(APIView):
     def post(self, request, format=None):
         serializer = MediasSerializer(data=request.data)
         if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            medias_obj = serializer.save()
+            return Response(MediasSerializer(medias_obj).data, status=status.HTTP_201_CREATED)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
     
 
