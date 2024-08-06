@@ -21,7 +21,7 @@ class MediasGetCreateView(APIView):
         if serializer.is_valid():
             medias_obj = serializer.save()
             return Response(MediasSerializer(medias_obj).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class MediasGetUpdateDeleteView(APIView):
     permission_classes = [IsMediaOwner]
