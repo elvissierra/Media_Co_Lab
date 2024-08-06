@@ -13,7 +13,11 @@ class MediasGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        medias = Medias.objects.filter(team_id=request.team.id)
+        user = request.user
+        team = user.team
+        if not team:
+            return Response({"error": "User is not associated with any team yet"}, status=status.HTTP_400_BAD_REQUEST)
+        medias = Medias.objects.filter(team_id=team.id)
         serializer = MediasSerializer(medias, many=True)
         return Response(serializer.data)
 
