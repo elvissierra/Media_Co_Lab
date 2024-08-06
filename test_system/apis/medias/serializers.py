@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from test_system.apps.medias.models import Medias
-import logging
 
 class MediasSerializer(serializers.ModelSerializer):
     uploaded_media = serializers.FileField(write_only=True)
