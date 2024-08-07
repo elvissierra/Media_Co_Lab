@@ -1,0 +1,30 @@
+version: "1.29.2"  # Use a correct and consistent version
+
+services:
+  test_system:
+    build: 
+      context: . # Path to the directory containing the Dockerfile
+    container_name: test_system
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app  # Map the current directory to /app in the container
+    environment:
+      - APP_ENV=${APP_ENV}
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: media_co_lab_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}  # Corrected the variable name
+      POSTGRES_HOST: ${DB_HOST}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
