@@ -7,7 +7,6 @@ from rest_framework import status
 from test_system.permissions import IsLabelOwner, TeamPermission
 
 class LabelsGetCreateView(APIView):
-    permission_classes=[TeamPermission]
 
     def get(self, request, format=None):
         label = Label.objects.all()
@@ -15,7 +14,7 @@ class LabelsGetCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = LabelSerializer(data=request.data)
+        serializer = LabelSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
