@@ -10,6 +10,17 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAdminUser
 from test_system.permissions import IsUser
 
+#create user
+class UserCreateView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request, format=None):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 #user login
 class LoginView(KnoxLoginView):
     permission_classes = [AllowAny]
@@ -29,16 +40,8 @@ class LoginView(KnoxLoginView):
         except User.DoesNotExist:
             return Response({"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED)
 
-#methods
-class UserCreateView(APIView):
-    permission_classes = [AllowAny]
-    
-    def post(self, request, format=None):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
+
+#methods    
 class UsersGetView(APIView):
     permission_classes = [IsAdminUser]
     
