@@ -1,21 +1,12 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.organizations.models import Organization
 from test_system.apis.organizations.serializers import OrganizationSerializer
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from test_system.permissions import OrganizationPermission
 
-class OrganizationsGetView(APIView):
-    permission_classes = [IsAdminUser]
-
-    def get(self, request, format=None):
-        organization = Organization.objects.filter(id = request.user.organization.id)
-        serializer = OrganizationSerializer(organization, many=True)
-        return Response(serializer.data)
-    
 class OrganizationCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -26,6 +17,15 @@ class OrganizationCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class OrganizationsGetView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, format=None):
+        organization = Organization.objects.filter(id = request.user.organization.id)
+        serializer = OrganizationSerializer(organization, many=True)
+        return Response(serializer.data)
+    
 
 class OrganizationGetUpdateDeleteView(APIView):
     permission_classes= [OrganizationPermission]
