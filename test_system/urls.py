@@ -29,7 +29,6 @@ urlpatterns = [
     path("api/auth/logoutall/", knox_views.LogoutAllView.as_view(), name="knox_logoutall"),
     path("api/users/", include("test_system.apis.users.urls")),
     path("api/teams/", include("test_system.apis.teams.urls")),
-    path("api/labels/", include("test_system.apis.labels.urls")),
     path("api/organizations/", include("test_system.apis.organizations.urls")),
     path("api/labels/", include("test_system.apis.labels.urls")),
     path("api/medias/", include("test_system.apis.medias.urls")),
