@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.teams.models import Team
 from test_system.apis.teams.serializers import TeamSerializer
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,8 +9,12 @@ from test_system.permissions import TeamPermission
 
 class TeamsGetCreateView(APIView):
     
-    def get(self, request, format=None): 
-        teams = Team.objects.filter(organization_id = request.user.organization.id)
+    def get(self, request, format=None):
+        user = request.user
+        organization = user.organization
+        if not organization:
+            return Response({"error": "User not associated with an organization."}, status=status.HTTP_400_BAD_REQUEST)
+        teams = Team.objects.filter(organization = request.user.organization)
         serializer = TeamSerializer(teams, many=True)
         return Response(serializer.data)
 
