@@ -4,7 +4,7 @@ from test_system.apis.labels.serializers import LabelSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from test_system.permissions import IsLabelOwner, TeamPermission
+from test_system.permissions import IsLabelOwner
 
 class LabelsGetCreateView(APIView):
 
@@ -13,7 +13,6 @@ class LabelsGetCreateView(APIView):
         labels = user.team
         if not labels:
             return Response({"error": "No team association."}, status=status.HTTP_400_BAD_REQUEST)
-        #label = Label.objects.all()
         team_labels = Label.objects.filter(medias__team = request.user.team)
         serializer = LabelSerializer(team_labels, many=True)
         return Response(serializer.data)
