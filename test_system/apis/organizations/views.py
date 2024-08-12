@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from test_system.permissions import OrganizationPermission
 
+
 class OrganizationCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
