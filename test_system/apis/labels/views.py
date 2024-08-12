@@ -9,8 +9,13 @@ from test_system.permissions import IsLabelOwner, TeamPermission
 class LabelsGetCreateView(APIView):
 
     def get(self, request, format=None):
-        label = Label.objects.all()
-        serializer = LabelSerializer(label, many=True)
+        user = request.user
+        labels = user.team
+        if not labels:
+            return Response({"error": "No team association."}, status=status.HTTP_400_BAD_REQUEST)
+        #label = Label.objects.all()
+        team_labels = Label.objects.filter(medias__team = request.user.team)
+        serializer = LabelSerializer(team_labels, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
