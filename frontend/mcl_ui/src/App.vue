@@ -2,18 +2,21 @@
   <div id="app">
     <Navbar />
     <Homepage />
+    <UserLogin />
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue'
 import Homepage from  './components/HomePage.vue'
+import UserLogin from './components/UserLogin.vue'
 
 export default {
   name: 'App',
   components: {
     Navbar,
     Homepage,
+    UserLogin,
   }
 }
 </script>
