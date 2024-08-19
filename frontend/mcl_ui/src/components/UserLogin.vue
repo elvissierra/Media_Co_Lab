@@ -30,14 +30,14 @@
       async loginUser() {
         try {
           const response = await this.$axios.post('auth/login/', {
-            username: this.email,  // Use 'username' if that's what your backend expects; otherwise, 'email'
+            email: this.email,
             password: this.password,
           });
           const token = response.data.token;
   
           // Save the token to localStorage
           localStorage.setItem('authToken', token);
-  
+
           // Redirect to the home page
           this.$router.push({ name: 'HomePage' });
         } catch (error) {

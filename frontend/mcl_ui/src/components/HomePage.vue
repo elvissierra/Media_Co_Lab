@@ -1,7 +1,7 @@
 <template>
     <div class="home-page">
       <h1>Welcome to My Project</h1>
-      <p>This is the landing page of your application.</p>
+      <p>Start to MCL!</p>
     </div>
   </template>
   
