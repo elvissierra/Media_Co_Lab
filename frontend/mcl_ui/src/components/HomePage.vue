@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-      <h1>Welcome to My Project</h1>
+      <h1>Welcome to Media Co lab!</h1>
       <p>Start to MCL!</p>
     </div>
   </template>
