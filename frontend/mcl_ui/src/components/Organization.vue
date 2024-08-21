@@ -7,7 +7,7 @@
   
   <script>
   export default {
-    name: 'Organization'
+    name: 'mclOrganization'
     // You can fetch organization-related data here
   };
   </script>

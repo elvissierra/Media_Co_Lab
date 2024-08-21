@@ -7,7 +7,7 @@
   
   <script>
   export default {
-    name: 'Media'
+    name: 'mclMedia'
     // You can fetch Media-related data here
   };
   </script>

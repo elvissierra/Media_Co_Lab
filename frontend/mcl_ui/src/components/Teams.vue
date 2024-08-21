@@ -7,7 +7,7 @@
   
   <script>
   export default {
-    name: 'Teams'
+    name: 'mclTeams'
     // You can fetch Teams-related data here
   };
   </script>

@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './components/HomePage.vue'
+import Organization from './components/Organization.vue'
+import Teams from './components/Teams.vue'
 import UserLogin from './components/UserLogin.vue'
 import Media from './components/Media.vue'
-import Organization from './components/Organization.vue'
-import Teams from '/components/Teams.vue'
 
 
 const routes = [
@@ -21,13 +21,13 @@ const routes = [
     }
   },
   {
-    path: '/organization', name: 'Organization', component: Organization,
+    path: '/organization', name: 'mclOrganization', component: Organization,
   },
   {
-    path: '/teams', name: 'Teams', component: Teams,
+    path: '/teams', name: 'mclTeams', component: Teams,
   },
   {
-    path: '/media', name: 'Media', component: Media,
+    path: '/media', name: 'mclMedia', component: Media,
   },
 ];
 

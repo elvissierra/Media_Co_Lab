@@ -1,15 +1,13 @@
 <template>
   <div id="app">
     <Navbar />
-    <Homepage />
-    <UserLogin />
+    <router-view />
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar.vue'
-import Homepage from  './components/HomePage.vue'
-import UserLogin from './components/UserLogin.vue'
+
 
 export default {
   name: 'App',
@@ -17,6 +15,9 @@ export default {
     Navbar,
     Homepage,
     UserLogin,
+    Organization,
+    Teams,
+    Media,
   }
 }
 </script>
