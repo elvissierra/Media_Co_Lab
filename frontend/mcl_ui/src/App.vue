@@ -1,23 +1,20 @@
 <template>
   <div id="app">
+    <HomePage />
     <Navbar />
     <router-view />
   </div>
 </template>
 
 <script>
+import HomePage from './components/HomePage.vue'
 import Navbar from './components/Navbar.vue'
-
 
 export default {
   name: 'App',
   components: {
+    HomePage,
     Navbar,
-    Homepage,
-    UserLogin,
-    Organization,
-    Teams,
-    Media,
   }
 }
 </script>
