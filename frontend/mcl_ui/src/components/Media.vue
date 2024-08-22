@@ -8,7 +8,8 @@
   <script>
   export default {
     name: 'mclMedia'
-    // You can fetch Media-related data here
+    // You can fetch Media-related data here 
+    // Media tabs and lables like sticky notes
   };
   </script>
   

@@ -9,6 +9,7 @@
   export default {
     name: 'mclOrganization'
     // You can fetch organization-related data here
+    // Everything org related
   };
   </script>
   
