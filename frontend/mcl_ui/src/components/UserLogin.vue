@@ -35,12 +35,12 @@ export default {
     async loginUser() {
       try {
         const response = await this.$axios.post('auth/login/', {
-          username: this.email,  // Adjust 'username' to 'email' if necessary
+          username: this.email,
           password: this.password,
         });
         const token = response.data.token;
 
-        // Store the token in localStorage
+        // Store the token in localStorage (temporary)
         localStorage.setItem('authToken', token);
 
         // Update the authentication status
