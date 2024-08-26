@@ -35,7 +35,7 @@ export default {
     async loginUser() {
       try {
         const response = await this.$axios.post('auth/login/', {
-          username: this.email,
+          email: this.email,
           password: this.password,
         });
         const token = response.data.token;
