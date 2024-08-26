@@ -3,10 +3,11 @@
     <h1>Teams</h1>
     <ul>
       <li v-for="team in teams" :key="team.id">
-        <h2>{{ team.name }}</h2>
+        <h2>{{ team.title }}</h2>
+        <p>{{ team.description }}</p>
         <ul>
-          <li v-for="member in team.members" :key="member.id">
-            {{ member.name }}
+          <li v-for="user in team.users" :key="user.id">
+            {{ user.first_name }}
           </li>
         </ul>
       </li>
@@ -24,7 +25,7 @@ export default {
   },
   async created() {
     try {
-      const response = await this.$axios.get('/teams/');  // axios use
+      const response = await this.$axios.get('/teams/');  // Use this.$axios
       this.teams = response.data;
     } catch (error) {
       console.error('Error fetching teams:', error);
