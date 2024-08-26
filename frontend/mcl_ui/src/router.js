@@ -30,7 +30,7 @@ const routes = [
     path: '/media', name: 'mclMedia', component: Media,
   },
 ];
-
+// connected to base backend
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
