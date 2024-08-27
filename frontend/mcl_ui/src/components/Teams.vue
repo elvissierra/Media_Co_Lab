@@ -14,16 +14,29 @@
         sm="6"
         md="4"
       >
-        <v-card class="mb-4">
+        <v-card 
+          class="mb-4"
+          @click="viewTeam(team.id)"
+          outlined
+          hover
+        >
           <v-card-title>
             {{ team.title }}
           </v-card-title>
           <v-card-text>
-            {{ team.description }}
+            <p>{{ team.description }}</p>
+            <v-divider></v-divider>
+            <v-list dense>
+              <v-list-item
+                v-for="user in team.users"
+                :key="user.id"
+              >
+                <v-list-item-content>
+                  {{ user.first_name }}
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
           </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary">View Team</v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -46,6 +59,17 @@ export default {
       console.error('Error fetching teams:', error);
     }
   },
+  methods: {
+    viewTeam(teamId) {
+      // Logic to navigate to a detailed view of the team
+      this.$router.push({ name: 'TeamDetail', params: { id: teamId } });
+    }
+  }
 };
 </script>
 
+<style>
+.v-card {
+  cursor: pointer;
+}
+</style>
