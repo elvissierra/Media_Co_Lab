@@ -4,6 +4,7 @@ import Organization from './components/Organization.vue'
 import Teams from './components/Teams.vue'
 import UserLogin from './components/UserLogin.vue'
 import Media from './components/Media.vue'
+import TeamDetail from './components/TeamDetail.vue'
 
 
 const routes = [
@@ -25,6 +26,9 @@ const routes = [
   },
   {
     path: '/teams', name: 'mclTeams', component: Teams,
+  },
+  {
+    path: '/teams/:uuid', name: 'TeamDetail', component: TeamDetail,
   },
   {
     path: '/media', name: 'mclMedia', component: Media,

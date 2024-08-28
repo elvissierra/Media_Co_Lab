@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     viewTeam(teamId) {
-      // Logic to navigate to a detailed view of the team
       this.$router.push({ name: 'TeamDetail', params: { id: teamId } });
     }
   }
