@@ -2,14 +2,31 @@
   <div class="home-page">
     <h1>Welcome to Media Co lab!</h1>
     <p>Start to MCL!</p>
-    <button @click="logoutUser">Logout</button> <!-- Logout Button -->
+
+    <!-- Registration Button (shown if user is not logged in) -->
+    <button v-if="!isLoggedIn" @click="goToRegister">Register</button>
+
+    <!-- Logout Button (shown if user is logged in) -->
+    <button v-if="isLoggedIn" @click="logoutUser">Logout</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "HomePage",
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  created() {
+    this.checkLoginStatus();
+  },
   methods: {
+    checkLoginStatus() {
+      // Check if the auth token is in localStorage
+      this.isLoggedIn = !!localStorage.getItem('authToken');
+    },
     async logoutUser() {
       try {
         await this.$axios.post('auth/logout/', {}, {
@@ -18,10 +35,14 @@ export default {
           },
         });
         localStorage.removeItem('authToken');
+        this.isLoggedIn = false; // Update login status
         this.$router.push({ name: 'UserLogin' });
       } catch (error) {
         console.error('Error on logout:', error);
       }
+    },
+    goToRegister() {
+      this.$router.push({ name: 'UserRegister' });
     },
   },
 };

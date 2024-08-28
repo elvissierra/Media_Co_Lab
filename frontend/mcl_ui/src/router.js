@@ -5,11 +5,14 @@ import Teams from './components/Teams.vue'
 import UserLogin from './components/UserLogin.vue'
 import Media from './components/Media.vue'
 import TeamDetail from './components/TeamDetail.vue'
-
+import UserRegister from './components/UserRegister.vue'
 
 const routes = [
   {
     path: '/', name: 'HomePage', component: HomePage,
+  },
+  {
+    path: '/register', name: 'UserRegister', component: UserRegister,
   },
   {
     path: '/login', name: 'UserLogin', component: UserLogin, 
