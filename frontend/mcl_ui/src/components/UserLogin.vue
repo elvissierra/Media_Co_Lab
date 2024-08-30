@@ -28,7 +28,7 @@ export default {
       email: '',
       password: '',
       error: null,
-      isAuthenticated: !!localStorage.getItem('authToken'),  // Check if the user is authenticated
+      isAuthenticated: !!localStorage.getItem('authToken'),
     };
   },
   methods: {
@@ -40,13 +40,10 @@ export default {
         });
         const token = response.data.token;
 
-        // Store the token in localStorage (temporary)
         localStorage.setItem('authToken', token);
 
-        // Update the authentication status
         this.isAuthenticated = true;
 
-        // Redirect to the home page
         this.$router.push({ name: 'HomePage' });
       } catch (error) {
         this.error = 'Invalid email or password';
@@ -58,15 +55,45 @@ export default {
 
 <style scoped>
 .login {
-  max-width: 300px;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1em;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 4px;
+  background: #f9f9f9;
+}
+
+.login h2 {
+  text-align: center;
+}
+
+.login form div {
+  margin-bottom: 1em;
+}
+
+.login form label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.login form input {
+  width: 100%;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+.login button {
+  width: 100%;
+  padding: 0.75em;
+  background: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 1em;
 }
 
 .error {
   color: red;
-  margin-top: 10px;
+  text-align: center;
 }
 </style>

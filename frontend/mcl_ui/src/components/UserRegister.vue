@@ -75,7 +75,7 @@ export default {
       }
       try {
         this.error = null;
-        await axiosPublic.post('/register/', this.user);
+        await axiosPublic.post('/users/create/', this.user);
         this.$router.push({ name: 'UserLogin' });
       } catch (error) {
         this.error = error.response?.data?.detail || 'Registration failed. Please try again.';
