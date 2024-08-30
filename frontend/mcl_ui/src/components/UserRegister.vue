@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="6" offset-md="3">
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" v-model="valid">
           <v-text-field
             v-model="user.first_name"
             :rules="rules.required"
@@ -32,7 +32,7 @@
             required
           ></v-text-field>
 
-          <v-btn :disabled="!valid" @click="registerUser">
+          <v-btn @click="registerUser">
             Register
           </v-btn>
 
@@ -70,7 +70,9 @@ export default {
   },
   methods: {
     async registerUser() {
+      console.log(this.$refs.form.validate());
       if (!this.$refs.form.validate()) {
+        console.log('Form is invalid');
         return;
       }
       try {
