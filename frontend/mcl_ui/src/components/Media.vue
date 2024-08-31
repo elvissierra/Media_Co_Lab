@@ -1,12 +1,18 @@
 <template>
   <div>
     <h1>Media</h1>
-    <!-- Media-related content goes here -->
+    <!-- Display media-related content -->
     <div v-if="mediaItems.length">
-      <div v-for="media in mediaItems" :key="media.id">
-        <!-- Display media content -->
-        <p>{{ media.title }}</p>
+      <div v-for="media in mediaItems" :key="media.id" class="media-item">
+        <h3>{{ media.title }}</h3>
         <p>{{ media.description }}</p>
+        <div v-if="media.media_type === 'image'">
+          <img :src="media.file_url" :alt="media.title" />
+        </div>
+        <div v-if="media.media_type === 'video'">
+          <video controls :src="media.file_url"></video>
+        </div>
+        <!-- Add more media types as needed -->
       </div>
     </div>
     <div v-else>
@@ -29,8 +35,20 @@ export default {
       this.mediaItems = response.data;
     } catch (error) {
       console.error('Error fetching media items:', error);
-      // Optionally handle other error cases here
     }
   },
 };
 </script>
+
+<style scoped>
+.media-item {
+  margin-bottom: 20px;
+}
+
+.media-item img,
+.media-item video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+</style>
