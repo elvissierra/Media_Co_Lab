@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from './components/HomePage.vue'
 import Organization from './components/Organization.vue'
-import Teams from './components/Teams.vue'
-import UserLogin from './components/UserLogin.vue'
-import Media from './components/Media.vue'
-import TeamDetail from './components/TeamDetail.vue'
 import UserRegister from './components/UserRegister.vue'
+import UserLogin from './components/UserLogin.vue'
+import Teams from './components/Teams.vue'
+import TeamDetail from './components/TeamDetail.vue'
+import Media from './components/Media.vue'
+import MediaDetail from './components/MediaDetail.vue'
+
 
 const routes = [
   {
@@ -35,6 +37,9 @@ const routes = [
   },
   {
     path: '/media', name: 'mclMedia', component: Media,
+  },
+  {
+    path: '/media/:uuid', name: 'MediaDetail', component: MediaDetail,
   },
 ];
 // connected to base backend

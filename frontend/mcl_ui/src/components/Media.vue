@@ -16,6 +16,7 @@
       >
         <v-card 
           class="mb-4"
+          @click="viewMedia(media.id)"
           outlined
           hover
         >
@@ -32,7 +33,7 @@
               </v-responsive>
             </div>
             <v-divider></v-divider>
-            <p>Team: {{ media.team.name }}</p>
+            <p>Team: {{ media.team.title }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -60,6 +61,9 @@ export default {
     isImage(filePath) {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
+    viewMedia(mediaId) {
+      this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } });
+    }
   },
 };
 </script>
