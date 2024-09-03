@@ -7,6 +7,7 @@ import Teams from './components/Teams.vue'
 import TeamDetail from './components/TeamDetail.vue'
 import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
+import Labels from './components/Labels.vue'
 
 
 const routes = [
@@ -40,6 +41,9 @@ const routes = [
   },
   {
     path: '/media/:uuid', name: 'MediaDetail', component: MediaDetail,
+  },
+  {
+    path: '/labels/', name: 'mclLabels', component: Labels,
   },
 ];
 // connected to base backend
