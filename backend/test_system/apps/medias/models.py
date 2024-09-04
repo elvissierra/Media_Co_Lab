@@ -10,4 +10,4 @@ class Medias(models.Model):
     content = models.FileField(upload_to="media/", null=True)
     description = models.CharField(max_length=255)
     user = models.ForeignKey(CustomUser, related_name="medias", on_delete=models.CASCADE)
-    team = models.ForeignKey(Team, related_name="teams", on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, related_name="medias", on_delete=models.CASCADE)

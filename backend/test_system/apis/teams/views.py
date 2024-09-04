@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.teams.models import Team
-from test_system.apis.teams.serializers import TeamSerializer
+from test_system.apps.medias.models import Medias
+from test_system.apis.teams.serializers import TeamSerializer, TeamMediaSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from test_system.permissions import TeamPermission
-
 
 class TeamsGetCreateView(APIView):
     
@@ -49,3 +49,10 @@ class TeamGetUpdateDeleteView(APIView):
         self.check_object_permissions(request, team)
         team.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class TeamMediasGetView(APIView):
+    def get(self, request, team_id):
+        team = get_object_or_404(Team, id=team_id)
+        team_media = Medias.objects.filter(team=team)
+        serializer = TeamMediaSerializer(team_media, many=True)
+        return Response(serializer.data)
