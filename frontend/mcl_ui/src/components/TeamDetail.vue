@@ -4,7 +4,6 @@
       <v-col cols="12">
         <h1 class="text-center">{{ team.title }}</h1>
         <p>{{ team.description }}</p>
-        <!-- Add more team details as needed -->
       </v-col>
     </v-row>
 
@@ -21,7 +20,8 @@
             md="4"
           >
             <div class="media-thumbnail">
-              <!-- Media Content (Image or Video Thumbnail) -->
+              <!-- Display Title and Content -->
+              <h3>{{ media.title }}</h3>
               <v-img
                 v-if="isImage(media.content)"
                 :src="media.content"
@@ -29,18 +29,8 @@
                 class="media-image"
               ></v-img>
               <v-responsive v-else class="media-image">
-                <video :src="media.content" muted></video>
+                <video :src="media.content" controls muted></video>
               </v-responsive>
-
-              <!-- Sticky Tabs for Labels -->
-              <div class="sticky-tabs">
-                <div
-                  v-for="label in media.labels"
-                  :key="label.id"
-                  :style="{ backgroundColor: label.preset_tag }"
-                  class="sticky-tab"
-                ></div>
-              </div>
             </div>
           </v-col>
         </v-row>
@@ -54,7 +44,7 @@ export default {
   name: 'TeamDetail',
   data() {
     return {
-      team: null,
+      team: null, // Team details
       relatedMedia: [], // Related media objects for the team
     };
   },
@@ -62,10 +52,10 @@ export default {
     const teamId = this.$route.params.uuid;
     try {
       // Fetch team details
-      const response = await this.$axios.get(`/teams/${teamId}/`);
-      this.team = response.data;
+      const teamResponse = await this.$axios.get(`/teams/${teamId}/`);
+      this.team = teamResponse.data;
 
-      // Fetch related media for the team
+      // Fetch related media (title and content only)
       const mediaResponse = await this.$axios.get(`/teams/${teamId}/medias/`);
       this.relatedMedia = mediaResponse.data;
     } catch (error) {
@@ -97,23 +87,6 @@ export default {
   object-fit: cover;
 }
 
-.sticky-tabs {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.sticky-tab {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Styling for title, description, etc. */
 .text-center {
   text-align: center;
 }
