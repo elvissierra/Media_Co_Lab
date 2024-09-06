@@ -5,11 +5,13 @@
         <h1 class="text-center">{{ media.title }}</h1>
         <p>{{ media.description }}</p>
 
-        <div v-if="media.content">
-          <v-img v-if="isImage(media.content)" :src="media.content" :alt="media.title" class="media-view mb-4"></v-img>
-          <v-responsive v-else aspect-ratio="16/9" class="media-view mb-4">
-            <video controls :src="media.content" class="video-view"></video>
-          </v-responsive>
+        <div class="media-box">
+          <div v-if="media.content">
+            <v-img v-if="isImage(media.content)" :src="media.content" :alt="media.title" class="media-view"></v-img>
+            <v-responsive v-else class="media-view">
+              <video controls :src="media.content" class="video-view"></video>
+            </v-responsive>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -78,27 +80,29 @@ export default {
 </script>
 
 <style scoped>
+.media-box {
+  border: 2px solid #ccc; /* Add a visible outline */
+  border-radius: 8px;
+  padding: 10px;
+  max-width: 800px; /* Standardize the width */
+  margin: 0 auto; /* Center the media box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  background-color: white; /* Ensure it stands out on any background */
+}
+
 .media-view {
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%; /* Make the media fit within the box */
+  height: auto; /* Adaptive height based on the content */
+  object-fit: contain; /* Maintain aspect ratio */
 }
 
 .video-view {
-  max-width: 800px;
-  height: auto;
-}
-
-.comments-container {
-  display: flex;
-  flex-direction: column;
+  max-width: 100%;
+  height: auto; /* Let the height adapt based on the content */
 }
 
 .comment-box {
   padding: 10px;
   border-radius: 8px;
-}
-
-.text-center {
-  text-align: center;
 }
 </style>
