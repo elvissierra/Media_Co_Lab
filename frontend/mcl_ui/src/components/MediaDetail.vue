@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
 
-    <!-- Comment Section -->
+    <!-- Comment Section tba -->
     <v-row>
       <v-col cols="12">
         <h2 class="text-center">Comments</h2>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       media: null,
-      comments: [], // Placeholder for fetched comments
+      comments: [],
     };
   },
   async created() {
@@ -81,24 +81,24 @@ export default {
 
 <style scoped>
 .media-box {
-  border: 2px solid #ccc; /* Add a visible outline */
+  border: 2px solid #ccc;
   border-radius: 8px;
   padding: 10px;
-  max-width: 800px; /* Standardize the width */
-  margin: 0 auto; /* Center the media box */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-  background-color: white; /* Ensure it stands out on any background */
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
 }
 
 .media-view {
-  width: 100%; /* Make the media fit within the box */
-  height: auto; /* Adaptive height based on the content */
-  object-fit: contain; /* Maintain aspect ratio */
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .video-view {
   max-width: 100%;
-  height: auto; /* Let the height adapt based on the content */
+  height: auto; 
 }
 
 .comment-box {
