@@ -5,7 +5,6 @@
         <h1 class="text-center">{{ media.title }}</h1>
         <p>{{ media.description }}</p>
 
-        <!-- Media File Display -->
         <div v-if="media.content">
           <v-img v-if="isImage(media.content)" :src="media.content" :alt="media.title" class="media-view mb-4"></v-img>
           <v-responsive v-else aspect-ratio="16/9" class="media-view mb-4">
@@ -51,11 +50,9 @@ export default {
   async created() {
     const mediaId = this.$route.params.uuid;
     try {
-      // Fetch media details
       const response = await this.$axios.get(`/medias/${mediaId}/`);
       this.media = response.data;
 
-      // Fetch comments for the media
       const commentsResponse = await this.$axios.get(`/medias/${mediaId}/comments/`);
       this.comments = commentsResponse.data;
     } catch (error) {

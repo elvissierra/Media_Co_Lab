@@ -3,10 +3,8 @@
     <h1>Welcome to Media Co lab!</h1>
     <p>Start to MCL!</p>
 
-    <!-- Registration Button (shown if user is not logged in) -->
     <button v-if="!isLoggedIn" @click="goToRegister">Register</button>
 
-    <!-- Logout Button (shown if user is logged in) -->
     <button v-if="isLoggedIn" @click="logoutUser">Logout</button>
   </div>
 </template>
@@ -24,7 +22,6 @@ export default {
   },
   methods: {
     checkLoginStatus() {
-      // Check if the auth token is in localStorage
       this.isLoggedIn = !!localStorage.getItem('authToken');
     },
     async logoutUser() {

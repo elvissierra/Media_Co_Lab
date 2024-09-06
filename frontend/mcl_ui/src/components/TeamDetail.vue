@@ -7,7 +7,6 @@
       </v-col>
     </v-row>
 
-    <!-- Media Thumbnails -->
     <v-row>
       <v-col cols="12">
         <h2 class="text-center">Related Media</h2>
@@ -20,7 +19,6 @@
             md="4"
           >
             <div class="media-thumbnail">
-              <!-- Display Title and Content -->
               <h3>{{ media.title }}</h3>
               <v-img
                 v-if="isImage(media.content)"
@@ -44,18 +42,16 @@ export default {
   name: 'TeamDetail',
   data() {
     return {
-      team: null, // Team details
-      relatedMedia: [], // Related media objects for the team
+      team: null, 
+      relatedMedia: [], 
     };
   },
   async created() {
     const teamId = this.$route.params.uuid;
     try {
-      // Fetch team details
       const teamResponse = await this.$axios.get(`/teams/${teamId}/`);
       this.team = teamResponse.data;
 
-      // Fetch related media (title and content only)
       const mediaResponse = await this.$axios.get(`/teams/${teamId}/medias/`);
       this.relatedMedia = mediaResponse.data;
     } catch (error) {

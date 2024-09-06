@@ -8,10 +8,8 @@
     <v-row>
       <v-col cols="12">
         <div class="dynamic-grid">
-          <!-- Iterate over each type group -->
           <div v-for="(labels, type) in groupedLabels" :key="type" class="type-group">
             <h3>{{ type }}</h3>
-            <!-- Display labels in a grid resembling a heat map -->
             <div class="label-collage">
               <div
                 v-for="label in labels"
@@ -34,7 +32,7 @@ export default {
   name: 'mclLabels',
   data() {
     return {
-      labels: [],  // Initialize as an empty array
+      labels: [], 
     };
   },
   computed: {
@@ -58,7 +56,7 @@ export default {
   methods: {
     async fetchLabels() {
       try {
-        const response = await this.$axios.get('/labels/');  // Adjust the URL as needed
+        const response = await this.$axios.get('/labels/');
         this.labels = response.data;
       } catch (error) {
         console.error('Error fetching labels:', error);
@@ -90,12 +88,11 @@ export default {
   padding: 10px;
   color: white;
   font-weight: bold;
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth hover effect */
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
 }
 
-/* Modernized color palette */
 .green {
   background: #6fcf97
 }
@@ -111,13 +108,11 @@ export default {
   background: #eb5757
 }
 
-/* Hover effect */
 .label-item:hover {
-  transform: scale(1.05); /* Slightly increase size on hover */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Increase shadow on hover */
+  transform: scale(1.05); 
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); 
 }
 
-/* Font improvements */
 h1 {
   font-family: 'Poppins', sans-serif;
   font-size: 2.5rem;

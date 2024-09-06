@@ -46,7 +46,7 @@ export default {
   name: 'mclMedia',
   data() {
     return {
-      medias: [], // Array to store fetched media data
+      medias: [],
     };
   },
   async created() {
