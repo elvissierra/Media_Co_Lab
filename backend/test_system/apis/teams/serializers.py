@@ -5,9 +5,10 @@ from test_system.apis.users.serializers import UsersGetSerializer
 from django.conf import settings
 
 class TeamMediaSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Medias
-        fields = ["title", "content"]
+        fields = ["title", "content", "team"]
 
     def get_content(self, obj):
         request = self.context.get('request')

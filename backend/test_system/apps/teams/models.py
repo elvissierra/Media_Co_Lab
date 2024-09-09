@@ -11,3 +11,6 @@ class Team(models.Model):
     organization = models.ForeignKey(
         Organization, related_name="teams", on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.title
