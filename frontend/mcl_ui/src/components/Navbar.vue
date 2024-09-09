@@ -1,9 +1,9 @@
 <template>
     <nav class="navbar">
       <ul>
-        <li><a href="/home/">Home</a></li>
-        <li><a href="/teams/">Teams</a></li>
-        <li><a href="/media/">Media</a></li>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/teams">Teams</a></li>
+        <li><a href="/media">Media</a></li>
       </ul>
     </nav>
   </template>

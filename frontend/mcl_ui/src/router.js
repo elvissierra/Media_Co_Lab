@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Page from './components/Page.vue'
-import Home from './components/Home.vue'
+import TopPage from './components/TopPage.vue'
+import HomePage from './components/HomePage.vue'
 import Organization from './components/Organization.vue'
 import UserRegister from './components/UserRegister.vue'
 import UserLogin from './components/UserLogin.vue'
@@ -19,10 +19,10 @@ import Labels from './components/Labels.vue'
 
 const routes = [
   {
-    path: '/', name: 'Page', component: Page,
+    path: '/', name: 'TopPage', component: TopPage,
   },
   {
-    path: '/home', name: 'Home', component: Home,
+    path: '/home', name: 'HomePage', component: HomePage,
   },
   {
     path: '/register', name: 'UserRegister', component: UserRegister,
