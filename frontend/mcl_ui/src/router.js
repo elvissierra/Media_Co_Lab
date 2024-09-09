@@ -9,7 +9,7 @@ import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
 import Labels from './components/Labels.vue'
 
-
+// Define all components
 const routes = [
   {
     path: '/', name: 'HomePage', component: HomePage,
