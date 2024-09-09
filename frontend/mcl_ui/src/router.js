@@ -28,7 +28,7 @@ const routes = [
     path: '/register', name: 'UserRegister', component: UserRegister,
   },
   {
-    path: '/login', name: 'UserLogin', component: UserLogin, 
+    path: '/login', name: 'UserLogin', component: UserLogin,
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('authToken')){
         next({ name: 'HomePage'})
