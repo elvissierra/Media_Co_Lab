@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div class="/">
     <h1>Welcome to Media Co lab!</h1>
     <p>Start to MCL!</p>
 
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "HomePage",
+  name: "Page",
   data() {
     return {
       isLoggedIn: false,
@@ -47,7 +47,7 @@ export default {
 
   
   <style scoped>
-  .home-page {
+  .page {
     text-align: center;
     margin-top: 50px;
   }

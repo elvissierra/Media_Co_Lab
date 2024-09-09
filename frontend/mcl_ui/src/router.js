@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from './components/HomePage.vue'
+import Page from './components/Page.vue'
+import Home from './components/Home.vue'
 import Organization from './components/Organization.vue'
 import UserRegister from './components/UserRegister.vue'
 import UserLogin from './components/UserLogin.vue'
@@ -18,7 +19,10 @@ import Labels from './components/Labels.vue'
 
 const routes = [
   {
-    path: '/', name: 'HomePage', component: HomePage,
+    path: '/', name: 'Page', component: Page,
+  },
+  {
+    path: '/home', name: 'Home', component: Home,
   },
   {
     path: '/register', name: 'UserRegister', component: UserRegister,
@@ -49,7 +53,7 @@ const routes = [
     path: '/media/:uuid', name: 'MediaDetail', component: MediaDetail,
   },
   {
-    path: '/labels/', name: 'mclLabels', component: Labels,
+    path: '/labels', name: 'mclLabels', component: Labels,
   },
 ];
 // connected to base backend

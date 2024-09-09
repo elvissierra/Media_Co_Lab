@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import HomePage from './components/HomePage.vue'
+import Page from './components/Page.vue'
 import Navbar from './components/Navbar.vue'
 
 export default {

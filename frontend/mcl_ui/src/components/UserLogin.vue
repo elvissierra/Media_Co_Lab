@@ -16,7 +16,7 @@
   </div>
   <div v-else>
     <p>You are already logged in.</p>
-    <router-link to="/">Go to Homepage</router-link>
+    <router-link to="/home">Go to Homepage</router-link>
   </div>
 </template>
 
