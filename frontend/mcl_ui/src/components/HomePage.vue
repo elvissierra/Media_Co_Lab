@@ -10,28 +10,22 @@
 
     <!-- About Section -->
     <section class="about">
-      <h2>About Us</h2>
-      <p>We are committed to bringing the best products and services to our users.</p>
+      <h2>About The Environment:</h2>
+      <p>To provide organizations and regular users the chance and tools to collaborate in a fluid
+         and conscious environment. Users can bring up ideas, share thoughts on media subjects, 
+         and explore new views on present-day media. Media can be any type of file—images, videos,
+          articles, voice notes, etc.</p>
     </section>
 
-    <!-- Featured Section -->
-    <section class="featured">
-      <h2>Featured</h2>
-      <div class="featured-items">
+    <!-- Features Section -->
+    <section class="features">
+      <h2>Features</h2>
+      <div class="feature-items">
         <div v-for="item in featuredItems" :key="item.id" class="featured-item">
           <h3>{{ item.title }}</h3>
           <p>{{ item.description }}</p>
           <button @click="learnMore(item)">Learn More</button>
         </div>
-      </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-      <h2>What Our Users Say</h2>
-      <div class="testimonial" v-for="testimonial in testimonials" :key="testimonial.id">
-        <p>{{ testimonial.text }}</p>
-        <small>— {{ testimonial.author }}</small>
       </div>
     </section>
 
@@ -43,12 +37,7 @@
 
     <!-- Footer -->
     <footer>
-      <p>&copy; 2024 Our Platform. All Rights Reserved.</p>
-      <div class="social-links">
-        <a href="#" aria-label="Twitter">Twitter</a>
-        <a href="#" aria-label="Facebook">Facebook</a>
-        <a href="#" aria-label="LinkedIn">LinkedIn</a>
-      </div>
+
     </footer>
   </div>
 </template>
@@ -60,12 +49,8 @@ export default {
   data() {
     return {
       featuredItems: [
-        { id: 1, title: "Item One", description: "Description of item one." },
-        { id: 2, title: "Item Two", description: "Description of item two." },
-      ],
-      testimonials: [
-        { id: 1, text: "This platform is amazing!", author: "John Doe" },
-        { id: 2, text: "I had a wonderful experience.", author: "Jane Smith" },
+        { id: 1, title: "Labeling type", description: "Type can be chosen from a preset list or create a new type to fit your needs." },
+        { id: 2, title: "Labeling tag", description: "Tags are designed to indicate a level of priority." },
       ],
     };
   },
@@ -122,29 +107,32 @@ export default {
   cursor: pointer;
 }
 
-.about, .featured, .testimonials, .cta-section {
+.about, .features, .cta-section {
   padding: 2rem;
   text-align: center;
 }
 
-.featured-items {
+.feature-items {
   display: flex;
   justify-content: space-around;
+  align-items: stretch;
+  gap: 1rem;
 }
 
 .featured-item {
-  background-color: #f5f5f5;
+  flex: 1 1 45%;
   padding: 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
 }
 
-.testimonial {
-  background-color: #fff;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
+@media (max-width: 768px) {
+  .featured-item {
+    flex: 1 1 100%;
+  }
 }
+
 
 .cta-section {
   background-color: #4caf50;
