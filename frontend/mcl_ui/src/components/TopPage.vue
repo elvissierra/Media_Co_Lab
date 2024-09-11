@@ -59,5 +59,31 @@ export default {
   p {
     font-size: 1.2em;
   }
+
+  .header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes content to the top and bottom */
+  padding: 0;
+  margin: 0;
+  position: relative;
+  }
+
+  .header button {
+    align-self: flex-end; /* Moves button to the right */
+    margin-top: auto; /* Pushes the button to the bottom */
+    background-color: #ff5722;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    top: 10px;
+  }
+
+  .header button:hover {
+    background-color: #e64a19;
+  }
+
   </style>
   

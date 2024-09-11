@@ -11,7 +11,7 @@
 
     <!-- Hero Section -->
     <section class="hero">
-      <button @click="ctaAction">Get Started</button>
+      <button v-if="!isLoggedIn" @click="ctaAction">Get Started</button>
     </section>
 
     <!-- About Section -->
@@ -38,7 +38,7 @@
     <!-- Call-to-Action Section -->
     <section class="cta-section">
       <h2>Ready to Join?</h2>
-      <button @click="joinNow">Sign Up Now</button>
+      <button @click="joinNow">Join Now</button>
     </section>
 
     <!-- Footer -->
@@ -155,7 +155,6 @@ export default {
 .cta-section {
   background-color: #4caf50;
   color: white;
-  padding: 2rem;
 }
 
 .cta-section button {
@@ -164,6 +163,11 @@ export default {
   padding: 1rem 2rem;
   border: none;
   cursor: pointer;
+  font-size: 1.25rem;
+  border-radius: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: auto;
 }
 
 footer {
