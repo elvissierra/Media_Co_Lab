@@ -122,10 +122,14 @@ export default {
   justify-content: space-around;
   align-items: stretch;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .featured-item {
   flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 1rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
