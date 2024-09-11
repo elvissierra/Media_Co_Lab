@@ -1,7 +1,6 @@
 <template>
   <div class="header">
     <h1>Welcome to Media Co lab!</h1>
-    <p>Start to MCL!</p>
 
     <button v-if="!isLoggedIn" @click="goToRegister">Register</button>
 
@@ -54,7 +53,7 @@ export default {
   
   h1 {
     font-size: 2.5em;
-    color: #42b983;
+    color: #4caf50;
   }
   
   p {

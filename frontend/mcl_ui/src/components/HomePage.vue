@@ -1,10 +1,16 @@
 <template>
   <div id="home">
 
+    <!-- About Section -->
+    <section class="about">
+      <h2>What we do here:</h2>
+      <p>Welcome to Media_co_Lab, where we foster creativity and discussion on topics world wide.
+        Form teams and seperate topics to more clearly identify interests, and evolve ideas!
+      </p>
+    </section>
+
     <!-- Hero Section -->
     <section class="hero">
-      <h1>Welcome to Our Amazing Platform</h1>
-      <p>Your journey to excellence starts here.</p>
       <button @click="ctaAction">Get Started</button>
     </section>
 
@@ -49,8 +55,10 @@ export default {
   data() {
     return {
       featuredItems: [
-        { id: 1, title: "Labeling type", description: "Type can be chosen from a preset list or create a new type to fit your needs." },
-        { id: 2, title: "Labeling tag", description: "Tags are designed to indicate a level of priority." },
+        { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing." },
+        { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns." },
+        { id: 3, title: "Labeling type", description: "Type can be chosen from a preset list or create a new type to fit your needs." },
+        { id: 4, title: "Labeling tag", description: "Tags are designed to indicate a level of priority." },
       ],
     };
   },
@@ -89,7 +97,7 @@ export default {
 }
 
 .hero {
-  background: () no-repeat center center;
+  background: url("@/assets/giphy.gif") no-repeat center center;
   background-size: cover;
   height: 60vh;
   display: flex;
@@ -107,9 +115,10 @@ export default {
   border: none;
   cursor: pointer;
   font-size: 1.25rem;
-  border-radius: 30px; /* Rounded corners */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover transition */
+  border-radius: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: auto;
 }
 
 .about, .features, .cta-section {
