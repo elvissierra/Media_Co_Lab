@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     ctaAction() {
-      alert("Navigating to get started!");
+      this.$router.push({name: 'UserRegister'});
     },
     learnMore(item) {
       alert(`Learn more about ${item.title}`);
@@ -89,7 +89,7 @@ export default {
 }
 
 .hero {
-  background: url() no-repeat center center;
+  background: () no-repeat center center;
   background-size: cover;
   height: 60vh;
   display: flex;
@@ -97,6 +97,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
+  padding: 2rem; /* Add some padding to the hero section */
 }
 
 .hero button {
@@ -105,6 +106,10 @@ export default {
   padding: 1rem 2rem;
   border: none;
   cursor: pointer;
+  font-size: 1.25rem;
+  border-radius: 30px; /* Rounded corners */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover transition */
 }
 
 .about, .features, .cta-section {
