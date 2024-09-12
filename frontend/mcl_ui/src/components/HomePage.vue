@@ -11,11 +11,11 @@
 
     <!-- Hero Section -->
     <section class="hero">
-      <button v-if="!isLoggedIn" @click="ctaAction">Get Started</button>
+      <button @click="ctaAction">Learn More</button>
     </section>
 
     <!-- About Section -->
-    <section class="about">
+    <section ref="about_env" class="target-section">
       <h2>About The Environment:</h2>
       <p>To provide organizations and regular users the chance and tools to collaborate in a fluid
          and conscious environment. Users can bring up ideas, share thoughts on media subjects, 
@@ -30,9 +30,17 @@
         <div v-for="item in featuredItems" :key="item.id" class="featured-item">
           <h3>{{ item.title }}</h3>
           <p>{{ item.description }}</p>
-          <button @click="learnMore(item)">Learn More</button>
+          <button @click="seeMore(item)"> View Feature </button>
         </div>
       </div>
+
+        <!-- Section to display the GIF -->
+      <div v-if="selectedItem" class="gif-display">
+        <h3>{{ selectedItem.title }}</h3>
+        <img :src="selectedGif" alt="Feature GIF">
+        <button @click="closeGif">Close</button>
+      </div>
+
     </section>
 
     <!-- Call-to-Action Section -->
@@ -54,6 +62,8 @@ export default {
   name: "HomePage",
   data() {
     return {
+      selectedItem: null, // Will hold the selected feature item
+      selectedGif: null,  // Will hold the URL of the GIF
       featuredItems: [
         { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing." },
         { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns." },
@@ -64,10 +74,15 @@ export default {
   },
   methods: {
     ctaAction() {
-      this.$router.push({name: 'UserRegister'});
+      this.$refs.about_env.scrollIntoView({behavior: 'smooth'}); /* tbc scroll down to ATE */
     },
-    learnMore(item) {
-      alert(`Learn more about ${item.title}`);
+    seeMore(item) {
+      this.seletedItem = item;
+      this.selectedGif = item.gifUrl;
+    },
+    closeGif() {
+      this.selectedItem = null;
+      this.selectedGif = null;
     },
     joinNow() {
       alert("Signing you up...");
@@ -143,6 +158,31 @@ export default {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   background-color: #f9f9f9;
+}
+
+.gif-display {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.gif-display img {
+  max-width: 100%;
+  height: auto;
+}
+
+.gif-display button {
+  margin-top: 10px;
+  background-color: #ff5722;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
