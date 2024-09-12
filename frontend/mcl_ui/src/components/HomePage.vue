@@ -65,10 +65,11 @@ export default {
       selectedItem: null, // Will hold the selected feature item
       selectedGif: null,  // Will hold the URL of the GIF
       featuredItems: [
-        { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing." },
-        { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns." },
-        { id: 3, title: "Labeling type", description: "Type can be chosen from a preset list or create a new type to fit your needs." },
-        { id: 4, title: "Labeling tag", description: "Tags are designed to indicate a level of priority." },
+        { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing.", gifUrl: "/gifs/gif1.gif"},
+        { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns.", gifUrl: "/gifs/gif2.gif"},
+        { id: 3, title: "Labeling type", description: "Type can be chosen from a preset list or create a new type to fit your needs.", gifUrl: "/gifs/gif3.gif"},
+        { id: 4, title: "Labeling tag", description: "Tags are designed to indicate a level of priority.", gifUrl: "/gifs/gif4.gif"},
+
       ],
     };
   },
@@ -77,7 +78,7 @@ export default {
       this.$refs.about_env.scrollIntoView({behavior: 'smooth'}); /* tbc scroll down to ATE */
     },
     seeMore(item) {
-      this.seletedItem = item;
+      this.selectedItem = item;
       this.selectedGif = item.gifUrl;
     },
     closeGif() {
