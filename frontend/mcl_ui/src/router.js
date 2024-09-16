@@ -47,7 +47,7 @@ const routes = [
     path: '/teams/:uuid', name: 'TeamDetail', component: TeamDetail,
   },
   {
-    path: '/media', name: 'mclMedia', component: Media,
+    path: '/medias', name: 'mclMedia', component: Media,
   },
   {
     path: '/media/:uuid', name: 'MediaDetail', component: MediaDetail,

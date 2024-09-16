@@ -21,6 +21,12 @@
           hover
         >
           <v-card-title>
+            <!-- Small colored dot for label -->
+            <span 
+              v-if="media.labels && media.labels.length > 0"
+              :style="{ backgroundColor: media.labels[0].preset_tag }"
+              class="label-dot"
+            ></span>
             {{ media.title }}
           </v-card-title>
           <v-card-text>
@@ -34,22 +40,7 @@
             </div>
             <v-divider></v-divider>
             <p>Team: {{ media.team.title }}</p>
-
-            <!-- Label chips section -->
-            <v-row>
-              <v-col v-for="label in media.labels" :key="label.id" cols="auto">
-                <v-chip 
-                  :color="label.preset_tag"
-                  dark
-                  small
-                  class="ma-1"
-                  outlined
-                  :text-color="label.preset_tag === 'yellow' ? 'black' : 'white'"
-                >
-                  {{ label.title }} ({{ label.preset_type }})
-                </v-chip>
-              </v-col>
-            </v-row>
+            <p>{{ media.labels }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -89,7 +80,13 @@ export default {
   cursor: pointer;
 }
 
-.media-card {
-  min-height: 400px; /* Ensures enough space for content */
+/* Small dot indicator for the label */
+.label-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 </style>
