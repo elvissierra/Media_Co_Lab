@@ -62,7 +62,7 @@ class UserGetUpdateDeleteView(APIView):
     def put(self, request, user_id, format=None):
         user = get_object_or_404(CustomUser, id=user_id)
         self.check_object_permissions(request, user)
-        serializer = UserSerializer(user, data=request.data)
+        serializer = UsersGetSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

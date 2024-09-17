@@ -37,13 +37,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UsersGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = ["id", "username", "first_name", "last_name", "email", "team", "organization"]
 
         def to_representation(self, instance):
             data = super().to_representation(instance)
             request = self.context.get('request')
             if request and not request.user.is_superuser:
-                sensitive_fields = ["password", "last_login", "is_superuser", "is_staff", "is_active", "date_joined", "email", "groups"]
+                sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
                 for field in sensitive_fields:
                     data.pop(field, None)
             return data                                                
