@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.teams.models import Team
 from test_system.apps.medias.models import Medias
-from test_system.apis.teams.serializers import TeamSerializer, TeamMediaSerializer
+from test_system.apis.teams.serializers import TeamsSerializer, TeamSerializer, TeamMediaSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,7 +15,7 @@ class TeamsGetCreateView(APIView):
         if not organization:
             return Response({"error": "User not associated with an organization."}, status=status.HTTP_400_BAD_REQUEST)
         teams = Team.objects.filter(organization = request.user.organization)
-        serializer = TeamSerializer(teams, many=True)
+        serializer = TeamsSerializer(teams, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):

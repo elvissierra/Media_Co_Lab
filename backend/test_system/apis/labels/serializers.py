@@ -2,6 +2,7 @@ from rest_framework import serializers
 from test_system.apps.labels.models import Label
 
 class LabelSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Label
         fields = "__all__"
@@ -11,3 +12,9 @@ class LabelSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         label = Label.objects.create(user=user, **validated_data)
         return label
+    
+class LabelsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Label
+        fields = ["title", "preset_tag"]

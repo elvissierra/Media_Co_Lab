@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
-from test_system.apis.medias.serializers import MediasSerializer
+from test_system.apis.medias.serializers import MediasSerializer, MediaSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -22,10 +22,10 @@ class MediasGetCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = MediasSerializer(data=request.data, context={"request":request})
+        serializer = MediaSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             medias_obj = serializer.save()
-            return Response(MediasSerializer(medias_obj).data, status=status.HTTP_201_CREATED)
+            return Response(MediaSerializer(medias_obj).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class MediasGetUpdateDeleteView(APIView):
@@ -38,11 +38,11 @@ class MediasGetUpdateDeleteView(APIView):
 
     def get(self, request, medias_id):
         media = get_object_or_404(Medias, id=medias_id)
-        return Response(MediasSerializer(media, context={"request": request}).data)
+        return Response(MediaSerializer(media, context={"request": request}).data)
 
     def update(self, request, medias_id):
         medias = get_object_or_404(Medias, id=medias_id)
-        serializer = MediasSerializer(medias, data=request.data)
+        serializer = MediaSerializer(medias, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -50,4 +50,4 @@ class MediasGetUpdateDeleteView(APIView):
     def delete(self, medias_id):
         medias = get_object_or_404(Medias, id=medias_id)
         medias.delete()
-        return Response(MediasSerializer(medias).data)
+        return Response(MediaSerializer(medias).data)
