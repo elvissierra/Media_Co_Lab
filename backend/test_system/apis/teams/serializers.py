@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from test_system.apps.teams.models import Team
 from test_system.apps.medias.models import Medias
-from test_system.apis.users.serializers import UsersGetSerializer
+from test_system.apis.users.serializers import UsersGetSerializer, UserSerializer
 from django.conf import settings
 
 class TeamMediaSerializer(serializers.ModelSerializer):
@@ -25,7 +25,8 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class TeamsSerializer(serializers.ModelSerializer):
+    users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team
-        fields = ["title"]
+        fields = ["title", "description", "users"]
