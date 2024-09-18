@@ -8,6 +8,14 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from test_system.permissions import OrganizationPermission
 
 
+class UserOrganizationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        organization = request.user.organization
+        serializer = OrganizationSerializer(organization)
+        return Response(serializer.data)
+
 class OrganizationCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
