@@ -41,6 +41,9 @@ const routes = [
     path: '/organization', name: 'mclOrganization', component: Organization,
   },
   {
+    path: '/organizations/to/', name: 'mclOrganization', component: Organization,
+  },
+  {
     path: '/teams', name: 'mclTeams', component: Teams,
   },
   {
