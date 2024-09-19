@@ -37,15 +37,18 @@
         sm="6"
         md="4"
       >
-        <v-list dense>
-          <v-list-item
-            v-for="user in team.users"
-            :key="user.id"
-          >
-            <v-list-item-content>{{ user.first_name }}</v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-col>
+        <v-col
+          v-for="user in team.users"
+          :key="user.id"
+          cols="12"
+          sm="6"
+          md="4"
+        >
+          <v-card class="mb-4" outlined hover>
+            <v-card-title> {{ user.first_name }}</v-card-title>
+          </v-card>
+          </v-col>
+        </v-col>
     </v-row>
 
     <!-- Medias Section -->
