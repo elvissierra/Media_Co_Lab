@@ -85,7 +85,7 @@ export default {
   },
   async created() {
     try {
-      const response = await this.$axios.get('/organization/to/');
+      const response = await this.$axios.get('/organizations/ov/');
       this.organization = response.data;
     } catch (error) {
       console.error('Error fetching organizational information:', error);
