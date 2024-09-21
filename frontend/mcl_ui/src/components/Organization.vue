@@ -35,7 +35,7 @@
       </v-col>
     </v-row>
 
-    <!-- Medias Section -->
+    <!-- TBD Medias Section -->
     <v-row v-if="organization?.medias && organization.medias.length">
       <v-col cols="12">
         <h2 class="text-center">Medias</h2>
@@ -54,7 +54,7 @@
       </v-col>
     </v-row>
 
-    <!-- Labels Section -->
+    <!-- TBD Labels Section -->
     <v-row v-if="organization?.labels && organization.labels.length">
       <v-col cols="12">
         <h2 class="text-center">Labels</h2>
