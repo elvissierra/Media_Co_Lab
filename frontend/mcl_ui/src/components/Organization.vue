@@ -35,7 +35,7 @@
       </v-col>
     </v-row>
 
-    <!-- TBD Medias Section -->
+    <!-- TBD Medias Section display small icons for each media -->
     <v-row v-if="organization?.medias && organization.medias.length">
       <v-col cols="12">
         <h2 class="text-center">Medias</h2>
