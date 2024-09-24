@@ -16,7 +16,7 @@
       </v-col>
     </v-row>
 
-    <!-- Comment Section tba -->
+    <!-- Comment Section TBD -->
     <v-row>
       <v-col cols="12">
         <h2 class="text-center">Comments</h2>

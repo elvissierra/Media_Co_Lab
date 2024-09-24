@@ -35,19 +35,19 @@
             <v-row>
               <v-col
                 v-for="media in team.medias"
-                :key="media.title"
+                :key="media.uuid"
                 cols="6"
                 sm="4"
               >
                 <v-hover v-slot:default="{ props }">
                   <v-card
                     v-bind="props"
-                    @click="viewMedia(media)"
+                    @click="viewMedia(media.uuid)"
                     class="media-thumbnail"
                     elevation="2"
                     tile
                   >
-                    <v-img :src="media.content" :alt="media.title" aspect-ratio="1" />
+                    <v-img v-if="isImage(media.content)" :src="getFullImageUrl(media.content)" :alt="media.title" aspect-ratio="1" />
                   </v-card>
                 </v-hover>
               </v-col>
@@ -96,8 +96,14 @@ export default {
   methods: {
     viewMedia(mediaId) {
       this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } });
-    }
-  }
+    },
+    isImage(filePath) {
+      return /\.(jpeg|jpg|gif|png)$/.test(filePath);
+    },
+    getFullImageUrl(relativeUrl) {
+      return `${this.$axios.defaults.baseURL}${relativeUrl}`;
+  },
+}
 };
 </script>
 
