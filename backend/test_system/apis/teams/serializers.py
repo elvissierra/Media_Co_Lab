@@ -8,7 +8,7 @@ class TeamMediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Medias
-        fields = ["title", "content", "team"]
+        fields = ["title", "content"]
 
     def get_content(self, obj):
         request = self.context.get('request')
@@ -26,7 +26,8 @@ class TeamSerializer(serializers.ModelSerializer):
 
 class TeamsSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True, read_only=True)
+    medias = TeamMediaSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team
-        fields = ["title", "description", "users"]
+        fields = ["title", "description", "users", "medias"]

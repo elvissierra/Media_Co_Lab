@@ -2,14 +2,14 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <h1 class="text-center"> Organization Overview: {{ organization?.title }} </h1>
+        <h1 class="text-center mb-5">Organization Overview: {{ organization?.title }}</h1>
       </v-col>
     </v-row>
 
     <!-- Teams Section -->
     <v-row>
       <v-col cols="12">
-        <h2 class="text-center">Teams</h2>
+        <h2 class="text-center mb-4">Teams</h2>
       </v-col>
       <v-col
         v-for="team in organization?.teams"
@@ -21,7 +21,7 @@
         <v-card class="mb-4" outlined hover>
           <v-card-title>{{ team.title }}</v-card-title>
           <v-card-text>
-            {{ team.description }}
+            <p>{{ team.description }}</p>
             <v-divider class="my-2"></v-divider>
             <h4>Users</h4>
             <v-list dense v-if="team.users.length">
@@ -30,26 +30,28 @@
               </v-list-item>
             </v-list>
             <p v-else>No users in this team</p>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
 
-    <!-- TBD Medias Section display small icons for each media -->
-    <v-row v-if="organization?.medias && organization.medias.length">
-      <v-col cols="12">
-        <h2 class="text-center">Medias</h2>
-      </v-col>
-      <v-col
-        v-for="media in organization.medias"
-        :key="media.id"
-        cols="12"
-        sm="6"
-        md="4"
-      >
-        <v-card class="mb-4" outlined hover>
-          <v-card-title>{{ media.title }}</v-card-title>
-          <v-card-text>{{ media.description }}</v-card-text>
+            <h4>Media Collage</h4>
+            <v-row>
+              <v-col
+                v-for="media in team.medias"
+                :key="media.title"
+                cols="6"
+                sm="4"
+              >
+                  <v-card
+                    v-bind="props"
+                    @click="viewMedia(media)"
+                    class="media-thumbnail"
+                    elevation="2"
+                    tile
+                  >
+                    <v-img :src="media.content" :alt="media.title" aspect-ratio="1" />
+                  </v-card>
+              </v-col>
+            </v-row>
+            <p v-if="!team.medias.length">No media in this team</p>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -57,7 +59,7 @@
     <!-- TBD Labels Section -->
     <v-row v-if="organization?.labels && organization.labels.length">
       <v-col cols="12">
-        <h2 class="text-center">Labels</h2>
+        <h2 class="text-center mb-4">Labels</h2>
       </v-col>
       <v-col
         v-for="label in organization.labels"
@@ -71,8 +73,6 @@
     </v-row>
   </v-container>
 </template>
-
-
 
 
 <script>
@@ -90,13 +90,41 @@ export default {
     } catch (error) {
       console.error('Error fetching organizational information:', error);
     }
+  },
+  methods: {
+    viewMedia(mediaId) {
+      this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } }); // Adjust the route name and params as necessary
+    }
   }
 };
 </script>
 
 <style>
 .v-card {
+  transition: transform 0.3s;
+}
+
+.v-card:hover {
+  transform: scale(1.05);
+}
+
+h1, h2, h4 {
+  color: #1976D2; /* Primary color */
+}
+
+.mb-4 {
+  margin-bottom: 20px;
+}
+
+.mb-5 {
+  margin-bottom: 40px;
+}
+.media-thumbnail {
   cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.media-thumbnail:hover {
+  transform: scale(1.05);
 }
 </style>
-  
