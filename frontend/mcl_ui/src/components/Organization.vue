@@ -39,6 +39,7 @@
                 cols="6"
                 sm="4"
               >
+                <v-hover v-slot:default="{ props }">
                   <v-card
                     v-bind="props"
                     @click="viewMedia(media)"
@@ -48,6 +49,7 @@
                   >
                     <v-img :src="media.content" :alt="media.title" aspect-ratio="1" />
                   </v-card>
+                </v-hover>
               </v-col>
             </v-row>
             <p v-if="!team.medias.length">No media in this team</p>
@@ -93,7 +95,7 @@ export default {
   },
   methods: {
     viewMedia(mediaId) {
-      this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } }); // Adjust the route name and params as necessary
+      this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } });
     }
   }
 };
