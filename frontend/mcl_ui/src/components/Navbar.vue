@@ -2,6 +2,7 @@
   <nav class="navbar">
     <ul class="navbar-list">
       <li><a href="/home">Home</a></li>
+      <li><a href="/organizations/ov">Organization</a></li>
       <li><a href="/teams">Teams</a></li>
       <li><a href="/medias">Media</a></li>
     </ul>
