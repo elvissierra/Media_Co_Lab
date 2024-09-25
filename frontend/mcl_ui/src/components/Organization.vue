@@ -6,7 +6,6 @@
       </v-col>
     </v-row>
 
-    <!-- Teams Section -->
     <v-row>
       <v-col cols="12">
         <h2 class="text-center mb-4">Teams</h2>
@@ -58,7 +57,6 @@
       </v-col>
     </v-row>
 
-    <!-- TBD Labels Section -->
     <v-row v-if="organization?.labels && organization.labels.length">
       <v-col cols="12">
         <h2 class="text-center mb-4">Labels</h2>
@@ -101,7 +99,7 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getFullImageUrl(relativeUrl) {
-      return `${this.$axios.defaults.baseURL}${relativeUrl}`;
+  return `http://localhost:8000${relativeUrl}`;
   },
 }
 };
