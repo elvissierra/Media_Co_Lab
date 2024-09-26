@@ -9,14 +9,14 @@
     <v-row>
       <v-col
         v-for="media in medias"
-        :key="media.id"
+        :key="media.uuid"
         cols="12"
         sm="6"
         md="4"
       >
         <v-card 
           class="mb-4"
-          @click="viewMedia(media.id)"
+          @click="viewMedia(media.uuid)"
           outlined
           hover
         >
@@ -27,14 +27,13 @@
             <p>{{ media.description }}</p>
             <v-divider></v-divider>
             <div v-if="media.content">
-              <v-img v-if="isImage(media.content)" :src="media.content" :alt="media.title"></v-img>
+              <v-img v-if="isImage(media.content)" :src="getFullImageUrl(media.content)" :alt="media.title"></v-img>
               <v-responsive v-else aspect-ratio="16/9">
                 <video controls :src="media.content" style="width: 100%;"></video>
               </v-responsive>
             </div>
             <v-divider></v-divider>
             <p>Team: {{ media.team_title }}</p>
-            <!-- Display all labels as colored chips -->
             <v-row v-if="media.labels && media.labels.length > 0">
               <v-col
                 v-for="label in media.labels"
@@ -80,8 +79,12 @@ export default {
     },
     viewMedia(mediaId) {
       this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } });
-    }
+    },
+    getFullImageUrl(relativeUrl) {
+  return `http://localhost:8000${relativeUrl}`;
+
   },
+}
 };
 </script>
 

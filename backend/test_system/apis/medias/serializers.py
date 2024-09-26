@@ -4,8 +4,6 @@ from test_system.apps.medias.models import Medias
 from test_system.apis.labels.serializers import LabelsSerializer
 from test_system.apis.teams.serializers import TeamsSerializer
 
-#/medias/ path returning redundant data in MediasSerailizer
-#only need media title, desrciption, content, labels, user, and team
 
 class MediasSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)

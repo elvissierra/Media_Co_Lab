@@ -8,8 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from test_system.permissions import IsMediaOwner
 from rest_framework.permissions import IsAuthenticated
 
-class MediasGetCreateView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
+class UserMediasGetView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -18,6 +17,15 @@ class MediasGetCreateView(APIView):
         if not team:
             return Response({"error": "User is not associated with any team yet"}, status=status.HTTP_400_BAD_REQUEST)
         medias = Medias.objects.filter(team_id=team.id)
+        serializer = MediasGetSerializer(medias, many=True)
+        return Response(serializer.data)
+
+class MediasGetCreateView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        medias = Medias.objects.all()
         serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
 
