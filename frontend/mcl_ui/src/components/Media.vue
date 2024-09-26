@@ -33,8 +33,7 @@
               </v-responsive>
             </div>
             <v-divider></v-divider>
-            <p>Team: {{ media.team.title }}</p>
-
+            <p>Team: {{ media.team_title }}</p>
             <!-- Display all labels as colored chips -->
             <v-row v-if="media.labels && media.labels.length > 0">
               <v-col

@@ -54,5 +54,5 @@ class TeamMediasGetView(APIView):
     def get(self, request, team_id):
         team = get_object_or_404(Team, id=team_id)
         team_media = Medias.objects.filter(team_id=team.id)
-        serializer = TeamMediaSerializer(team_media, many=True, context={'request': request})  # Pass the request context
+        serializer = TeamMediaSerializer(team_media, many=True, context={'request': request})
         return Response(serializer.data)

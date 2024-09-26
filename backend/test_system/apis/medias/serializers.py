@@ -1,7 +1,11 @@
+from django.conf import settings
 from rest_framework import serializers
 from test_system.apps.medias.models import Medias
 from test_system.apis.labels.serializers import LabelsSerializer
 from test_system.apis.teams.serializers import TeamsSerializer
+
+#/medias/ path returning redundant data in MediasSerailizer
+#only need media title, desrciption, content, labels, user, and team
 
 class MediasSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)
@@ -10,6 +14,21 @@ class MediasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medias
         fields = "__all__"
+
+class MediasGetSerializer(serializers.ModelSerializer):
+    labels = LabelsSerializer(many=True, read_only=True)
+    team_title = serializers.CharField(source="team.title", read_only=True)
+    content = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Medias
+        fields = ["title", "description", "content", "labels", "user", "team_title"]
+
+    def get_content(self, obj):
+        request = self.context.get("request")
+        if request:
+            return request.build_absolute_uri(obj.content)
+        return f"{settings.MEDIA_URL}{obj.content}"
 
 class MediaSerializer(serializers.ModelSerializer):
 

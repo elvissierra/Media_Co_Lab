@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
-from test_system.apis.medias.serializers import MediasSerializer, MediaSerializer
+from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -18,7 +18,7 @@ class MediasGetCreateView(APIView):
         if not team:
             return Response({"error": "User is not associated with any team yet"}, status=status.HTTP_400_BAD_REQUEST)
         medias = Medias.objects.filter(team_id=team.id)
-        serializer = MediasSerializer(medias, many=True)
+        serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
