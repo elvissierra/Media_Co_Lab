@@ -33,7 +33,7 @@ class MediasGetCreateView(APIView):
         serializer = MediaSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             medias_obj = serializer.save()
-            return Response(MediaSerializer(medias_obj).data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class MediasGetUpdateDeleteView(APIView):
