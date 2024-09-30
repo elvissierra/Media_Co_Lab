@@ -31,7 +31,7 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    team = models.ForeignKey(Team, related_name="users", on_delete=models.SET_NULL, blank=True, null=True)
+    teams = models.ManyToManyField(Team, related_name="users", blank=True, null=True)
     organization = models.ForeignKey(Organization, related_name="users", on_delete=models.CASCADE, null=True, blank=True, db_index=True)
     email = models.EmailField(unique=True)
     
