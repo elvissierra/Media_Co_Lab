@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TopPage from './components/TopPage.vue'
 import HomePage from './components/HomePage.vue'
 import Organization from './components/Organization.vue'
+import OrgRegister from './components/OrgRegister.vue'
 import UserRegister from './components/UserRegister.vue'
 import UserLogin from './components/UserLogin.vue'
 import Teams from './components/Teams.vue'
@@ -39,6 +40,9 @@ const routes = [
   },
   {
     path: '/organization', name: 'mclOrganization', component: Organization,
+  },
+  {
+    path: '/organizations/reg', name: 'RegisterOrganization', component: OrgRegister,
   },
   {
     path: '/organizations/ov', name: 'OrganizationOverview', component: Organization,

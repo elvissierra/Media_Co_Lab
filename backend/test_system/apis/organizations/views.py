@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from test_system.permissions import OrganizationPermission
+from rest_framework.permissions import AllowAny
 
 
 class UserOrganizationView(APIView):
@@ -17,7 +18,7 @@ class UserOrganizationView(APIView):
         return Response(serializer.data)
 
 class OrganizationCreateView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request, format=None):
         serializer = OrganizationSerializer(data=request.data)
