@@ -10,7 +10,7 @@
               required
             ></v-text-field>
     
-            <v-btn :loading="loading" :disabled="loading" @click="registerOrg">
+            <v-btn @click="registerOrg">
               Register
             </v-btn>
     
@@ -55,8 +55,6 @@
           this.$router.push({ name: 'HomePage' });
         } catch (error) {
           this.error = error.response?.data?.detail || 'Registration failed. Please try again.';
-        } finally {
-            this.loading = false;
         }
       },
     },

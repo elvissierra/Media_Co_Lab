@@ -1,12 +1,13 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.organizations.models import Organization
-from test_system.apis.organizations.serializers import OrganizationSerializer
+from test_system.apis.organizations.serializers import OrganizationSerializer, OrganizationGetSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from test_system.permissions import OrganizationPermission
 from rest_framework.permissions import AllowAny
+from rest_framework import viewsets
 
 
 class UserOrganizationView(APIView):
@@ -29,11 +30,12 @@ class OrganizationCreateView(APIView):
 
 
 class OrganizationsGetView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
+    """ Get request for approved organizations"""
 
-    def get(self, request, format=None):
-        organization = Organization.objects.filter(id = request.user.organization.id)
-        serializer = OrganizationSerializer(organization, many=True)
+    def get(self, request):
+        approved_orgs = Organization.objects.filter(is_approved=True)
+        serializer = OrganizationGetSerializer(approved_orgs, many=True)
         return Response(serializer.data)
     
 

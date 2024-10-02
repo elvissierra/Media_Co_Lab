@@ -32,6 +32,15 @@
             required
           ></v-text-field>
 
+          <v-select
+            v-model="user.organization"
+            :items="organizations"
+            item-text="title"
+            :rules="rules.required"
+            label="Select Organization"
+            required
+          ></v-select>
+
           <v-btn @click="registerUser">
             Register
           </v-btn>
@@ -57,7 +66,9 @@ export default {
         last_name: '',
         email: '',
         password: '',
+        orgnization: null,
       },
+      organizations: [],
       error: null,
       rules: {
         required: (value) => !!value || 'Required.',
@@ -68,7 +79,18 @@ export default {
       },
     };
   },
+  async created() {
+    await this.fetchOrganizations();
+  },
   methods: {
+    async fetchOrganizations(){
+      try {
+        const response = await axiosPublic.get('/organizations/');
+        this.organizations = response.data;
+      } catch (error) {
+        this.error = 'Issue fetching Organization.';
+      }
+    },
     async registerUser() {
       console.log(this.$refs.form.validate());
       if (!this.$refs.form.validate()) {

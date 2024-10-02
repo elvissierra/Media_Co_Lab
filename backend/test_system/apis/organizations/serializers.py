@@ -8,3 +8,8 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = ["title", "teams"]
+
+class OrganizationGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = ["title"]
