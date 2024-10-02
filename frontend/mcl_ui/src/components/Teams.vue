@@ -6,6 +6,9 @@
       </v-col>
     </v-row>
     
+    <v-alert v-if="error" type="error">
+    {{ error }}
+    </v-alert>
     <v-row>
       <v-col
         v-for="team in teams"
@@ -49,6 +52,7 @@ export default {
   data() {
     return {
       teams: [],
+      error: null,
     };
   },
   async created() {
@@ -56,6 +60,7 @@ export default {
       const response = await this.$axios.get('/teams/');
       this.teams = response.data;
     } catch (error) {
+      this.error = error.response?.data?.error || 'An error occurred.';
       console.error('Error fetching teams:', error);
     }
   },
