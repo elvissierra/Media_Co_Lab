@@ -12,4 +12,4 @@ class OrganizationSerializer(serializers.ModelSerializer):
 class OrganizationGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
-        fields = ["title"]
+        fields = ["title", "id"]

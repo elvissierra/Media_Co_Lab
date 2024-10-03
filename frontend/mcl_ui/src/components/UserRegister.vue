@@ -36,6 +36,7 @@
             v-model="user.organization"
             :items="organizations"
             item-text="title"
+            item-value="id"
             :rules="rules.required"
             label="Select Organization"
             required

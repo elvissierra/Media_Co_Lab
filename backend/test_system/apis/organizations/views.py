@@ -7,11 +7,11 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from test_system.permissions import OrganizationPermission
 from rest_framework.permissions import AllowAny
-from rest_framework import viewsets
 
 
-class UserOrganizationView(APIView):
+class UserOrganizationView(APIView):    
     permission_classes = [IsAuthenticated]
+    """ User associated organization overview """
 
     def get(self, request):
         organization = request.user.organization
@@ -20,6 +20,7 @@ class UserOrganizationView(APIView):
 
 class OrganizationCreateView(APIView):
     permission_classes = [AllowAny]
+    """ Create organization """
 
     def post(self, request, format=None):
         serializer = OrganizationSerializer(data=request.data)
