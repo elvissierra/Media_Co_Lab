@@ -8,8 +8,9 @@ from rest_framework import status
 from test_system.permissions import TeamPermission
 
 class TeamsGetCreateView(APIView):
-    
+     
     def get(self, request, format=None):
+        """Create or Retrieve all Team objects"""  
         user = request.user
         organization = user.organization
         if not organization:
@@ -19,6 +20,9 @@ class TeamsGetCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """Create and associate the obj with the user's organization"""
+        user_organization = request.user.organization.id
+        request.data["organization"] = user_organization
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

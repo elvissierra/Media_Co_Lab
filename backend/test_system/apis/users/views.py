@@ -12,11 +12,11 @@ from test_system.permissions import IsUser
 from test_system.apps.organizations.models import Organization
 
 
-#create user
 class UserCreateView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request, format=None):
+        """Create a new user"""
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
