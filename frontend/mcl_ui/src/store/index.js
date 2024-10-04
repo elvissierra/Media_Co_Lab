@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import axios from 'axios';
 
 const store = createStore({
   state: {
@@ -18,9 +19,9 @@ const store = createStore({
     userHasOrganization: state => !!state.user?.organization,
   },
   actions: {
-    async fetchUser({ commit }) {
+    async fetchUser({ commit }, userId) {
       try {
-        const response = await axios.get('/api/users/${userId}');
+        const response = await axios.get(`/api/users/${userId}`);
         commit('setUser', response.data);
       } catch (error) {
         console.error('Error fetching user:', error);

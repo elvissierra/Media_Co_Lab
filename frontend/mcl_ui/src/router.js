@@ -6,6 +6,7 @@ import OrgRegister from './components/OrgRegister.vue'
 import UserRegister from './components/UserRegister.vue'
 import UserLogin from './components/UserLogin.vue'
 import Teams from './components/Teams.vue'
+import TeamCreate from './components/TeamCreate.vue'
 import TeamDetail from './components/TeamDetail.vue'
 import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
@@ -49,6 +50,9 @@ const routes = [
   },
   {
     path: '/teams', name: 'mclTeams', component: Teams,
+  },
+  {
+    path: '/team/create', name: 'mclTeams', component: TeamCreate,
   },
   {
     path: '/teams/:uuid', name: 'TeamDetail', component: TeamDetail,
