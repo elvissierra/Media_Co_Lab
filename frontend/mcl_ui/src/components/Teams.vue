@@ -48,7 +48,7 @@
 
 <script>
 export default {
-  name: 'mclTeam',
+  name: 'mclTeams',
   data() {
     return {
       teams: [],

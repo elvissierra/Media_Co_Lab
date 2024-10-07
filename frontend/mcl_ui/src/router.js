@@ -52,7 +52,7 @@ const routes = [
     path: '/teams', name: 'mclTeams', component: Teams,
   },
   {
-    path: '/team/create', name: 'mclTeams', component: TeamCreate,
+    path: '/team/create', name: 'mclTeam', component: TeamCreate,
   },
   {
     path: '/teams/:id', name: 'TeamDetail', component: TeamDetail,
