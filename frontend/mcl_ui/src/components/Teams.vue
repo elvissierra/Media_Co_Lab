@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     viewTeam(teamId) {
-      this.$router.push({ name: 'TeamDetail', params: { uuid: teamId } });
+      this.$router.push({ name: 'TeamDetail', params: { id: teamId } });
     }
   }
 };

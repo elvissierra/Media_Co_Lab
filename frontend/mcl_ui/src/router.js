@@ -55,13 +55,13 @@ const routes = [
     path: '/team/create', name: 'mclTeams', component: TeamCreate,
   },
   {
-    path: '/teams/:uuid', name: 'TeamDetail', component: TeamDetail,
+    path: '/teams/:id', name: 'TeamDetail', component: TeamDetail,
   },
   {
     path: '/medias', name: 'mclMedia', component: Media,
   },
   {
-    path: '/media/:uuid', name: 'MediaDetail', component: MediaDetail,
+    path: '/media/:id', name: 'MediaDetail', component: MediaDetail,
   },
   {
     path: '/labels', name: 'mclLabels', component: Labels,
