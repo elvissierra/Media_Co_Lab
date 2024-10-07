@@ -12,6 +12,7 @@ class UserMediasGetView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """ User created media """
         user = request.user
         team = user.team
         if not team:

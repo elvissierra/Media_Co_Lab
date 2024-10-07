@@ -32,7 +32,7 @@ class OrganizationCreateView(APIView):
 
 class OrganizationsGetView(APIView):
     permission_classes = [AllowAny]
-    """ Get request for approved organizations"""
+    """ Get request for approved organizations on user signup"""
 
     def get(self, request):
         approved_orgs = Organization.objects.filter(is_approved=True)

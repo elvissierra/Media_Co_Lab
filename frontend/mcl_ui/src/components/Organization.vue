@@ -24,7 +24,7 @@
             <v-divider class="my-2"></v-divider>
             <h4>Users</h4>
             <v-list dense v-if="team.users.length">
-              <v-list-item v-for="user in team.users" :key="user.first_name">
+              <v-list-item v-for="user in team.users" :key="user.id">
                 <v-list-item-content>{{ user.first_name }}</v-list-item-content>
               </v-list-item>
             </v-list>

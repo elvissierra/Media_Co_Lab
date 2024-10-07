@@ -51,4 +51,4 @@ class UsersGetSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ["first_name"]
+        fields = ["first_name", "id"]
