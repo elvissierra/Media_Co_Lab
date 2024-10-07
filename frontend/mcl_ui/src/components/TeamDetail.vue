@@ -10,7 +10,12 @@
     <v-row>
       <v-col cols="12">
         <h2 class="text-center">Related Media</h2>
-        <v-row>
+
+        <v-alert v-if="error" type="warning">
+          {{ error }}
+        </v-alert>
+
+        <v-row v-if="relatedMedia.length > 0">
           <v-col
             v-for="media in relatedMedia"
             :key="media.id"
@@ -42,20 +47,29 @@ export default {
   name: 'TeamDetail',
   data() {
     return {
-      team: null, 
-      relatedMedia: [], 
+      team: null,
+      relatedMedia: [],
+      error: null,
     };
   },
   async created() {
     const teamId = this.$route.params.uuid;
     try {
+    
       const teamResponse = await this.$axios.get(`/teams/${teamId}/`);
       this.team = teamResponse.data;
 
+    
       const mediaResponse = await this.$axios.get(`/teams/${teamId}/medias/`);
       this.relatedMedia = mediaResponse.data;
+
+    
+      if (this.relatedMedia.length === 0) {
+        this.error = 'No related media found for this team.';
+      }
     } catch (error) {
       console.error('Error fetching team or media details:', error);
+      this.error = 'Unable to fetch team or media details. Please try again later.';
     }
   },
   methods: {
