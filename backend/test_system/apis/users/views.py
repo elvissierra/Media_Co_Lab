@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.users.models import CustomUser
-from test_system.apis.users.serializers import UserSerializer, UserRegistrationSerializer, UsersGetSerializer
+from test_system.apis.users.serializers import UserRegistrationSerializer, UsersGetSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -58,7 +58,7 @@ class UsersGetView(APIView):
         serializer = UsersGetSerializer(users, many=True)
         return Response(serializer.data)
 
-class UserGetUpdateDeleteView(APIView):
+class UserGetPatchDeleteView(APIView):
     permission_classes= [IsUser]
 
     def get(self, request, user_id, format=None):
@@ -67,10 +67,10 @@ class UserGetUpdateDeleteView(APIView):
         serializer = UsersGetSerializer(user)
         return Response(serializer.data)
 
-    def put(self, request, user_id, format=None):
+    def patch(self, request, user_id, format=None):
         user = get_object_or_404(CustomUser, id=user_id)
         self.check_object_permissions(request, user)
-        serializer = UsersGetSerializer(user, data=request.data)
+        serializer = UsersGetSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

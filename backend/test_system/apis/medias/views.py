@@ -12,7 +12,7 @@ class UserMediasGetView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        """ User created media """
+        """ User created Media objects """
         user = request.user
         team = user.team
         if not team:
@@ -26,14 +26,20 @@ class MediasGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """ Retrieve all Media objects """
         medias = Medias.objects.all()
         serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """ Create Media and associate it to the User's Team field """
+        user = request.user
+        team_id = request.data.get("team_id")
+        if not user.team.filter(id=team_id).exists():
+            return Response({"error": "User not associated with this team."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = MediaSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
-            medias_obj = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

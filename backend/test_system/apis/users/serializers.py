@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from test_system.apps.users.models import CustomUser
 from test_system.apps.organizations.models import Organization
+from test_system.apps.teams.models import Team
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     organization_id = serializers.UUIDField(write_only=True, required=False)
@@ -35,20 +36,23 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
     
 class UsersGetSerializer(serializers.ModelSerializer):
+    team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all(), many=True)
+
     class Meta:
         model = CustomUser
         fields = ["id", "username", "first_name", "last_name", "email", "team", "organization"]
 
-        def to_representation(self, instance):
-            data = super().to_representation(instance)
-            request = self.context.get('request')
-            if request and not request.user.is_superuser:
-                sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
-                for field in sensitive_fields:
-                    data.pop(field, None)
-            return data                                                
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        if request and not request.user.is_superuser:
+            sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
+            for field in sensitive_fields:
+                data.pop(field, None)
+        return data
 
 class UserSerializer(serializers.ModelSerializer):
+    """ Organization Overview """
     class Meta:
         model = CustomUser
         fields = ["first_name", "id"]
