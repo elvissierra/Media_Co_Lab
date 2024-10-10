@@ -12,12 +12,6 @@ import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
 import Labels from './components/Labels.vue'
 
-// Define all components
-// team users can create media and labels to team.medias
-// need to be part of team to add objs
-// media objs can be voted on and labels placed for urgency/priority
-// comments can be added to media objs == discussions to determine engangement
-// Uses: social media platforms, news, blog, etc. similar to bulletin boards
 
 const routes = [
   {

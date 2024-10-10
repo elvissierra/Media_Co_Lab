@@ -138,7 +138,7 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getFullImageUrl(relativeUrl) {
-      return `http://localhost:8000${relativeUrl}`;
+      return `${process.env.VUE_APP_MEDIA_BASE_URL}${relativeUrl}`;
     },
   }
 };
