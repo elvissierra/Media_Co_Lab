@@ -40,7 +40,7 @@ class UsersGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "email", "team", "organization"]
+        fields = ["id", "username", "first_name", "last_name", "email", "team", "organization", "labels"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
