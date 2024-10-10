@@ -34,6 +34,7 @@ class CustomUser(AbstractUser):
     team = models.ManyToManyField(Team, related_name="users", blank=True)
     organization = models.ForeignKey(Organization, related_name="users", on_delete=models.CASCADE, null=True, blank=True, db_index=True)
     email = models.EmailField(unique=True)
+    avatar = models.FileField(upload_to="profile/", blank=True, null=True)
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

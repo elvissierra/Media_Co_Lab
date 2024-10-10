@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from test_system import settings
 from test_system.apps.users.models import CustomUser
 from test_system.apps.organizations.models import Organization
 from test_system.apps.teams.models import Team
@@ -40,11 +41,19 @@ class UsersGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "email", "team", "organization", "labels"]
+        fields = ["id", "username", "first_name", "last_name", "email", "team", "organization", "labels", "avatar"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get('request')
+        if instance.avatar and hasattr(instance.avatar, 'url'):
+            avatar_url = instance.avatar.url
+            if request:
+                avatar_url = request.build_absolute_uri(avatar_url)
+            data['avatar'] = avatar_url
+        else:
+            data['avatar'] = f"{settings.MEDIA_URL}default.jpg"
+
         if request and not request.user.is_superuser:
             sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
             for field in sensitive_fields:
