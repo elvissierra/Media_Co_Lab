@@ -46,6 +46,7 @@ class UsersGetSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get('request')
+
         if instance.avatar and hasattr(instance.avatar, 'url'):
             avatar_url = instance.avatar.url
             if request:
@@ -58,10 +59,25 @@ class UsersGetSerializer(serializers.ModelSerializer):
             sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
             for field in sensitive_fields:
                 data.pop(field, None)
+
         return data
 
 class UserSerializer(serializers.ModelSerializer):
     """ Organization Overview """
     class Meta:
         model = CustomUser
-        fields = ["first_name", "id"]
+        fields = ["first_name", "id", "avatar"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+
+        if instance.avatar and hasattr(instance.avatar, 'url'):
+            avatar_url = instance.avatar.url
+            if request:
+                avatar_url = request.build_absolute_uri(avatar_url)
+            data['avatar'] = avatar_url
+        else:
+            data['avatar'] = f"{settings.MEDIA_URL}default.jpg"
+        return data
+            
