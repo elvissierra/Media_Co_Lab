@@ -3,7 +3,7 @@ import router from './router'; // Adjust the path to your router file
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API_URL,
+  baseURL: 'http:localhost:8000/api',
 });
 
 // Request interceptor to add the Authorization header
