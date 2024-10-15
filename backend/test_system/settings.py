@@ -58,9 +58,6 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://mcl_ui:8080",
-    "http://frontend:8080",
-    "http://test_system:8080",
 ]
 
 ROOT_URLCONF = "test_system.urls"
