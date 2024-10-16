@@ -37,8 +37,7 @@ class MediaSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context["request"].user
-        medias_obj = Medias(**validated_data)
-        medias_obj.user = user
-        medias_obj.save()
+        validated_data["user"] = user
+        medias_obj = Medias.objects.create(**validated_data)
         return medias_obj
     

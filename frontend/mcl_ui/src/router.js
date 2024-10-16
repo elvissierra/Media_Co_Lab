@@ -55,7 +55,7 @@ const routes = [
     path: '/medias', name: 'mclMedia', component: Media,
   },
   {
-    path: '/media/:id', name: 'MediaDetail', component: MediaDetail,
+    path: '/medias/:medias_id', name: 'MediaDetail', component: MediaDetail,
   },
   {
     path: '/labels', name: 'mclLabels', component: Labels,
