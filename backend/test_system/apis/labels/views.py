@@ -7,13 +7,13 @@ from rest_framework import status
 from test_system.permissions import IsLabelOwner
 
 class LabelsGetCreateView(APIView):
-
+    """ How is the user to recieve the labels? """
     def get(self, request, format=None):
         user = request.user
-        labels = user.team
-        if not labels:
+        user_teams = user.team.all()
+        if not user_teams:
             return Response({"error": "No team association."}, status=status.HTTP_400_BAD_REQUEST)
-        team_labels = Label.objects.filter(medias__team = request.user.team)
+        team_labels = Label.objects.filter(medias__team__in=user_teams)
         serializer = LabelSerializer(team_labels, many=True)
         return Response(serializer.data)
 

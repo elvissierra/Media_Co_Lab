@@ -34,7 +34,10 @@
                 <p>{{ team.description }}</p>
                 <v-divider class="my-2"></v-divider>
                 <h4>Users</h4>
-                <v-chip-group>
+                <v-chip-group
+                  column
+                  class="d-flex flex-wrap"
+                  >
                   <v-chip
                     v-for="user in team.users"
                     :key="user.id"
@@ -42,9 +45,17 @@
                     outlined
                     color="primary"
                     ripple="false"
+                    style="align-items: center;"
                   >
-                    <v-avatar left size="24">
-                      <img :src="getFullImageUrl(user.avatar)" alt="user avatar" />
+                    <v-avatar left size="32">
+                      <v-img
+                        :src="getFullImageUrl(user.avatar)"
+                        alt="user avatar"
+                        height="32"
+                        width="32"
+                        aspect-ratio="1"
+                        class="rounded-circle"
+                      />
                     </v-avatar>
                     {{ user.first_name }}
                   </v-chip>
@@ -138,7 +149,7 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getFullImageUrl(relativeUrl) {
-      return `${process.env.VUE_APP_MEDIA_BASE_URL}${relativeUrl}`;
+      return `http://localhost:8000${relativeUrl}`;
     },
   }
 };

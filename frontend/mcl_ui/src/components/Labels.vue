@@ -1,27 +1,36 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="12">
-        <h1 class="text-center">Labels Overview</h1>
+      <v-col cols="12" class="text-center">
+        <h1 class="headline mb-5">Labels Overview</h1>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
-        <div class="dynamic-grid">
-          <div v-for="(labels, type) in groupedLabels" :key="type" class="type-group">
-            <h3>{{ type }}</h3>
-            <div class="label-collage">
-              <div
-                v-for="label in labels"
-                :key="label.id"
-                :style="{ backgroundColor: label.preset_tag }"
-                class="label-item"
-              >
-                {{ label.title }}
-              </div>
-            </div>
-          </div>
-        </div>
+      <v-col
+        v-for="(labels, type) in groupedLabels"
+        :key="type"
+        cols="12"
+        md="6"
+        lg="4"
+        class="mb-4"
+      >
+        <v-card outlined class="pa-3">
+          <v-card-title class="subtitle-1 text-uppercase font-weight-bold">
+            {{ type }}
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-card-text class="label-collage d-flex flex-wrap mt-3">
+            <v-chip
+              v-for="label in labels"
+              :key="label.id"
+              :style="{ backgroundColor: label.preset_tag }"
+              class="label-item ma-1"
+              outlined
+            >
+              {{ label.title }}
+            </v-chip>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -75,9 +84,8 @@ export default {
 }
 
 .label-collage {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .label-item {
@@ -85,12 +93,12 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 10px;
+  padding: 4px 8px;
   color: white;
   font-weight: bold;
-  border-radius: 8px; 
+  border-radius: 4px; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+  transition: all 0.3s ease-in-out, box-shadow 0.2s ease-in-out; 
 }
 
 .green {
