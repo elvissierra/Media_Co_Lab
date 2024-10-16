@@ -20,7 +20,7 @@ class MediasGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Medias
-        fields = ["title", "description", "content", "labels", "user", "team_title"]
+        fields = ["title", "description", "content", "labels", "user", "team_title", "id"]
 
     def get_content(self, obj):
         request = self.context.get("request")
