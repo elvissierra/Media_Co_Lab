@@ -65,7 +65,6 @@ export default {
   data() {
     return {
       teams: [],
-      error: null,
     };
   },
   async created() {
@@ -73,13 +72,11 @@ export default {
       const response = await this.$axios.get('/teams/');
       this.teams = response.data;
     } catch (error) {
-      this.error = error.response?.data?.error || 'An error occurred.';
       console.error('Error fetching teams:', error);
     }
   },
   methods: {
     viewTeam(teamId) {
-      console.log("Team ID from route params:", teamId);
       this.$router.push({ name: 'TeamDetail', params: { team_id: teamId } });
     }
   }

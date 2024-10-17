@@ -9,13 +9,13 @@ class TeamMediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Medias
-        fields = ["title", "content"]
+        fields = ["title", "content", "id"]
 
     def get_content(self, obj):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if request:
             return request.build_absolute_uri(obj.content)
-        return f'{settings.MEDIA_URL}{obj.content}'
+        return f"{settings.MEDIA_URL}{obj.content}"
 
 class TeamSerializer(serializers.ModelSerializer):
     users = UsersGetSerializer(many=True, read_only=True)
