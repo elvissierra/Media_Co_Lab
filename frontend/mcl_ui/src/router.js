@@ -43,13 +43,13 @@ const routes = [
     path: '/organizations/ov', name: 'OrganizationOverview', component: Organization,
   },
   {
-    path: '/teams', name: 'mclTeams', component: Teams,
-  },
-  {
     path: '/team/create', name: 'mclTeam', component: TeamCreate,
   },
   {
-    path: '/teams/:id', name: 'TeamDetail', component: TeamDetail,
+    path: '/teams', name: 'mclTeams', component: Teams,
+  },
+  {
+    path: '/teams/:team_id', name: 'TeamDetail', component: TeamDetail,
   },
   {
     path: '/medias', name: 'mclMedia', component: Media,

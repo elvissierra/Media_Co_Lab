@@ -31,4 +31,4 @@ class TeamsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = ["title", "description", "users", "medias"]
+        fields = ["title", "id", "description", "users", "medias"]

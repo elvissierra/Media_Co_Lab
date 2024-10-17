@@ -79,7 +79,8 @@ export default {
   },
   methods: {
     viewTeam(teamId) {
-      this.$router.push({ name: 'TeamDetail', params: { id: teamId } });
+      console.log("Team ID from route params:", teamId);
+      this.$router.push({ name: 'TeamDetail', params: { team_id: teamId } });
     }
   }
 };

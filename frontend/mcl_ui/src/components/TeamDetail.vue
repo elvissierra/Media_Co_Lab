@@ -53,7 +53,7 @@ export default {
     };
   },
   async created() {
-    const teamId = this.$route.params.uuid;
+    const teamId = this.$route.params.team_id;
     try {
     
       const teamResponse = await this.$axios.get(`/teams/${teamId}/`);
