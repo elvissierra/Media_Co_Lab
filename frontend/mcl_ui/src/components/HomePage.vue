@@ -67,8 +67,8 @@ export default {
       featuredItems: [
         { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing.", gifUrl: "/gifs/orgoverview.gif"},
         { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns.", gifUrl: "/gifs/gif2.gif"},
-        { id: 3, title: "Labeling type", description: "Type can be chosen from a preset list or create a new type to fit your needs.", gifUrl: "/gifs/gif3.gif"},
-        { id: 4, title: "Labeling tag", description: "Tags are designed to indicate a level of priority.", gifUrl: "/gifs/gif4.gif"},
+        { id: 3, title: "Labeling type and tag", description: "Type can be chosen from a preset list or create a new type to fit your needs. Along with tags are designed to indicate a level of priority as standard, however this can be adjusted to suit your needs..", gifUrl: "/gifs/labels.gif"},
+        { id: 4, title: "Team base", description: "Devise teams to seperate discussions and brainstorm.", gifUrl: "/gifs/teams.gif"},
 
       ],
     };

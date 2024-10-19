@@ -50,7 +50,7 @@ export default {
     };
   },
   async created() {
-    const mediaId = this.$route.params.uuid;
+    const mediaId = this.$route.params.medias_id;
     try {
       const response = await this.$axios.get(`/medias/${mediaId}/`);
       this.media = response.data;
@@ -71,9 +71,8 @@ export default {
         user2: 'blue lighten-3',
         user3: 'purple lighten-3',
         user4: 'orange lighten-3',
-        // Add more user-specific colors as needed
       };
-      return userColors[user.username] || 'grey lighten-3'; // Default color if no specific color
+      return userColors[user.username] || 'grey lighten-3';
     },
   },
 };
