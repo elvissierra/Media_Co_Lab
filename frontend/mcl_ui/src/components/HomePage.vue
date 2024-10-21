@@ -66,7 +66,7 @@ export default {
       selectedGif: null,  // Will hold the URL of the GIF
       featuredItems: [
         { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing.", gifUrl: "/gifs/orgoverview.gif"},
-        { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns.", gifUrl: "/gifs/gif2.gif"},
+        { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns.", gifUrl: "/gifs/media.gif"},
         { id: 3, title: "Labeling type and tag", description: "Type can be chosen from a preset list or create a new type to fit your needs. Along with tags are designed to indicate a level of priority as standard, however this can be adjusted to suit your needs..", gifUrl: "/gifs/labels.gif"},
         { id: 4, title: "Team base", description: "Devise teams to seperate discussions and brainstorm.", gifUrl: "/gifs/teams.gif"},
 
