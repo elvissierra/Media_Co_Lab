@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-if="team">
       <v-col cols="12">
         <h1 class="text-center">{{ team.title }}</h1>
         <p>{{ team.description }}</p>
@@ -23,18 +23,33 @@
             sm="6"
             md="4"
           >
-            <div class="media-thumbnail">
-              <h3>{{ media.title }}</h3>
+          <v-card
+              class="mb-4"
+              @click="viewMedia(media.id)"
+              outlined
+              hover
+              elevation="3"
+            >
               <v-img
                 v-if="isImage(media.content)"
-                :src="media.content"
+                :src="getFullImageUrl(media.content)"
                 :alt="media.title"
+                height="200"
                 class="media-image"
+                cover
               ></v-img>
-              <v-responsive v-else class="media-image">
-                <video :src="media.content" controls muted></video>
+              <v-responsive v-else aspect-ratio="16/9">
+                <video
+                  controls
+                  :src="getFullImageUrl(media.content)"
+                  class="video-content"
+                  style="width: 100%; height: 200px; object-fit: cover;"
+                ></video>
               </v-responsive>
-            </div>
+              <v-card-title class="text-h6 text-center mt-2">
+                {{ media.title }}
+              </v-card-title>
+            </v-card>
           </v-col>
         </v-row>
       </v-col>
@@ -55,15 +70,9 @@ export default {
   async created() {
     const teamId = this.$route.params.team_id;
     try {
-    
       const teamResponse = await this.$axios.get(`/teams/${teamId}/`);
       this.team = teamResponse.data;
-
-    
-      const mediaResponse = await this.$axios.get(`/teams/${teamId}/medias/`);
-      this.relatedMedia = mediaResponse.data;
-
-    
+      this.relatedMedia = this.team.medias
       if (this.relatedMedia.length === 0) {
         this.error = 'No related media found for this team.';
       }
@@ -76,9 +85,15 @@ export default {
     isImage(filePath) {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
+    getFullImageUrl(relativeUrl) {
+    },
+    viewMedia(mediaId) {
+      this.$router.push({ name: 'MediaDetail', params: { medias_id: mediaId } });
+    },
   },
 };
 </script>
+
 
 <style scoped>
 .media-thumbnail {

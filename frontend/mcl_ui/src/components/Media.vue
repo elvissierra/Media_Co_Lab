@@ -9,14 +9,14 @@
     <v-row>
       <v-col
         v-for="media in medias"
-        :key="media.uuid"
+        :key="media.id"
         cols="12"
         sm="6"
         md="4"
       >
         <v-card 
           class="mb-4"
-          @click="viewMedia(media.uuid)"
+          @click="viewMedia(media.id)"
           outlined
           hover
         >
@@ -78,11 +78,9 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     viewMedia(mediaId) {
-      this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } });
+      this.$router.push({ name: 'MediaDetail', params: { medias_id: mediaId } });
     },
     getFullImageUrl(relativeUrl) {
-  return `http://localhost:8000${relativeUrl}`;
-
   },
 }
 };
