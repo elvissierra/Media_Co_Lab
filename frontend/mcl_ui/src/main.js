@@ -9,7 +9,7 @@ import store from './store'
 const app = createApp(App)
 
 // base backend endpoint
-axios.defaults.baseURL = 'http://localhost:8000/api/'
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 app.config.globalProperties.$axios = axiosInstance
 
 app.use(vuetify)

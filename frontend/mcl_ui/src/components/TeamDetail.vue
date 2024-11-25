@@ -86,6 +86,7 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getFullImageUrl(relativeUrl) {
+      return `${process.env.VUE_APP_BASE_URL}${relativeUrl}`;
     },
     viewMedia(mediaId) {
       this.$router.push({ name: 'MediaDetail', params: { medias_id: mediaId } });

@@ -81,6 +81,7 @@ export default {
       this.$router.push({ name: 'MediaDetail', params: { medias_id: mediaId } });
     },
     getFullImageUrl(relativeUrl) {
+    return `${process.env.VUE_APP_BASE_URL}${relativeUrl}`;
   },
 }
 };
