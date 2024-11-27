@@ -1,7 +1,6 @@
 <template>
   <div id="home">
 
-    <!-- About Section -->
     <section class="about">
       <h2>What we do here:</h2>
       <p>Welcome to Media_co_Lab, where we foster creativity and discussion on topics world wide.
@@ -9,12 +8,10 @@
       </p>
     </section>
 
-    <!-- Hero Section -->
     <section class="hero">
       <button @click="ctaAction">Learn More</button>
     </section>
 
-    <!-- About Section -->
     <section ref="about_env" class="target-section">
       <h2>About The Environment:</h2>
       <p>To provide organizations and regular users the chance and tools to collaborate in a fluid
@@ -23,7 +20,6 @@
           articles, voice notes, etc.</p>
     </section>
 
-    <!-- Features Section -->
     <section class="features">
       <h2>Features</h2>
       <div class="feature-items">
@@ -34,7 +30,6 @@
         </div>
       </div>
 
-        <!-- Section to display the GIF -->
       <div v-if="selectedItem" class="gif-display">
         <h3>{{ selectedItem.title }}</h3>
         <img :src="selectedGif" alt="Feature GIF">
@@ -43,13 +38,11 @@
 
     </section>
 
-    <!-- Call-to-Action Section -->
     <section class="cta-section">
       <h2>Ready to Join?</h2>
       <button @click="joinNow">Join Now</button>
     </section>
 
-    <!-- Footer -->
     <footer>
 
     </footer>
@@ -62,8 +55,8 @@ export default {
   name: "HomePage",
   data() {
     return {
-      selectedItem: null, // Will hold the selected feature item
-      selectedGif: null,  // Will hold the URL of the GIF
+      selectedItem: null,
+      selectedGif: null, 
       featuredItems: [
         { id: 1, title: "Organizational layout", description: "Structured to provide a clean and clear pattern for anyone to start co_lab-ing.", gifUrl: "/gifs/orgoverview.gif"},
         { id: 2, title: "Media discussions", description: "Have team discussions around media to help seperate concerns.", gifUrl: "/gifs/media.gif"},
@@ -75,7 +68,7 @@ export default {
   },
   methods: {
     ctaAction() {
-      this.$refs.about_env.scrollIntoView({behavior: 'smooth'}); /* tbc scroll down to ATE */
+      this.$refs.about_env.scrollIntoView({behavior: 'smooth'});
     },
     seeMore(item) {
       this.selectedItem = item;
@@ -93,7 +86,6 @@ export default {
 </script>
 
 <style scoped>
-/* Styling for the homepage sections */
 
 .navbar {
   background: #333;
@@ -121,7 +113,7 @@ export default {
   align-items: center;
   justify-content: center;
   color: white;
-  padding: 2rem; /* Add some padding to the hero section */
+  padding: 2rem;
 }
 
 .hero button {
