@@ -61,7 +61,6 @@ const routes = [
     path: '/labels', name: 'mclLabels', component: Labels,
   },
 ];
-// connected to base backend
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
