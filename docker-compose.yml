@@ -1,0 +1,49 @@
+version: "v2.29.2"  # compose version
+
+services:
+  test_system:
+    build: 
+      context: ./backend # Path to the directory containing the Dockerfile
+    container_name: test_system
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app  # Map the current directory to /app in the container
+      - ./backend/media:/app/media
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+      #- condition: service_healthy
+    networks:
+      - app-network
+
+  mcl_ui:
+    build:
+      context: ./frontend/mcl_ui # Path to the directory containing the Dockerfile
+    container_name: mcl_ui
+    env_file:
+      - ./frontend/mcl_ui/.env
+    ports:
+      - "8080:80"
+    depends_on:
+      - test_system
+    networks:
+      - app-network
+  
+  db:
+    image: postgres:latest
+    container_name: media_co_lab_db
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
