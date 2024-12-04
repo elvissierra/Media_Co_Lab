@@ -1,4 +1,4 @@
-version: "v2.29.2"  # compose version
+version: "2.30"  # compose version
 
 services:
   test_system:
