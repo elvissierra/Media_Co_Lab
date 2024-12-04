@@ -1,3 +1,16 @@
+name: CI Pipeline
+
+# Define the triggers for this workflow
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+
 jobs:
   lint-test-build:
     runs-on: ubuntu-latest
@@ -24,6 +37,11 @@ jobs:
         run: |
           cp ./backend/.env.ci ./backend/.env
           cp ./frontend/mcl_ui/.env.ci ./frontend/mcl_ui/.env
+
+      - name: Set Environment Variables from Secrets
+        run: |
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> ./backend/.env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> ./backend/.env
 
       - name: Build and Start Services
         run: docker-compose -f docker-compose.yml up --build -d
