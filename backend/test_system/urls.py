@@ -5,8 +5,13 @@ from django.urls import path, include
 from test_system.apis.users.views import LoginView
 from knox import views as knox_views
 from test_system import swagger
+from django.shortcuts import redirect
+
+def redirect_to_docs(request):
+    return redirect("api/schema/swagger-ui/")
 
 urlpatterns = [
+    path("", redirect_to_docs),
     path("admin/", admin.site.urls),
     path("api/auth/login/", LoginView.as_view(), name="knox_login"),
     path("api/auth/logout/", knox_views.LogoutView.as_view(), name="knox_logout"),
