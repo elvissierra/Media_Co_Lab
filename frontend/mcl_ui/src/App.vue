@@ -4,7 +4,7 @@
 
     <div v-if="!isLoggedIn">
       <button class="combined-button">
-        <span @click="goToRegister">Register</span> /
+        <span @click="goToRegister">Register</span>
         <span @click="loginUser">Login</span>
       </button>
     </div>
@@ -60,6 +60,14 @@ export default {
 </script>
 
 <style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 
 .top_page {
   text-align: center;
