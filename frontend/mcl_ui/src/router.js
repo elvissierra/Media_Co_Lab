@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TopPage from './components/TopPage.vue'
 import HomePage from './components/HomePage.vue'
 import Organization from './components/Organization.vue'
 import OrgRegister from './components/OrgRegister.vue'
@@ -14,9 +13,6 @@ import Labels from './components/Labels.vue'
 
 
 const routes = [
-  {
-    path: '/', name: 'TopPage', component: TopPage,
-  },
   {
     path: '/home', name: 'HomePage', component: HomePage,
   },
