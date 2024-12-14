@@ -1,25 +1,29 @@
 <template>
-  <div class="header">
-    <h1>Welcome to Media Co lab!</h1>
-
-    <div v-if="!isLoggedIn">
-      <button class="combined-button">
-        <span @click="goToRegister">Register</span>
-        <span @click="loginUser">Login</span>
-      </button>
+  <div id="app">
+    <div class="header">
+      <h1>Welcome to Media Co Lab!</h1>
+      <div v-if="!isLoggedIn">
+        <button class="combined-button">
+          <span @click="goToRegister">Register</span>
+          <span @click="loginUser">Login</span>
+        </button>
+      </div>
+      <button v-if="isLoggedIn" @click="logoutUser">Logout</button>
     </div>
-    <button v-if="isLoggedIn" @click="logoutUser">Logout</button>
-  </div>
 
-  <nav class="navbar">
-    <ul class="navbar-list">
-      <li><a href="/home">Home</a></li>
-      <li><a href="/organizations/ov">Organization</a></li>
-      <li><a href="/teams">Teams</a></li>
-      <li><a href="/medias">Media</a></li>
-    </ul>
-  </nav>  
+    <nav class="navbar">
+      <ul class="navbar-list">
+        <li><router-link to="/home">Home</router-link></li>
+        <li><router-link to="/organizations/ov">Organization</router-link></li>
+        <li><router-link to="/teams">Teams</router-link></li>
+        <li><router-link to="/medias">Media</router-link></li>
+      </ul>
+    </nav>
+
+    <router-view />
+  </div>
 </template>
+
 
 <script>
 export default {
