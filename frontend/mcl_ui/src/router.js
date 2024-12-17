@@ -14,7 +14,7 @@ import Labels from './components/Labels.vue'
 
 const routes = [
   {
-    path: '/home', name: 'HomePage', component: HomePage,
+    path: '/', name: 'HomePage', component: HomePage,
   },
   {
     path: '/register', name: 'UserRegister', component: UserRegister,

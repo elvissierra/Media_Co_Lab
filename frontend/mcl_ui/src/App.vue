@@ -147,26 +147,26 @@ p {
   .navbar {
   position: relative;
   background-color: #333;
-  height: 60px; /* Set a specific height */
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 2rem;
   color: white;
-  margin: 0; /* Ensure no default margins */
+  margin: 0;
   }
 
   .navbar-list {
-  display: flex; /* Turns the list into a flex container */
-  list-style: none; /* Removes bullet points */
+  display: flex;
+  list-style: none;
   justify-content: space-between;
-  width: 100%; /* Makes the list take the full width of the navbar */
+  width: 100%;
   padding: 0;
   margin: 0;
   }
 
   .navbar-list li {
-    margin: 0 20px; /* Adds spacing between the items */
+    margin: 0 20px;
   }
 
   .navbar-list li a {
