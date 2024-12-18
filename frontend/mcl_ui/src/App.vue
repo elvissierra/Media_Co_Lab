@@ -4,7 +4,7 @@
       <h1>Welcome to Media Co Lab!</h1>
       <div v-if="!isLoggedIn">
         <button class="combined-button">
-          <span @click="goToRegister">Register</span>
+          <span @click="goToRegister">Register</span>/
           <span @click="loginUser">Login</span>
         </button>
       </div>
