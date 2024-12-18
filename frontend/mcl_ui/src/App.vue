@@ -13,7 +13,7 @@
 
     <nav class="navbar">
       <ul class="navbar-list">
-        <li><router-link to="/home">Home</router-link></li>
+        <li><router-link to="/">Home</router-link></li>
         <li><router-link to="/organizations/ov">Organization</router-link></li>
         <li><router-link to="/teams">Teams</router-link></li>
         <li><router-link to="/medias">Media</router-link></li>
