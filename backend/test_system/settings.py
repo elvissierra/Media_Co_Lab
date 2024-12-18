@@ -44,7 +44,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv("CORS_ALLOWED_ORIGINS"),
+    os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
 ]
 
 ROOT_URLCONF = "test_system.urls"
