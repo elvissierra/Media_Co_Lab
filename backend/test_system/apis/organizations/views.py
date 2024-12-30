@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.organizations.models import Organization
-from test_system.apis.organizations.serializers import OrganizationSerializer, OrganizationGetSerializer
+from test_system.apis.organizations.serializers import OrganizationSerializer, OrganizationGetSerializer, DemoOrgSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -36,10 +36,10 @@ class DemoOrgCreateView(APIView):
     def post(self, request):
         title = request.data.get("title", "").strip()
         if not title.endswith("demo"):
-            title += "demo"
+            title += " demo"
 
         demo_organization = Organization.objects.create(title=title, is_demo=True)
-        serializer = OrganizationSerializer(demo_organization)
+        serializer = DemoOrgSerializer(demo_organization)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class OrganizationsGetView(APIView):

@@ -1,6 +1,9 @@
 <template>
     <div>
       <h1>Create Demo Organization</h1>
+      <h3>Continue with the demo: So you can explore the platform quicker. After you create your organization, 
+        a demo team will also be initialized and youll be able to upload media and tinker with the platform.
+      </h3>
       <form @submit.prevent="createDemoOrganization">
         <label for="org-title">Demo Organization Title:</label>
         <input type="text" id="org-title" v-model="demoTitle" />
