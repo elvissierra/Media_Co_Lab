@@ -29,6 +29,18 @@ class OrganizationCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class DemoOrgCreateView(APIView):
+    permission_classes = [AllowAny]
+    """ Creates a demo organization """
+
+    def post(self, request):
+        title = request.data.get("title", "").strip()
+        if not title.endswith("demo"):
+            title += "demo"
+
+        demo_organization = Organization.objects.create(title=title, is_demo=True)
+        serializer = OrganizationSerializer(demo_organization)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class OrganizationsGetView(APIView):
     permission_classes = [AllowAny]

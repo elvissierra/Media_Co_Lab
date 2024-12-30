@@ -14,7 +14,7 @@
   import axiosPublic from '@/axiosPublic';
 
   export default {
-    name: 'OrganizationDemo',
+    name: 'DemoOrganization',
     data() {
       return {
         demoTitle: '',
@@ -28,7 +28,7 @@
             title: this.demoTitle,
           });
           this.message = `Demo organization "${response.data.title}" created successfully!`;
-          this.demoTitle = ''; // Reset the form
+          this.demoTitle = '';
         } catch (error) {
           console.error(error);
           this.message = 'Failed to create demo organization. Please try again.';
