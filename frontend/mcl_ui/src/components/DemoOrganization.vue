@@ -57,68 +57,62 @@
   </script>
   
   <style scoped>
-  /* Container Styling */
+  
   .info-container.compact {
-    max-width: 600px; /* Limit the width */
-    margin: 0 auto; /* Center the container */
-    background-color: #f9f9f9; /* Light gray background */
-    border: 1px solid #ddd; /* Subtle border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 16px; /* Add space inside */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    text-align: left; /* Align text to the left */
+    max-width: 600px; 
+    margin: 0 auto; 
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    padding: 16px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    text-align: left; 
   }
   
-  /* Heading Styling */
   .info-container h3 {
-    margin-bottom: 8px; /* Reduce space below heading */
-    font-size: 1.25rem; /* Slightly smaller font size */
-    color: #333; /* Dark text color */
+    margin-bottom: 8px; 
+    font-size: 1.25rem; 
+    color: #333; 
   }
   
-  /* Paragraph Styling */
   .info-container p {
-    margin: 0 0 8px; /* Compact spacing */
-    font-size: 0.95rem; /* Smaller font size */
-    line-height: 1.4; /* Tighter line spacing */
+    margin: 0 0 8px; 
+    font-size: 0.95rem; 
+    line-height: 1.4; 
   }
   
-  /* List Styling */
   .info-container ul {
-    list-style-type: disc; /* Bulleted list */
-    margin: 0 0 8px 20px; /* Compact with slight indentation */
+    list-style-type: disc; 
+    margin: 0 0 8px 20px; 
     padding: 0;
   }
   
   .info-container ul li {
-    margin-bottom: 4px; /* Tighten space between items */
-    font-size: 0.9rem; /* Smaller font for compactness */
+    margin-bottom: 4px; 
+    font-size: 0.9rem; 
   }
 
   .demo-form {
-  margin-top: 16px; /* Space above the form */
+  margin-top: 16px; 
 }
 
-/* Form Elements */
-
-
 .demo-form input[type="text"] {
-  width: 100%; /* Full width */
-  max-width: 300px; /* Limit input size */
-  padding: 5px; /* Minimal padding */
-  margin-bottom: 8px; /* Space below input */
-  border: 1px solid #ccc; /* Subtle border */
-  border-radius: 4px; /* Soft corners */
+  width: 100%; 
+  max-width: 300px; 
+  padding: 5px; 
+  margin-bottom: 8px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
 }
 
 .demo-form button {
-  padding: 6px 12px; /* Compact button size */
-  background-color: #007bff; /* Blue background */
-  color: white; /* White text */
-  border: none; /* No border */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 0.9rem; /* Consistent with form size */
-  cursor: pointer; /* Pointer cursor */
+  padding: 6px 12px; 
+  background-color: #007bff; 
+  color: white; 
+  border: none; 
+  border-radius: 4px; 
+  font-size: 0.9rem; 
+  cursor: pointer; 
 }
   </style>
   
