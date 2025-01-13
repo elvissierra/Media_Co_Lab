@@ -58,7 +58,7 @@ export default {
       const commentsResponse = await this.$axios.get(`/medias/${mediaId}/comments/`);
       this.comments = commentsResponse.data;
     } catch (error) {
-      console.error('Error fetching media or comments:', error);
+      console.error('Error fetching comments:', error);
     }
   },
   methods: {
