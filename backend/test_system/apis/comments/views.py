@@ -8,7 +8,9 @@ from test_system.apps.medias.models import Medias
 from rest_framework.pagination import PageNumberPagination
 
 class CommentsGetOrCreateView(APIView):
+    
     def get(self, request, format=None):
+        """ retrieve all comments associated under a single media object """
         user = request.user
         user_team = user.team.all()
         if not user_team:
@@ -21,6 +23,7 @@ class CommentsGetOrCreateView(APIView):
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):
+        """ create a comment under a single media object """
         serializer = CommentsGetOrCreateSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             serializer.save()

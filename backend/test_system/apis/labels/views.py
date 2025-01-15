@@ -7,8 +7,9 @@ from rest_framework import status
 from test_system.permissions import IsLabelOwner
 
 class LabelsGetCreateView(APIView):
-    """ How is the user to recieve the labels? """
+
     def get(self, request, format=None):
+        """ retrieve all labels associated under a team object """
         user = request.user
         user_teams = user.team.all()
         if not user_teams:
@@ -18,6 +19,7 @@ class LabelsGetCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """ create a label instance under a media object """
         serializer = LabelSerializer(data=request.data, context={"request":request})
         if serializer.is_valid():
             serializer.save()
