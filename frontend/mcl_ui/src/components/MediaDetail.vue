@@ -43,6 +43,18 @@
             </v-card-text>
           </v-card>
         </div>
+
+        <!-- Comment Form -->
+        <v-form v-if="media" @submit.prevent="submitComment">
+          <v-textarea
+            v-model="newComment"
+            label="Add a comment"
+            outlined
+            rows="3"
+            required
+          ></v-textarea>
+          <v-btn type="submit" color="primary">Post Comment</v-btn>
+        </v-form>
       </v-col>
     </v-row>
   </v-container>
@@ -55,7 +67,8 @@ export default {
     return {
       media: null,
       comments: [],
-      loadingComments: true, // To track loading state
+      newComment: '',
+      loadingComments: true,
     };
   },
   async created() {
@@ -77,11 +90,29 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getUserColor(user) {
-      // Dynamic user color generation based on username hash
       const hash = Array.from(user.username).reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const colorIndex = hash % 4; // 4 colors cycle
       const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
       return colors[colorIndex] || 'grey lighten-3';
+    },
+    async submitComment() {
+      if (this.newComment.trim()) {
+        const mediaId = this.$route.params.medias_id;
+        try {
+          // Post the comment
+          const response = await this.$axios.post(`/medias/${mediaId}/comments/`, {
+            text: this.newComment,
+          });
+
+          // Add the new comment to the list of comments
+          this.comments.push(response.data);
+          this.newComment = ''; // Clear the input field
+        } catch (error) {
+          console.error('Error posting comment:', error);
+        }
+      } else {
+        alert('Please enter a comment before submitting.');
+      }
     },
   },
 };
@@ -112,5 +143,13 @@ export default {
 .comment-box {
   padding: 10px;
   border-radius: 8px;
+}
+
+.comments-container {
+  margin-top: 20px;
+}
+
+.comment-form {
+  margin-top: 20px;
 }
 </style>
