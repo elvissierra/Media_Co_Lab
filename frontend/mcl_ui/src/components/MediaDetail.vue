@@ -16,15 +16,23 @@
       </v-col>
     </v-row>
 
-    <!-- Comment Section TBD -->
+    <!-- Comment Section -->
     <v-row>
       <v-col cols="12">
         <h2 class="text-center">Comments</h2>
-        <div class="comments-container">
+
+        <!-- Loading Indicator -->
+        <v-progress-circular v-if="loadingComments" indeterminate color="primary" class="mx-auto"></v-progress-circular>
+
+        <!-- No Comments Message -->
+        <p v-if="!comments.length && !loadingComments" class="text-center">No comments yet</p>
+
+        <!-- Comment List -->
+        <div v-else class="comments-container">
           <v-card
             v-for="comment in comments"
             :key="comment.id"
-            :class="getUserColor(comment.user)"
+            :class="getUserColor(comment.owner)"
             class="comment-box mb-3"
           >
             <v-card-title>
@@ -47,6 +55,7 @@ export default {
     return {
       media: null,
       comments: [],
+      loadingComments: true, // To track loading state
     };
   },
   async created() {
@@ -58,7 +67,9 @@ export default {
       const commentsResponse = await this.$axios.get(`/medias/${mediaId}/comments/`);
       this.comments = commentsResponse.data;
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      console.error('Error fetching data:', error);
+    } finally {
+      this.loadingComments = false;
     }
   },
   methods: {
@@ -66,13 +77,11 @@ export default {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getUserColor(user) {
-      const userColors = {
-        user1: 'green lighten-3',
-        user2: 'blue lighten-3',
-        user3: 'purple lighten-3',
-        user4: 'orange lighten-3',
-      };
-      return userColors[user.username] || 'grey lighten-3';
+      // Dynamic user color generation based on username hash
+      const hash = Array.from(user.username).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const colorIndex = hash % 4; // 4 colors cycle
+      const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
+      return colors[colorIndex] || 'grey lighten-3';
     },
   },
 };
