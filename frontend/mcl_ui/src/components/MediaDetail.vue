@@ -2,16 +2,18 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <h1 class="text-center">{{ media.title }}</h1>
-        <p>{{ media.description }}</p>
+        <h1 class="text-center" v-if="media">{{ media.title }}</h1>
+        <p v-if="media">{{ media.description }}</p>
+        <v-progress-circular v-else indeterminate color="primary" class="mx-auto"></v-progress-circular>
 
-        <div class="media-box">
-          <div v-if="media.content">
-            <v-img v-if="isImage(media.content)" :src="media.content" :alt="media.title" class="media-view"></v-img>
-            <v-responsive v-else class="media-view">
-              <video controls :src="media.content" class="video-view"></video>
-            </v-responsive>
+        <!-- Media content (image / video) -->
+        <div v-if="media && media.content" class="media-box">
+          <div v-if="isImage(media.content)">
+            <v-img :src="media.content" :alt="media.title" class="media-view"></v-img>
           </div>
+          <v-responsive v-else class="media-view">
+            <video controls :src="media.content" class="video-view"></video>
+          </v-responsive>
         </div>
       </v-col>
     </v-row>
@@ -29,36 +31,26 @@
 
         <!-- Comment List -->
         <div v-else class="comments-container">
-          <v-card
-            v-for="comment in comments"
-            :key="comment.id"
-            :class="getUserColor(comment.owner)"
-            class="comment-box mb-3"
-          >
+          <v-card v-for="comment in comments" :key="comment.id" :class="getUserColor(comment.owner)" class="comment-box mb-3">
             <v-card-title>
-              {{ comment.user.username }}
+              {{ comment.owner }}
             </v-card-title>
             <v-card-text>
-              {{ comment.text }}
+              {{ comment.content }}
             </v-card-text>
           </v-card>
         </div>
 
         <!-- Comment Form -->
         <v-form v-if="media" @submit.prevent="submitComment">
-          <v-textarea
-            v-model="newComment"
-            label="Add a comment"
-            outlined
-            rows="3"
-            required
-          ></v-textarea>
-          <v-btn type="submit" color="primary">Post Comment</v-btn>
+          <v-textarea v-model="newComment" label="Add a comment" outlined rows="3" required></v-textarea>
+          <v-btn type="submit" color="primary" :disabled="isSubmitting">Post Comment</v-btn>
         </v-form>
       </v-col>
     </v-row>
   </v-container>
 </template>
+
 
 <script>
 export default {
@@ -68,6 +60,7 @@ export default {
       media: null,
       comments: [],
       newComment: '',
+      isSubmitting: false,
       loadingComments: true,
     };
   },
@@ -91,24 +84,29 @@ export default {
     },
     getUserColor(user) {
       const hash = Array.from(user.username).reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const colorIndex = hash % 4; // 4 colors cycle
+      const colorIndex = hash % 4;
       const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
       return colors[colorIndex] || 'grey lighten-3';
     },
     async submitComment() {
       if (this.newComment.trim()) {
+        this.isSubmitting = true;
         const mediaId = this.$route.params.medias_id;
         try {
-          // Post the comment
           const response = await this.$axios.post(`/medias/${mediaId}/comments/`, {
             text: this.newComment,
           });
-
-          // Add the new comment to the list of comments
           this.comments.push(response.data);
-          this.newComment = ''; // Clear the input field
+          this.newComment = '';
         } catch (error) {
           console.error('Error posting comment:', error);
+          this.$vuetify.notify({
+            message: 'Failed to fetch media or comments, please try again.',
+            color: 'error',
+            timeout: 3000,
+            });
+        } finally {
+          this.isSubmitting = false;
         }
       } else {
         alert('Please enter a comment before submitting.');
