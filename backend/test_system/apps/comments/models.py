@@ -17,6 +17,6 @@ class Comment(db_models.Model):
         "self", related_name="replies", on_delete=db_models.CASCADE, null=True, blank=True
     )
     owner = db_models.CharField(max_length=255, blank=False, null=False)
-    content = db_models.CharField(max_length=255, blank=False, null=False)
+    content = db_models.TextField()
     created_at = db_models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = db_models.DateTimeField(auto_now_add=True, editable=False)
