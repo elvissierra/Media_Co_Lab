@@ -1,6 +1,5 @@
 import uuid
-from django.db import models as db_models
-
+from django.db import models as models
 
 class CommentsModelMixin:
     @property
@@ -11,12 +10,15 @@ class CommentsModelMixin:
         return self.comments.count()
 
 
-class Comment(db_models.Model):
-    id = db_models.UUIDField(default=uuid.uuid4, primary_key=True)
-    parent_id = db_models.ForeignKey(
-        "self", related_name="replies", on_delete=db_models.CASCADE, null=True, blank=True
+class Comment(models.Model):
+    from test_system.apps.medias.models import Medias
+    
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    parent_id = models.ForeignKey(
+        "self", related_name="replies", on_delete=models.CASCADE, null=True, blank=True
     )
-    owner = db_models.CharField(max_length=255, blank=False, null=False)
-    content = db_models.TextField()
-    created_at = db_models.DateTimeField(auto_now_add=True, editable=False)
-    updated_at = db_models.DateTimeField(auto_now_add=True, editable=False)
+    media = models.ForeignKey(Medias, related_name = "medias", on_delete=models.CASCADE)
+    owner = models.CharField(max_length=255, blank=False, null=False)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now_add=True, editable=False)
