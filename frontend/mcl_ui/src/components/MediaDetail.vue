@@ -41,6 +41,9 @@
           </v-card>
         </div>
 
+        <!-- Load More Comments Button -->
+        <v-btn v-if="nextPageUrl" @click="loadMoreComments" color="primary">Load More Comments</v-btn>
+
         <!-- Comment Form -->
         <v-form v-if="media" @submit.prevent="submitComment">
           <v-textarea v-model="newComment" label="Add a comment" outlined rows="3" required></v-textarea>
@@ -48,9 +51,14 @@
         </v-form>
       </v-col>
     </v-row>
+
+    <!-- Snackbar Notification -->
+    <v-snackbar v-model="snackbar.visible" :timeout="snackbar.timeout" :color="snackbar.color">
+      {{ snackbar.message }}
+      <v-btn color="white" text @click="snackbar.visible = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
-
 
 <script>
 export default {
@@ -62,6 +70,13 @@ export default {
       newComment: '',
       isSubmitting: false,
       loadingComments: true,
+      nextPageUrl: null,  // Store the next page URL
+      snackbar: {
+        visible: false,
+        message: '',
+        color: 'success',  // Default color for success
+        timeout: 3000,
+      },
     };
   },
   async created() {
@@ -70,10 +85,12 @@ export default {
       const response = await this.$axios.get(`/medias/${mediaId}/`);
       this.media = response.data;
 
-      const commentsResponse = await this.$axios.get(`/medias/${mediaId}/comments/`);
-      this.comments = commentsResponse.data;
+      await this.loadComments();
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching media or comments:', error);
+      this.snackbar.message = 'Failed to fetch media or comments, please try again.';
+      this.snackbar.color = 'error';
+      this.snackbar.visible = true;
     } finally {
       this.loadingComments = false;
     }
@@ -88,6 +105,39 @@ export default {
       const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
       return colors[colorIndex] || 'grey lighten-3';
     },
+    async loadComments() {
+      this.loadingComments = true;
+      const mediaId = this.$route.params.medias_id;
+      try {
+        const response = await this.$axios.get(`/medias/${mediaId}/comments/`);
+        this.comments = response.data.results;
+        this.nextPageUrl = response.data.next;
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+        this.snackbar.message = 'Failed to load comments.';
+        this.snackbar.color = 'error';
+        this.snackbar.visible = true;
+      } finally {
+        this.loadingComments = false;
+      }
+    },
+    async loadMoreComments() {
+      if (this.nextPageUrl) {
+        this.loadingComments = true;
+        try {
+          const response = await this.$axios.get(this.nextPageUrl);
+          this.comments.push(...response.data.results);
+          this.nextPageUrl = response.data.next;
+        } catch (error) {
+          console.error('Error loading more comments:', error);
+          this.snackbar.message = 'Failed to load more comments.';
+          this.snackbar.color = 'error';
+          this.snackbar.visible = true;
+        } finally {
+          this.loadingComments = false;
+        }
+      }
+    },
     async submitComment() {
       if (this.newComment.trim()) {
         this.isSubmitting = true;
@@ -100,11 +150,9 @@ export default {
           this.newComment = '';
         } catch (error) {
           console.error('Error posting comment:', error);
-          this.$vuetify.notify({
-            message: 'Failed to fetch media or comments, please try again.',
-            color: 'error',
-            timeout: 3000,
-            });
+          this.snackbar.message = 'Failed to post your comment, please try again.';
+          this.snackbar.color = 'error';
+          this.snackbar.visible = true;
         } finally {
           this.isSubmitting = false;
         }

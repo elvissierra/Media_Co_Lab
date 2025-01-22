@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
-from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer
+from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer, MediaCommentsGetSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from test_system.permissions import IsMediaOwner
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+
 
 class UserMediasGetView(APIView):
     permission_classes = [IsAuthenticated]
@@ -20,6 +22,21 @@ class UserMediasGetView(APIView):
         medias = Medias.objects.filter(team_id=team.id)
         serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
+
+
+class MediaCommentsGetView(APIView):
+    def get(self, request, medias_id):
+        """ Retrieve media and associated comments with pagination """
+        media = get_object_or_404(Medias, id=medias_id)
+        media_comments = media.comments.all()        
+        paginator = PageNumberPagination()        
+        paginate_comments = paginator.paginate_queryset(media_comments, request)
+        if paginate_comments is not None:
+            serializer = MediaCommentsGetSerializer(paginate_comments, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            return Response({"detail": "No comments."}, status=status.HTTP_404_NOT_FOUND)
+
 
 class MediasGetCreateView(APIView):
     parser_classes = [MultiPartParser, FormParser]
