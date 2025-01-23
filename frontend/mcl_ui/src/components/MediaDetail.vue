@@ -6,7 +6,6 @@
         <p v-if="media">{{ media.description }}</p>
         <v-progress-circular v-else indeterminate color="primary" class="mx-auto"></v-progress-circular>
 
-        <!-- Media content (image / video) -->
         <div v-if="media && media.content" class="media-box">
           <div v-if="isImage(media.content)">
             <v-img :src="media.content" :alt="media.title" class="media-view"></v-img>
@@ -18,18 +17,14 @@
       </v-col>
     </v-row>
 
-    <!-- Comment Section -->
     <v-row>
       <v-col cols="12">
         <h2 class="text-center">Comments</h2>
 
-        <!-- Loading Indicator -->
         <v-progress-circular v-if="loadingComments" indeterminate color="primary" class="mx-auto"></v-progress-circular>
 
-        <!-- No Comments Message -->
         <p v-if="!comments.length && !loadingComments" class="text-center">No comments yet</p>
 
-        <!-- Comment List -->
         <div v-else class="comments-container">
           <v-card v-for="comment in comments" :key="comment.id" :class="getUserColor(comment.owner)" class="comment-box mb-3">
             <v-card-title>
@@ -41,10 +36,8 @@
           </v-card>
         </div>
 
-        <!-- Load More Comments Button -->
         <v-btn v-if="nextPageUrl" @click="loadMoreComments" color="primary">Load More Comments</v-btn>
 
-        <!-- Comment Form -->
         <v-form v-if="media" @submit.prevent="submitComment">
           <v-textarea v-model="newComment" label="Add a comment" outlined rows="3" required></v-textarea>
           <v-btn type="submit" color="primary" :disabled="isSubmitting">Post Comment</v-btn>
@@ -52,7 +45,6 @@
       </v-col>
     </v-row>
 
-    <!-- Snackbar Notification -->
     <v-snackbar v-model="snackbar.visible" :timeout="snackbar.timeout" :color="snackbar.color">
       {{ snackbar.message }}
       <v-btn color="white" text @click="snackbar.visible = false">Close</v-btn>
@@ -70,11 +62,11 @@ export default {
       newComment: '',
       isSubmitting: false,
       loadingComments: true,
-      nextPageUrl: null,  // Store the next page URL
+      nextPageUrl: null,
       snackbar: {
         visible: false,
         message: '',
-        color: 'success',  // Default color for success
+        color: 'success',
         timeout: 3000,
       },
     };
