@@ -1,7 +1,7 @@
 from test_system.apps.comments.models import Comment
 from rest_framework import serializers
 
-class CommentsGetOrCreateSerializer(serializers.ModelSerializer):
+class CommentsCreateSerializer(serializers.ModelSerializer):
 
         class Meta:
                 model = Comment
