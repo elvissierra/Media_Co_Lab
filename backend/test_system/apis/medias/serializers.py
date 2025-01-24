@@ -3,14 +3,16 @@ from rest_framework import serializers
 from test_system.apps.medias.models import Medias
 from test_system.apis.labels.serializers import LabelsSerializer
 from test_system.apis.teams.serializers import TeamsSerializer
-from test_system.apis.comments.serializers import CommentsGetOrCreateSerializer
+from test_system.apis.comments.serializers import CommentsGetCreateSerializer
 
-class MediaCommentsGetSerializer(serializers.ModelSerializer):
-    comments = CommentsGetOrCreateSerializer(many= True, read_only= True)
+
+class MediaCommentsGetCreateSerializer(serializers.ModelSerializer):    
+    comments_count = serializers.ReadOnlyField()
+    comments = CommentsGetCreateSerializer(many=True, read_only=True)
     
     class Meta:
         model = Medias
-        fields = "__all__"
+        fields = ["id", "title", "description", "content", "user", "team", "comments", "comments_count"]
 
 class MediasSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)

@@ -24,8 +24,9 @@
         <v-progress-circular v-if="loadingComments" indeterminate color="primary" class="mx-auto"></v-progress-circular>
 
         <p v-if="!comments.length && !loadingComments" class="text-center">No comments yet</p>
+        <p v-if="media && media.comments_count" class="text-center">{{ media.comments_count }} Comments </p>
 
-        <div v-else class="comments-container">
+        <div v-if="comments.length" class="comments-container">
           <v-card v-for="comment in comments" :key="comment.id" :class="getUserColor(comment.owner)" class="comment-box mb-3">
             <v-card-title>
               {{ comment.owner }}
@@ -75,6 +76,7 @@ export default {
     const mediaId = this.$route.params.medias_id;
     try {
       const response = await this.$axios.get(`/medias/${mediaId}/`);
+      console.log('Media Response:', response.data);
       this.media = response.data;
 
       await this.loadComments();
@@ -91,8 +93,8 @@ export default {
     isImage(filePath) {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
-    getUserColor(user) {
-      const hash = Array.from(user.username).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    getUserColor(owner) {
+      const hash = Array.from(owner).reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const colorIndex = hash % 4;
       const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
       return colors[colorIndex] || 'grey lighten-3';
@@ -102,7 +104,8 @@ export default {
       const mediaId = this.$route.params.medias_id;
       try {
         const response = await this.$axios.get(`/medias/${mediaId}/comments/`);
-        this.comments = response.data.results;
+        console.log('Comments Response:', response.data.results);
+        this.comments = response.data.results || [];
         this.nextPageUrl = response.data.next;
       } catch (error) {
         console.error('Error fetching comments:', error);
@@ -136,9 +139,9 @@ export default {
         const mediaId = this.$route.params.medias_id;
         try {
           const response = await this.$axios.post(`/medias/${mediaId}/comments/`, {
-            text: this.newComment,
+            content: this.newComment,
           });
-          this.comments.push(response.data);
+          this.comments.unshift(response.data);
           this.newComment = '';
         } catch (error) {
           console.error('Error posting comment:', error);

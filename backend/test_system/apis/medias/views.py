@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
-from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer, MediaCommentsGetSerializer
+from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer, MediaCommentsGetCreateSerializer
+from test_system.apis.comments.serializers import CommentsGetCreateSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -24,18 +25,31 @@ class UserMediasGetView(APIView):
         return Response(serializer.data)
 
 
-class MediaCommentsGetView(APIView):
+class MediaCommentsGetCreateView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, medias_id):
-        """ Retrieve media and associated comments with pagination """
+        """Retrieve media and associated comments with pagination"""
         media = get_object_or_404(Medias, id=medias_id)
-        media_comments = media.comments.all()        
-        paginator = PageNumberPagination()        
+        media_comments = media.comments.all()
+
+        paginator = PageNumberPagination()
         paginate_comments = paginator.paginate_queryset(media_comments, request)
+
         if paginate_comments is not None:
-            serializer = MediaCommentsGetSerializer(paginate_comments, many=True)
-            return paginator.get_paginated_response(serializer.data)
+            comments_serializer = CommentsGetCreateSerializer(paginate_comments, many=True)
+            return paginator.get_paginated_response(comments_serializer.data)
         else:
-            return Response({"detail": "No comments."}, status=status.HTTP_404_NOT_FOUND)
+            serializer = MediaCommentsGetCreateSerializer(media)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, medias_id):
+        """ Create a comment obj under a specified media obj """
+        media = get_object_or_404(Medias, id=medias_id)
+        serializer = CommentsGetCreateSerializer(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            serializer.save(media=media)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MediasGetCreateView(APIView):
@@ -49,7 +63,7 @@ class MediasGetCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        """ Create Media and associate it to the User's Team field """
+        """ Create Media associated to User Team obj """
         user = request.user
         team_id = request.data.get("team_id")
         if not user.team.filter(id=team_id).exists():
