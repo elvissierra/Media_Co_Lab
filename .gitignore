@@ -6,4 +6,4 @@ migrations
 snyk
 staticfiles
 media
-test_system/management
+management
