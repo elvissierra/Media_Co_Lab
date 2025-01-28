@@ -29,7 +29,6 @@ class UserCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#user login
 class LoginView(KnoxLoginView):
     permission_classes = [AllowAny]
 
@@ -49,7 +48,6 @@ class LoginView(KnoxLoginView):
             return Response({"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-#methods    
 class UsersGetView(APIView):
     permission_classes = [IsAdminUser]
     
