@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import HomePage from './components/HomePage.vue'
 import Organization from './components/Organization.vue'
 import OrgRegister from './components/OrgRegister.vue'
@@ -15,14 +16,21 @@ import Labels from './components/Labels.vue'
 
 const routes = [
   {
-    path: '/', name: 'HomePage', component: HomePage,
+    path: '/',
+    name: 'HomePage',
+    component: HomePage,
   },
   {
-    path: '/register', name: 'UserRegister', component: UserRegister,
+    path: '/register',
+    name: 'UserRegister',
+    component: UserRegister,
   },
   {
-    path: '/login', name: 'UserLogin', component: UserLogin,
-    beforeEnter: (to, from, next) => {
+    path: '/login',
+    name: 'UserLogin',
+    component: UserLogin,
+    beforeEnter: (to, from,
+      next) => {
       if (localStorage.getItem('authToken')){
         next({ name: 'HomePage'})
       } else {
@@ -31,34 +39,54 @@ const routes = [
     }
   },
   {
-    path: '/organization', name: 'mclOrganization', component: Organization,
+    path: '/organization',
+    name: 'mclOrganization',
+    component: Organization,
   },
   {
-    path: '/organizations/reg', name: 'RegisterOrganization', component: OrgRegister,
+    path: '/organizations/reg',
+    name: 'RegisterOrganization',
+    component: OrgRegister,
   },
   {
-    path: '/organizations/ov', name: 'OrganizationOverview', component: Organization,
+    path: '/organizations/ov',
+    name: 'OrganizationOverview',
+    component: Organization,
   },
   {
-    path: '/organizations/demo', name: 'DemoOrganization', component: DemoOrganization,
+    path: '/organizations/demo',
+    name: 'DemoOrganization',
+    component: DemoOrganization,
   },
   {
-    path: '/team/create', name: 'mclTeam', component: TeamCreate,
+    path: '/team/create',
+    name: 'mclTeam',
+    component: TeamCreate,
   },
   {
-    path: '/teams', name: 'mclTeams', component: Teams,
+    path: '/teams',
+    name: 'mclTeams',
+    component: Teams,
   },
   {
-    path: '/teams/:team_id', name: 'TeamDetail', component: TeamDetail,
+    path: '/teams/:team_id',
+    name: 'TeamDetail',
+    component: TeamDetail,
   },
   {
-    path: '/medias', name: 'mclMedia', component: Media,
+    path: '/medias',
+    name: 'mclMedia',
+    component: Media,
   },
   {
-    path: '/medias/:medias_id', name: 'MediaDetail', component: MediaDetail,
+    path: '/medias/:medias_id',
+    name: 'MediaDetail',
+    component: MediaDetail,
   },
   {
-    path: '/labels', name: 'mclLabels', component: Labels,
+    path: '/labels',
+    name: 'mclLabels',
+    component: Labels,
   },
 ];
 const router = createRouter({
