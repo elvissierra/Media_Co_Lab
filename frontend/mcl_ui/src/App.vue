@@ -65,6 +65,33 @@ export default {
 </script>
 
 <style>
+@media (max-width: 768px){
+  #app {
+    margin-top: 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-list {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .navbar-list li {
+    margin: 10px 0;
+  }
+
+  .combined-button {
+    position: static;
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+  }
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
