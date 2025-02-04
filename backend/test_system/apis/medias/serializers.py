@@ -6,7 +6,7 @@ from test_system.apis.teams.serializers import TeamsSerializer
 from test_system.apis.chats.serializers import ChatsGetCreateSerializer
 
 
-class MediachatGetCreateSerializer(serializers.ModelSerializer):    
+class MediaChatGetCreateSerializer(serializers.ModelSerializer):    
     chat_count = serializers.ReadOnlyField()
     chat = ChatsGetCreateSerializer(many=True, read_only=True)
     
