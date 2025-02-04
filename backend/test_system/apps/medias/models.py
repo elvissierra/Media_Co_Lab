@@ -1,7 +1,7 @@
 from django.db import models
 from test_system.apps.users.models import CustomUser
 from test_system.apps.teams.models import Team
-from test_system.apps.comments.models import Comment
+from test_system.apps.chats.models import Chat
 import uuid
 
 

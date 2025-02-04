@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
-from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer, MediaCommentsGetCreateSerializer
-from test_system.apis.comments.serializers import CommentsGetCreateSerializer
+from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer, MediaChatGetCreateSerializer
+from test_system.apis.chats.serializers import ChatsGetCreateSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -25,27 +25,27 @@ class UserMediasGetView(APIView):
         return Response(serializer.data)
 
 
-class MediaCommentsGetCreateView(APIView):
+class MediaChatGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, medias_id):
-        """Retrieve media and associated comments with pagination"""
+        """Retrieve media and associated Chat with pagination"""
         media = get_object_or_404(Medias, id=medias_id)
-        media_comments = media.comments.all()
+        media_Chat = media.Chat.all()
 
         paginator = PageNumberPagination()
-        paginate_comments = paginator.paginate_queryset(media_comments, request)
+        paginate_Chat = paginator.paginate_queryset(media_Chat, request)
 
-        if paginate_comments is not None:
-            comments_serializer = CommentsGetCreateSerializer(paginate_comments, many=True)
-            return paginator.get_paginated_response(comments_serializer.data)
+        if paginate_Chat is not None:
+            Chat_serializer = ChatsGetCreateSerializer(paginate_Chat, many=True)
+            return paginator.get_paginated_response(Chat_serializer.data)
         else:
-            serializer = MediaCommentsGetCreateSerializer(media)
+            serializer = MediaChatGetCreateSerializer(media)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, medias_id):
-        """ Create a comment obj under a specified media obj """
+        """ Create a chat obj under a specified media obj """
         media = get_object_or_404(Medias, id=medias_id)
-        serializer = CommentsGetCreateSerializer(data=request.data, context={"request": request})
+        serializer = ChatsGetCreateSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save(media=media)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

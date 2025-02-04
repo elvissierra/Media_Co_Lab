@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     "test_system.apps.teams",
     "test_system.apps.organizations",
     "test_system.apps.medias",
-    "test_system.apps.comments",
+    "test_system.apps.chats",
     "django_extensions",
     "test_system"
 ]
