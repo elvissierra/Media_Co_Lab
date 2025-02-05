@@ -19,29 +19,29 @@
 
     <v-row>
       <v-col cols="12">
-        <h2 class="text-center">Comments</h2>
+        <h2 class="text-center">Chats</h2>
 
-        <v-progress-circular v-if="loadingComments" indeterminate color="primary" class="mx-auto"></v-progress-circular>
+        <v-progress-circular v-if="loadingChats" indeterminate color="primary" class="mx-auto"></v-progress-circular>
 
-        <p v-if="!comments.length && !loadingComments" class="text-center">No comments yet</p>
-        <p v-if="media && media.comments_count" class="text-center">{{ media.comments_count }} Comments </p>
+        <p v-if="!chats.length && !loadingChats" class="text-center">No chats yet</p>
+        <p v-if="media && media.chats_count" class="text-center">{{ media.chats_count }} Chats </p>
 
-        <div v-if="comments.length" class="comments-container">
-          <v-card v-for="comment in comments" :key="comment.id" :class="getUserColor(comment.owner)" class="comment-box mb-3">
+        <div v-if="chats.length" class="chats-container">
+          <v-card v-for="chat in chats" :key="chat.id" :class="getUserColor(chat.owner)" class="chat-box mb-3">
             <v-card-title>
-              {{ comment.owner }}
+              {{ chat.owner }}
             </v-card-title>
             <v-card-text>
-              {{ comment.content }}
+              {{ chat.content }}
             </v-card-text>
           </v-card>
         </div>
 
-        <v-btn v-if="nextPageUrl" @click="loadMoreComments" color="primary">Load More Comments</v-btn>
+        <v-btn v-if="nextPageUrl" @click="loadMoreChats" color="primary">Load More Chats</v-btn>
 
-        <v-form v-if="media" @submit.prevent="submitComment">
-          <v-textarea v-model="newComment" label="Add a comment" outlined rows="3" required></v-textarea>
-          <v-btn type="submit" color="primary" :disabled="isSubmitting">Post Comment</v-btn>
+        <v-form v-if="media" @submit.prevent="submitChat">
+          <v-textarea v-model="newChat" label="Add a chat" outlined rows="3" required></v-textarea>
+          <v-btn type="submit" color="primary" :disabled="isSubmitting">Post Chat</v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -59,10 +59,10 @@ export default {
   data() {
     return {
       media: null,
-      comments: [],
-      newComment: '',
+      chats: [],
+      newChat: '',
       isSubmitting: false,
-      loadingComments: true,
+      loadingChats: true,
       nextPageUrl: null,
       snackbar: {
         visible: false,
@@ -79,14 +79,14 @@ export default {
       console.log('Media Response:', response.data);
       this.media = response.data;
 
-      await this.loadComments();
+      await this.loadChats();
     } catch (error) {
-      console.error('Error fetching media or comments:', error);
-      this.snackbar.message = 'Failed to fetch media or comments, please try again.';
+      console.error('Error fetching media or chats:', error);
+      this.snackbar.message = 'Failed to fetch media or chats, please try again.';
       this.snackbar.color = 'error';
       this.snackbar.visible = true;
     } finally {
-      this.loadingComments = false;
+      this.loadingChats = false;
     }
   },
   methods: {
@@ -99,60 +99,60 @@ export default {
       const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
       return colors[colorIndex] || 'grey lighten-3';
     },
-    async loadComments() {
-      this.loadingComments = true;
+    async loadChats() {
+      this.loadingChats = true;
       const mediaId = this.$route.params.medias_id;
       try {
-        const response = await this.$axios.get(`/medias/${mediaId}/comments/`);
-        console.log('Comments Response:', response.data.results);
-        this.comments = response.data.results || [];
+        const response = await this.$axios.get(`/medias/${mediaId}/chats/`);
+        console.log('Chats Response:', response.data.results);
+        this.chats = response.data.results || [];
         this.nextPageUrl = response.data.next;
       } catch (error) {
-        console.error('Error fetching comments:', error);
-        this.snackbar.message = 'Failed to load comments.';
+        console.error('Error fetching chats:', error);
+        this.snackbar.message = 'Failed to load chats.';
         this.snackbar.color = 'error';
         this.snackbar.visible = true;
       } finally {
-        this.loadingComments = false;
+        this.loadingChats = false;
       }
     },
-    async loadMoreComments() {
+    async loadMoreChats() {
       if (this.nextPageUrl) {
-        this.loadingComments = true;
+        this.loadingChats = true;
         try {
           const response = await this.$axios.get(this.nextPageUrl);
-          this.comments.push(...response.data.results);
+          this.chats.push(...response.data.results);
           this.nextPageUrl = response.data.next;
         } catch (error) {
-          console.error('Error loading more comments:', error);
-          this.snackbar.message = 'Failed to load more comments.';
+          console.error('Error loading more chats:', error);
+          this.snackbar.message = 'Failed to load more chats.';
           this.snackbar.color = 'error';
           this.snackbar.visible = true;
         } finally {
-          this.loadingComments = false;
+          this.loadingChats = false;
         }
       }
     },
-    async submitComment() {
-      if (this.newComment.trim()) {
+    async submitChat() {
+      if (this.newChat.trim()) {
         this.isSubmitting = true;
         const mediaId = this.$route.params.medias_id;
         try {
-          const response = await this.$axios.post(`/medias/${mediaId}/comments/`, {
-            content: this.newComment,
+          const response = await this.$axios.post(`/medias/${mediaId}/chats/`, {
+            content: this.newChat,
           });
-          this.comments.unshift(response.data);
-          this.newComment = '';
+          this.chats.unshift(response.data);
+          this.newChat = '';
         } catch (error) {
-          console.error('Error posting comment:', error);
-          this.snackbar.message = 'Failed to post your comment, please try again.';
+          console.error('Error posting chat:', error);
+          this.snackbar.message = 'Failed to post your chat, please try again.';
           this.snackbar.color = 'error';
           this.snackbar.visible = true;
         } finally {
           this.isSubmitting = false;
         }
       } else {
-        alert('Please enter a comment before submitting.');
+        alert('Please enter a chat before submitting.');
       }
     },
   },
@@ -181,16 +181,16 @@ export default {
   height: auto; 
 }
 
-.comment-box {
+.chat-box {
   padding: 10px;
   border-radius: 8px;
 }
 
-.comments-container {
+.chats-container {
   margin-top: 20px;
 }
 
-.comment-form {
+.chat-form {
   margin-top: 20px;
 }
 </style>
