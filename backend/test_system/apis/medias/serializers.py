@@ -12,7 +12,7 @@ class MediaChatGetCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Medias
-        fields = ["id", "title", "description", "content", "user", "team", "chats", "chat_count"]
+        fields = ["id", "title", "description", "content", "user", "team", "chat", "chat_count"]
 
 class MediasSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)

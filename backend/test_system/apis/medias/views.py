@@ -30,7 +30,7 @@ class MediaChatGetCreateView(APIView):
     def get(self, request, medias_id):
         """Retrieve media and associated Chat with pagination"""
         media = get_object_or_404(Medias, id=medias_id)
-        media_Chat = media.Chat.all()
+        media_Chat = media.chats.all()
 
         paginator = PageNumberPagination()
         paginate_Chat = paginator.paginate_queryset(media_Chat, request)

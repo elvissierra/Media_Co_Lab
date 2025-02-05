@@ -10,8 +10,8 @@ class ChatsGetCreateSerializer(serializers.ModelSerializer):
 
         def create(self, validated_data):
             user = self.context["request"].user
-            Chat = Chat.objects.create(owner=user, **validated_data)
-            return Chat
+            chat = Chat.objects.create(owner=user, **validated_data)
+            return chat
 
 class ChatGetUpdateDeleteSerializer(serializers.ModelSerializer):
         class Meta:

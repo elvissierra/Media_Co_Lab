@@ -4,6 +4,7 @@ import axios from 'axios';
 const store = createStore({
   state: {
     user: null,
+    authToken: localStorage.getItem('authToken') || null,
   },
   mutations: {
     setUser(state, user) {
@@ -14,9 +15,18 @@ const store = createStore({
         state.user.organization = organization;
       }
     },
+    setAuthToken(state, token) {
+      state.authToken = token;
+      if (token) {
+        localStorage.setItem('authToken', token);
+      } else {
+        localStorage.removeItem('authToken');
+      }
+    },
   },
   getters: {
     userHasOrganization: state => !!state.user?.organization,
+    isLoggedIn: state => !!state.authToken,
   },
   actions: {
     async fetchUser({ commit }, userId) {

@@ -19,11 +19,11 @@
 
     <v-row>
       <v-col cols="12">
-        <h2 class="text-center">Chats</h2>
+        <h2 class="text-center">Chat</h2>
 
         <v-progress-circular v-if="loadingChats" indeterminate color="primary" class="mx-auto"></v-progress-circular>
 
-        <p v-if="!chats.length && !loadingChats" class="text-center">No chats yet</p>
+        <p v-if="!chats.length && !loadingChats" class="text-center">No comments yet</p>
         <p v-if="media && media.chats_count" class="text-center">{{ media.chats_count }} Chats </p>
 
         <div v-if="chats.length" class="chats-container">
