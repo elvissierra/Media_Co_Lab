@@ -6,13 +6,21 @@ from test_system.apis.teams.serializers import TeamsSerializer
 from test_system.apis.chats.serializers import ChatsGetCreateSerializer
 
 
-class MediaChatGetCreateSerializer(serializers.ModelSerializer):    
+class MediaChatGetCreateSerializer(serializers.ModelSerializer):
     chat_count = serializers.ReadOnlyField()
-    chat = ChatsGetCreateSerializer(many=True, read_only=True)
-    
+    chats = ChatsGetCreateSerializer(many=True, read_only=True)
+    content = serializers.SerializerMethodField()
+
     class Meta:
         model = Medias
-        fields = ["id", "title", "description", "content", "user", "team", "chat", "chat_count"]
+        fields = ["id", "title", "description", "content", "user", "team", "chats", "chat_count"]
+
+    def get_content(self, obj):
+        request = self.context.get("request")
+        if request:
+            return f"{request.scheme}://{request.get_host()}{settings.MEDIA_URL}{obj.content}"
+        return f"{settings.MEDIA_URL}{obj.content}"
+
 
 class MediasSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)
@@ -25,17 +33,11 @@ class MediasSerializer(serializers.ModelSerializer):
 class MediasGetSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)
     team_title = serializers.CharField(source="team.title", read_only=True)
-    content = serializers.SerializerMethodField()
 
     class Meta:
         model = Medias
         fields = ["title", "description", "content", "labels", "user", "team_title", "id"]
 
-    def get_content(self, obj):
-        request = self.context.get("request")
-        if request:
-            return request.build_absolute_uri(obj.content)
-        return f"{settings.MEDIA_URL}{obj.content}"
 
 class MediaSerializer(serializers.ModelSerializer):
 

@@ -14,7 +14,7 @@ class ChatsGetView(APIView):
         user_organization = user.organization
         if not user_organization:
             return Response({"error": "User not associated with an organization."}, status=status.HTTP_400_BAD_REQUEST)
-        Chats = Chat.objects.filter(organization_id=user_organization.id)
+        Chats = Chat.objects.filter(owner__organization=user_organization)
         serializer = ChatsGetCreateSerializer(Chats, many=True)
         return Response(serializer.data)
     

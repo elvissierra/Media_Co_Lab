@@ -15,7 +15,7 @@ class UserMediasGetView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        """ User created Media objects """
+        """  Retrieve user created Media objects """
         user = request.user
         team = user.team
         if not team:
@@ -27,25 +27,19 @@ class UserMediasGetView(APIView):
 
 class MediaChatGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, medias_id):
         """Retrieve media and associated Chat with pagination"""
         media = get_object_or_404(Medias, id=medias_id)
-        media_Chat = media.chats.all()
-
-        paginator = PageNumberPagination()
-        paginate_Chat = paginator.paginate_queryset(media_Chat, request)
-
-        if paginate_Chat is not None:
-            Chat_serializer = ChatsGetCreateSerializer(paginate_Chat, many=True)
-            return paginator.get_paginated_response(Chat_serializer.data)
-        else:
-            serializer = MediaChatGetCreateSerializer(media)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        media_chat = media.chats.all()
+        serializer = MediaChatGetCreateSerializer(media, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, medias_id):
         """ Create a chat obj under a specified media obj """
         media = get_object_or_404(Medias, id=medias_id)
         serializer = ChatsGetCreateSerializer(data=request.data, context={"request": request})
+        
         if serializer.is_valid():
             serializer.save(media=media)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
