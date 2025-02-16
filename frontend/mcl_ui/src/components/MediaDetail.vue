@@ -21,32 +21,57 @@
       <v-col cols="12">
         <h2 class="text-center">Chat</h2>
 
-        <v-progress-circular v-if="loadingChats" indeterminate color="primary" class="mx-auto"></v-progress-circular>
+        <v-progress-circular
+          v-if="loadingMedia"
+          indeterminate
+          color="primary"
+          class="mx-auto"
+        ></v-progress-circular>
 
-        <p v-if="!chats.length && !loadingChats" class="text-center">No comments yet</p>
-        <p v-if="media && media.chats_count" class="text-center">{{ media.chats_count }} Chats </p>
+        <p v-if="!chats.length && !loadingMedia" class="text-center">
+          No comments yet
+        </p>
+        <p v-if="media && media.chat_count" class="text-center">
+          {{ media.chat_count }} Chats
+        </p>
 
         <div v-if="chats.length" class="chats-container">
-          <v-card v-for="chat in chats" :key="chat.id" :class="getUserColor(chat.owner)" class="chat-box mb-3">
-            <v-card-title>
-              {{ chat.owner }}
-            </v-card-title>
-            <v-card-text>
-              {{ chat.content }}
-            </v-card-text>
+          <v-card
+            v-for="chat in chats"
+            :key="chat.id"
+            :class="getUserColor(chat.owner_full_name)"
+            class="chat-box mb-3"
+          >
+            <v-card-title>{{ chat.owner_full_name }}</v-card-title>
+            <v-card-text>{{ chat.content }}</v-card-text>
           </v-card>
         </div>
 
-        <v-btn v-if="nextPageUrl" @click="loadMoreChats" color="primary">Load More Chats</v-btn>
+        <!-- Optional remove Load More to return all chats in one call -->
+        <!-- <v-btn v-if="nextPageUrl" @click="loadMoreChats" color="primary">
+          Load More Chats
+        </v-btn> -->
 
         <v-form v-if="media" @submit.prevent="submitChat">
-          <v-textarea v-model="newChat" label="Add a chat" outlined rows="3" required></v-textarea>
-          <v-btn type="submit" color="primary" :disabled="isSubmitting">Post Chat</v-btn>
+          <v-textarea
+            v-model="newChat"
+            label="Add a chat"
+            outlined
+            rows="3"
+            required
+          ></v-textarea>
+          <v-btn type="submit" color="primary" :disabled="isSubmitting">
+            Post Chat
+          </v-btn>
         </v-form>
       </v-col>
     </v-row>
 
-    <v-snackbar v-model="snackbar.visible" :timeout="snackbar.timeout" :color="snackbar.color">
+    <v-snackbar
+      v-model="snackbar.visible"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+    >
       {{ snackbar.message }}
       <v-btn color="white" text @click="snackbar.visible = false">Close</v-btn>
     </v-snackbar>
@@ -55,82 +80,61 @@
 
 <script>
 export default {
-  name: 'MediaDetail',
+  name: "MediaDetail",
   data() {
     return {
       media: null,
       chats: [],
-      newChat: '',
+      newChat: "",
       isSubmitting: false,
-      loadingChats: true,
-      nextPageUrl: null,
+      loadingMedia: true,
+      // nextPageUrl: null, // Remove if pagination is no longer needed
       snackbar: {
         visible: false,
-        message: '',
-        color: 'success',
+        message: "",
+        color: "success",
         timeout: 3000,
       },
     };
   },
   async created() {
-    const mediaId = this.$route.params.medias_id;
-    try {
-      const response = await this.$axios.get(`/medias/${mediaId}/`);
-      console.log('Media Response:', response.data);
-      this.media = response.data;
-
-      await this.loadChats();
-    } catch (error) {
-      console.error('Error fetching media or chats:', error);
-      this.snackbar.message = 'Failed to fetch media or chats, please try again.';
-      this.snackbar.color = 'error';
-      this.snackbar.visible = true;
-    } finally {
-      this.loadingChats = false;
-    }
+    await this.fetchMedia();
   },
   methods: {
     isImage(filePath) {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
     getUserColor(owner) {
-      const hash = Array.from(owner).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      if (!owner) return "grey lighten-3";
+      const hash = Array.from(owner).reduce(
+        (acc, char) => acc + char.charCodeAt(0),
+        0
+      );
       const colorIndex = hash % 4;
-      const colors = ['green lighten-3', 'blue lighten-3', 'purple lighten-3', 'orange lighten-3'];
-      return colors[colorIndex] || 'grey lighten-3';
+      const colors = [
+        "green lighten-3",
+        "blue lighten-3",
+        "purple lighten-3",
+        "orange lighten-3",
+      ];
+      return colors[colorIndex] || "grey lighten-3";
     },
-    async loadChats() {
-      this.loadingChats = true;
+    async fetchMedia() {
       const mediaId = this.$route.params.medias_id;
       try {
         const response = await this.$axios.get(`/medias/${mediaId}/chats/`);
-        console.log('Chats Response:', response.data.results);
-        this.chats = response.data.results || [];
-        this.nextPageUrl = response.data.next;
+        console.log("Media Response:", response.data);
+        this.media = response.data;
+        // Assuming your serializer returns the chats under "chat"
+        this.chats = response.data.chat || [];
       } catch (error) {
-        console.error('Error fetching chats:', error);
-        this.snackbar.message = 'Failed to load chats.';
-        this.snackbar.color = 'error';
+        console.error("Error fetching media:", error);
+        this.snackbar.message =
+          "Failed to fetch media, please try again.";
+        this.snackbar.color = "error";
         this.snackbar.visible = true;
       } finally {
-        this.loadingChats = false;
-      }
-    },
-    async loadMoreChats() {
-      if (this.nextPageUrl) {
-        this.loadingChats = true;
-        try {
-          const response = await this.$axios.get(this.nextPageUrl);
-          this.chats.push(...response.data.results);
-          this.nextPageUrl = response.data.next;
-        } catch (error) {
-          console.error('Error loading more chats:', error);
-          this.snackbar.message = 'Failed to load more chats.';
-          this.snackbar.color = 'error';
-          this.snackbar.visible = true;
-        } finally {
-          this.loadingChats = false;
-        }
+        this.loadingMedia = false;
       }
     },
     async submitChat() {
@@ -138,21 +142,27 @@ export default {
         this.isSubmitting = true;
         const mediaId = this.$route.params.medias_id;
         try {
+          // You may still post to a dedicated chat creation endpoint
           const response = await this.$axios.post(`/medias/${mediaId}/chats/`, {
             content: this.newChat,
           });
+          // Add the newly created chat to both chats array and update media.chat_count if needed
           this.chats.unshift(response.data);
-          this.newChat = '';
+          if (this.media.chat_count !== undefined) {
+            this.media.chat_count++;
+          }
+          this.newChat = "";
         } catch (error) {
-          console.error('Error posting chat:', error);
-          this.snackbar.message = 'Failed to post your chat, please try again.';
-          this.snackbar.color = 'error';
+          console.error("Error posting chat:", error);
+          this.snackbar.message =
+            "Failed to post your chat, please try again.";
+          this.snackbar.color = "error";
           this.snackbar.visible = true;
         } finally {
           this.isSubmitting = false;
         }
       } else {
-        alert('Please enter a chat before submitting.');
+        alert("Please enter a chat before submitting.");
       }
     },
   },
@@ -178,7 +188,7 @@ export default {
 
 .video-view {
   max-width: 100%;
-  height: auto; 
+  height: auto;
 }
 
 .chat-box {

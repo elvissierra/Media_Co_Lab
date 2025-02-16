@@ -18,6 +18,7 @@ class ChatsGetView(APIView):
         serializer = ChatsGetCreateSerializer(Chats, many=True)
         return Response(serializer.data)
     
+    
 class ChatGetUpdateDeleteView(APIView):
     
     def get_permissions(self):

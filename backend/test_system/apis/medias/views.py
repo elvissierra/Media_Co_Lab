@@ -31,7 +31,6 @@ class MediaChatGetCreateView(APIView):
     def get(self, request, medias_id):
         """Retrieve media and associated Chat with pagination"""
         media = get_object_or_404(Medias, id=medias_id)
-        media_chat = media.chats.all()
         serializer = MediaChatGetCreateSerializer(media, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
