@@ -1,69 +1,74 @@
 <template>
   <v-container>
+    <!-- Media Area -->
     <v-row>
       <v-col cols="12">
-        <h1 class="text-center" v-if="media">{{ media.title }}</h1>
-        <p v-if="media">{{ media.description }}</p>
-        <v-progress-circular v-else indeterminate color="primary" class="mx-auto"></v-progress-circular>
-
-        <div v-if="media && media.content" class="media-box">
-          <div v-if="isImage(media.content)">
-            <v-img :src="media.content" :alt="media.title" class="media-view"></v-img>
+        <div class="media-details">
+          <h1 class="text-center" v-if="media">{{ media.title }}</h1>
+          <p class="text-center" v-if="media">{{ media.description }}</p>
+          <div v-if="media && media.content" class="media-box">
+            <div v-if="isImage(media.content)">
+              <v-img :src="media.content" :alt="media.title" class="media-view"></v-img>
+            </div>
+            <v-responsive v-else class="media-view">
+              <video controls :src="media.content" class="video-view"></video>
+            </v-responsive>
           </div>
-          <v-responsive v-else class="media-view">
-            <video controls :src="media.content" class="video-view"></video>
-          </v-responsive>
         </div>
       </v-col>
     </v-row>
 
+    <!-- Chat Area -->
     <v-row>
       <v-col cols="12">
-        <h2 class="text-center">Chat</h2>
+        <div class="chat-area">
+          <h2 class="text-center">Chat</h2>
+          <v-progress-circular
+            v-if="loadingMedia"
+            indeterminate
+            color="primary"
+            class="mx-auto"
+          ></v-progress-circular>
 
-        <v-progress-circular
-          v-if="loadingMedia"
-          indeterminate
-          color="primary"
-          class="mx-auto"
-        ></v-progress-circular>
+          <p v-if="!chats.length && !loadingMedia" class="text-center">
+            No comments yet
+          </p>
+          <p v-if="media && media.chat_count" class="text-center">
+            {{ media.chat_count }} Chats
+          </p>
 
-        <p v-if="!chats.length && !loadingMedia" class="text-center">
-          No comments yet
-        </p>
-        <p v-if="media && media.chat_count" class="text-center">
-          {{ media.chat_count }} Chats
-        </p>
+          <div ref="chatContainer" v-if="chats.length" class="chats-container">
+            <v-card
+              v-for="chat in chats"
+              :key="chat.id"
+              class="chat-card mb-3"
+            >
+              <v-card-title class="chat-header">
+                <v-avatar size="32" class="mr-2">
+                  <v-img :src="`https://ui-avatars.com/api/?name=${encodeURIComponent(chat.owner_full_name)}`"></v-img>
+                </v-avatar>
+                <span class="chat-owner">{{ chat.owner_full_name }}</span>
+              </v-card-title>
+              <v-card-text class="chat-content">
+                {{ chat.content }}
+              </v-card-text>
+            </v-card>
+          </div>
 
-        <div v-if="chats.length" class="chats-container">
-          <v-card
-            v-for="chat in chats"
-            :key="chat.id"
-            :class="getUserColor(chat.owner_full_name)"
-            class="chat-box mb-3"
-          >
-            <v-card-title>{{ chat.owner_full_name }}</v-card-title>
-            <v-card-text>{{ chat.content }}</v-card-text>
-          </v-card>
+          <v-form v-if="media" @submit.prevent="submitChat" class="chat-form">
+            <v-textarea
+              v-model="newChat"
+              label="Add a chat"
+              outlined
+              rows="2"
+              required
+              class="mb-2"
+            ></v-textarea>
+            <v-btn type="submit" color="primary" :disabled="isSubmitting">
+              Post Chat
+            </v-btn>
+          </v-form>
         </div>
-
-        <!-- Optional remove Load More to return all chats in one call -->
-        <!-- <v-btn v-if="nextPageUrl" @click="loadMoreChats" color="primary">
-          Load More Chats
-        </v-btn> -->
-
-        <v-form v-if="media" @submit.prevent="submitChat">
-          <v-textarea
-            v-model="newChat"
-            label="Add a chat"
-            outlined
-            rows="3"
-            required
-          ></v-textarea>
-          <v-btn type="submit" color="primary" :disabled="isSubmitting">
-            Post Chat
-          </v-btn>
-        </v-form>
       </v-col>
     </v-row>
 
@@ -73,7 +78,9 @@
       :color="snackbar.color"
     >
       {{ snackbar.message }}
-      <v-btn color="white" text @click="snackbar.visible = false">Close</v-btn>
+      <v-btn color="white" text @click="snackbar.visible = false">
+        Close
+      </v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -88,7 +95,6 @@ export default {
       newChat: "",
       isSubmitting: false,
       loadingMedia: true,
-      // nextPageUrl: null, // Remove if pagination is no longer needed
       snackbar: {
         visible: false,
         message: "",
@@ -104,20 +110,13 @@ export default {
     isImage(filePath) {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
-    getUserColor(owner) {
-      if (!owner) return "grey lighten-3";
-      const hash = Array.from(owner).reduce(
-        (acc, char) => acc + char.charCodeAt(0),
-        0
-      );
-      const colorIndex = hash % 4;
-      const colors = [
-        "green lighten-3",
-        "blue lighten-3",
-        "purple lighten-3",
-        "orange lighten-3",
-      ];
-      return colors[colorIndex] || "grey lighten-3";
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const container = this.$refs.chatContainer;
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
+      });
     },
     async fetchMedia() {
       const mediaId = this.$route.params.medias_id;
@@ -125,12 +124,10 @@ export default {
         const response = await this.$axios.get(`/medias/${mediaId}/chats/`);
         console.log("Media Response:", response.data);
         this.media = response.data;
-        // Assuming your serializer returns the chats under "chat"
-        this.chats = response.data.chat || [];
+        this.chats = response.data.chats || [];
       } catch (error) {
         console.error("Error fetching media:", error);
-        this.snackbar.message =
-          "Failed to fetch media, please try again.";
+        this.snackbar.message = "Failed to fetch media, please try again.";
         this.snackbar.color = "error";
         this.snackbar.visible = true;
       } finally {
@@ -142,16 +139,15 @@ export default {
         this.isSubmitting = true;
         const mediaId = this.$route.params.medias_id;
         try {
-          // You may still post to a dedicated chat creation endpoint
           const response = await this.$axios.post(`/medias/${mediaId}/chats/`, {
             content: this.newChat,
           });
-          // Add the newly created chat to both chats array and update media.chat_count if needed
-          this.chats.unshift(response.data);
+          this.chats.push(response.data);
           if (this.media.chat_count !== undefined) {
             this.media.chat_count++;
           }
           this.newChat = "";
+          this.scrollToBottom();
         } catch (error) {
           console.error("Error posting chat:", error);
           this.snackbar.message =
@@ -166,10 +162,20 @@ export default {
       }
     },
   },
+  watch: {
+    chats() {
+      this.scrollToBottom();
+    },
+  },
 };
 </script>
 
 <style scoped>
+
+.media-details {
+  margin-bottom: 2rem;
+}
+
 .media-box {
   border: 2px solid #ccc;
   border-radius: 8px;
@@ -191,16 +197,54 @@ export default {
   height: auto;
 }
 
-.chat-box {
-  padding: 10px;
-  border-radius: 8px;
+.chat-area {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .chats-container {
-  margin-top: 20px;
+  margin-top: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.chat-card {
+  border-radius: 8px;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+  margin: .5rem auto;
+  display: block;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  background-color: #eeeeee;
+  padding: 0.5rem 1rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.chat-owner {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.chat-content {
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 .chat-form {
-  margin-top: 20px;
+  margin-top: 1rem;
 }
 </style>
