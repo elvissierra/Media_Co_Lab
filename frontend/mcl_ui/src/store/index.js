@@ -6,6 +6,20 @@ const store = createStore({
     user: null,
     authToken: localStorage.getItem('authToken') || null,
   },
+  getters: {
+    userHasOrganization: state => !!state.user?.organization,
+    isLoggedIn: state => !!state.authToken,
+  },
+  actions: {
+    async fetchUser({ commit }, userId) {
+      try {
+        const response = await axios.get(`/api/users/${userId}`);
+        commit('setUser', response.data);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    },
+  },
   mutations: {
     setUser(state, user) {
       state.user = user;
@@ -21,20 +35,6 @@ const store = createStore({
         localStorage.setItem('authToken', token);
       } else {
         localStorage.removeItem('authToken');
-      }
-    },
-  },
-  getters: {
-    userHasOrganization: state => !!state.user?.organization,
-    isLoggedIn: state => !!state.authToken,
-  },
-  actions: {
-    async fetchUser({ commit }, userId) {
-      try {
-        const response = await axios.get(`/api/users/${userId}`);
-        commit('setUser', response.data);
-      } catch (error) {
-        console.error('Error fetching user:', error);
       }
     },
   },

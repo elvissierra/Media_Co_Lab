@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
+
 export default {
   name: "UserLogin",
   data() {
@@ -28,10 +30,16 @@ export default {
       email: '',
       password: '',
       error: null,
-      isAuthenticated: !!localStorage.getItem('authToken'),
     };
   },
+  computed: {
+    ...mapGetters(['isLoggedIn']),
+    isAuthenticated() {
+      return this.isLoggedIn;
+    }
+  },
   methods: {
+    ...mapMutations(['setAuthToken']),
     async loginUser() {
       try {
         const response = await this.$axios.post('auth/login/', {
@@ -39,11 +47,9 @@ export default {
           password: this.password,
         });
         const token = response.data.token;
-
-        localStorage.setItem('authToken', token);
-
-        this.isAuthenticated = true;
-
+        
+        this.setAuthToken(token);
+        
         this.$router.push({ name: 'HomePage' });
       } catch (error) {
         this.error = 'Invalid email or password';
@@ -52,6 +58,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .login {

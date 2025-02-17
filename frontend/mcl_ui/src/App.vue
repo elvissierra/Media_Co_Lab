@@ -27,33 +27,26 @@
 
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
+
 export default {
-  data() {
-    return {
-      isLoggedIn: false,
-    };
-  },
+  name: "App",
   computed: {
+    ...mapGetters(['isLoggedIn']),
     isHomePage() {
       return this.$route.path === '/';
     }
   },
-  created() {
-    this.checkLoginStatus();
-  },
   methods: {
-    checkLoginStatus() {
-      this.isLoggedIn = !!localStorage.getItem('authToken');
-    },
+    ...mapMutations(['setAuthToken']),
     async logoutUser() {
       try {
         await this.$axios.post('auth/logout/', {}, {
           headers: {
-            'Authorization': `Token ${localStorage.getItem('authToken')}`,
+            'Authorization': `Token ${this.$store.state.authToken}`,
           },
         });
-        localStorage.removeItem('authToken');
-        this.isLoggedIn = false; 
+        this.setAuthToken(null);
         this.$router.push({ name: 'UserLogin' });
       } catch (error) {
         console.error('Error on logout:', error);
@@ -66,8 +59,11 @@ export default {
       this.$router.push({ name: 'UserLogin' });
     },
   },
+  created() {
+  },
 };
 </script>
+
 
 <style>
 @media (max-width: 768px){
@@ -81,12 +77,17 @@ export default {
   }
 
   .navbar-list {
-    flex-direction: column;
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
   }
 
   .navbar-list li {
-    margin: 10px 0;
+    margin: 5px;
+    flex: 1 1 8px;
+    text-align: center;
   }
 
   .combined-button {
