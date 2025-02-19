@@ -18,7 +18,7 @@
         md="4"
         class="mb-4"
       >
-        <v-card outlined elevation="3" class="pa-3">
+        <v-card outlined elevation="3" class="pa-3 team-card">
           <v-card-title class="text-uppercase font-weight-bold d-flex align-center justify-center">
             <v-icon left class="mr-2">mdi-account-group</v-icon>
             {{ team.title }}
@@ -97,7 +97,7 @@
             <p v-if="!team.medias.length" class="text-grey">No media in this team</p>
 
             <v-card-actions class="justify-center mt-4">
-              <v-btn color="primary" @click="viewTeamDetails(team.id)">View Team</v-btn>
+              <v-btn color="primary" @click="viewTeam(team.id)">View Team</v-btn>
             </v-card-actions>
           </v-card-text>
         </v-card>
@@ -148,6 +148,9 @@ export default {
     viewMedia(mediaId) {
       this.$router.push({ name: 'MediaDetail', params: { uuid: mediaId } });
     },
+    viewTeam(teamId) {
+      this.$router.push({ name: 'TeamDetail', params: { team_id: teamId } });
+    },
     isImage(filePath) {
       return /\.(jpeg|jpg|gif|png)$/.test(filePath);
     },
@@ -167,8 +170,19 @@ export default {
   transform: scale(1.05);
 }
 
+.team-card {
+  border: 2px solid #1976D2;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.team-card .v-card-actions,
+.team-card .v-btn {
+  pointer-events: auto;
+}
+
 h1, h2, h4 {
-  color: #1976D2; /* Primary color */
+  color: #1976D2;
 }
 
 .mb-4 {
