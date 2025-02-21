@@ -95,11 +95,11 @@ export default {
 }
 
 .team-description {
-  color: #757575; /* Grey text */
-  white-space: normal; /* Ensures wrapping */
-  word-wrap: break-word; /* Forces words to wrap */
-  overflow-wrap: break-word; /* Additional support for older browsers */
-  max-width: 100%; /* Ensures it doesn't overflow */
+  color: #757575; 
+  white-space: normal; 
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  max-width: 100%; 
 }
 
 </style>
