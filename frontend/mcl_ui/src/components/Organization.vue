@@ -43,17 +43,18 @@
               <v-chip
                 v-for="user in team.users"
                 :key="user.id"
-                class="ma-1"
+                class="ma-1 d-flex align-center user-chip"
                 outlined
                 color="primary"
                 ripple="false"
+                size="large"
               >
-                <v-avatar left size="32">
+                <v-avatar left size="32" class="mr-2 ml-n2">
                   <v-img
                     :src="getFullImageUrl(user.avatar)"
                     alt="user avatar"
-                    height="32"
-                    width="32"
+                    height="40"
+                    width="40"
                     aspect-ratio="1"
                     class="rounded-circle"
                   />
@@ -97,7 +98,7 @@
             <p v-if="!team.medias.length" class="text-grey">No media in this team</p>
 
             <v-card-actions class="justify-center mt-4">
-              <v-btn color="primary" @click="viewTeam(team.id)">View Team</v-btn>
+              <v-btn color="blue darken-2" class="white---text" @click="viewTeam(team.id)">View Team</v-btn>
             </v-card-actions>
           </v-card-text>
         </v-card>

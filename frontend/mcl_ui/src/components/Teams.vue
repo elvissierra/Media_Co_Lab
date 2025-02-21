@@ -35,8 +35,8 @@
           ></v-img>
           <v-card-title>
             <div>
-              <h3 class="headline mb-1">{{ team.title }}</h3>
-              <p class="grey--text">{{ team.description.length > 100 ? team.description.substring(0, 100) + '...' : team.description }}</p>
+              <h3 class="headline mb-1 team-title">{{ team.title }}</h3>
+              <p class="team-description">{{ team.description.length > 100 ? team.description.substring(0, 100) + '...' : team.description }}</p>
             </div>
           </v-card-title>
           <v-divider></v-divider>
@@ -86,5 +86,20 @@ export default {
 <style>
 .v-card {
   cursor: pointer;
+  border: 2px solid #1976D2;
 }
+
+.team-title {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.team-description {
+  color: #757575; /* Grey text */
+  white-space: normal; /* Ensures wrapping */
+  word-wrap: break-word; /* Forces words to wrap */
+  overflow-wrap: break-word; /* Additional support for older browsers */
+  max-width: 100%; /* Ensures it doesn't overflow */
+}
+
 </style>
