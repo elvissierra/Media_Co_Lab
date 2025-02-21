@@ -6,13 +6,15 @@
     <div class="info-container compact">
       <h3>Continue with the demo:</h3>
       <p>
-        So you can explore the platform. After you create your organization,
-        a demo team will also be initialized, and you can tinker with features of:
+        So you can explore the platform. After you create an organization below,
+        a demo team will also be initialized, and this will allow you to experience 
+        the features of:
       </p>
       <ul>
-        <li><strong>Teams:</strong> Separation between concerns</li>
-        <li><strong>Upload Content:</strong> Media, documents</li>
-        <li><strong>Collaborate:</strong> Message with team members</li>
+        <li><strong>Teams:</strong> Create teams to form separation of concerns</li>
+        <li><strong>Upload Content:</strong> Media/ documents to share within the team for discussion.</li>
+        <li><strong>Labels:</strong> Add labels with type and tags for levels of concern to your content.</li>
+        <li><strong>Collaborate:</strong> Utilize the chat for discussion.</li>
       </ul>
     </div>
 
