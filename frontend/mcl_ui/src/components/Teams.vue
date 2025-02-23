@@ -99,7 +99,8 @@ export default {
   white-space: normal; 
   word-wrap: break-word; 
   overflow-wrap: break-word; 
-  max-width: 100%; 
+  max-width: 100%;
+  font-size: medium;
 }
 
 </style>
