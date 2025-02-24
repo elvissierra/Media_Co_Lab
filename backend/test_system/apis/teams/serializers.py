@@ -26,6 +26,7 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class TeamsSerializer(serializers.ModelSerializer):
+    """ Organization overview """
     users = UserSerializer(many=True, read_only=True)
     medias = TeamMediaSerializer(many=True, read_only=True)
 

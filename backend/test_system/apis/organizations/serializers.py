@@ -9,6 +9,7 @@ class DemoOrgSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    """ Organization Overview """
     teams = TeamsSerializer(many=True, read_only=True)
 
     class Meta:

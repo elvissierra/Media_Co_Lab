@@ -7,6 +7,7 @@ from test_system.apis.chats.serializers import ChatsGetCreateSerializer
 
 
 class MediaChatGetCreateSerializer(serializers.ModelSerializer):
+    """ media obj and associated chats """
     chat_count = serializers.ReadOnlyField()
     chats = ChatsGetCreateSerializer(many=True, read_only=True)
     content = serializers.SerializerMethodField()
