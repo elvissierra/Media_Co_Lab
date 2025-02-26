@@ -45,7 +45,14 @@
             >
               <v-card-title class="chat-header">
                 <v-avatar size="32" class="mr-2">
-                  <v-img :src="`https://ui-avatars.com/api/?name=${encodeURIComponent(chat.owner_full_name)}`"></v-img>
+                  <v-img 
+                    :src="chat.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(chat.owner_full_name)}`"
+                    alt="user avatar"
+                    height="32"
+                    width="32"
+                    aspect-ratio="1"
+                    class="rounded-circle"
+                  />
                 </v-avatar>
                 <span class="chat-owner">{{ chat.owner_full_name }}</span>
               </v-card-title>
