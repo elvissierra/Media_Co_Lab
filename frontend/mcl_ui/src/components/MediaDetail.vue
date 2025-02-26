@@ -227,6 +227,12 @@ export default {
   margin: .5rem auto;
   display: block;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.chat-card:hover {
+  transform: scale(1.03);
+  transform-origin: center;
 }
 
 .chat-header {
