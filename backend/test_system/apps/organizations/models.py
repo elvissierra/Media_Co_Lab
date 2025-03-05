@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 
+
 class Organization(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     title = models.CharField(max_length=255)
@@ -15,7 +16,7 @@ class Organization(models.Model):
 
         if is_demo_org:
             Team.objects.create(
-                title = "Demo Team",
-                description = "This is a demo team for demonstration purposes.",
+                title="Demo Team",
+                description="This is a demo team for demonstration purposes.",
                 organization=self,
             )

@@ -1,23 +1,31 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.teams.models import Team
 from test_system.apps.medias.models import Medias
-from test_system.apis.teams.serializers import TeamsSerializer, TeamSerializer, TeamMediaSerializer
+from test_system.apis.teams.serializers import (
+    TeamsSerializer,
+    TeamSerializer,
+    TeamMediaSerializer,
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from test_system.permissions import TeamPermission
 from rest_framework.permissions import IsAuthenticated
 
+
 class TeamsGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        """Retrieve all Team objects"""  
+        """Retrieve all Team objects"""
         user = request.user
         organization = user.organization
         if not organization:
-            return Response({"error": "User not associated with an organization."}, status=status.HTTP_400_BAD_REQUEST)
-        teams = Team.objects.filter(organization = request.user.organization)
+            return Response(
+                {"error": "User not associated with an organization."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        teams = Team.objects.filter(organization=request.user.organization)
         serializer = TeamsSerializer(teams, many=True)
         return Response(serializer.data)
 
@@ -33,7 +41,7 @@ class TeamsGetCreateView(APIView):
 
 
 class TeamGetUpdateDeleteView(APIView):
-    permission_classes= [TeamPermission]
+    permission_classes = [TeamPermission]
 
     def get(self, request, team_id, format=None):
         team = get_object_or_404(Team, id=team_id)
@@ -56,9 +64,12 @@ class TeamGetUpdateDeleteView(APIView):
         team.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class TeamMediasGetView(APIView):
     def get(self, request, team_id):
         team = get_object_or_404(Team, id=team_id)
         team_media = Medias.objects.filter(team_id=team.id)
-        serializer = TeamMediaSerializer(team_media, many=True, context={'request': request})
+        serializer = TeamMediaSerializer(
+            team_media, many=True, context={"request": request}
+        )
         return Response(serializer.data)

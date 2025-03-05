@@ -4,6 +4,7 @@ from test_system.apps.medias.models import Medias
 from test_system.apis.users.serializers import UsersGetSerializer, UserSerializer
 from django.conf import settings
 
+
 class TeamMediaSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField()
 
@@ -17,6 +18,7 @@ class TeamMediaSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.content)
         return f"{settings.MEDIA_URL}{obj.content}"
 
+
 class TeamSerializer(serializers.ModelSerializer):
     users = UsersGetSerializer(many=True, read_only=True)
     medias = TeamMediaSerializer(many=True, read_only=True)
@@ -25,8 +27,10 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
         fields = "__all__"
 
+
 class TeamsSerializer(serializers.ModelSerializer):
-    """ Organization overview """
+    """Organization overview"""
+
     users = UserSerializer(many=True, read_only=True)
     medias = TeamMediaSerializer(many=True, read_only=True)
 

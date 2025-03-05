@@ -1,6 +1,9 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.users.models import CustomUser
-from test_system.apis.users.serializers import UserRegistrationSerializer, UsersGetSerializer
+from test_system.apis.users.serializers import (
+    UserRegistrationSerializer,
+    UsersGetSerializer,
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -43,21 +46,27 @@ class LoginView(KnoxLoginView):
                 _, token = AuthToken.objects.create(user)
                 return Response({"token": token})
             else:
-                return Response({"error": "Invalid credentials."}, status = status.HTTP_401_UNAUTHORIZED)
+                return Response(
+                    {"error": "Invalid credentials."},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
         except User.DoesNotExist:
-            return Response({"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED
+            )
 
 
 class UsersGetView(APIView):
     permission_classes = [IsAdminUser]
-    
+
     def get(self, request, format=None):
         users = CustomUser.objects.all()
         serializer = UsersGetSerializer(users, many=True)
         return Response(serializer.data)
 
+
 class UserGetPatchDeleteView(APIView):
-    permission_classes= [IsUser]
+    permission_classes = [IsUser]
 
     def get(self, request, user_id, format=None):
         user = get_object_or_404(CustomUser, id=user_id)

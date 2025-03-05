@@ -27,19 +27,27 @@ class UserManager(BaseUserManager):
             raise ValueError("Superuser must be set.")
         return self.create_user(email, password, **extra_fields)
 
+
 class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     team = models.ManyToManyField(Team, related_name="users", blank=True)
-    organization = models.ForeignKey(Organization, related_name="users", on_delete=models.CASCADE, null=True, blank=True, db_index=True)
+    organization = models.ForeignKey(
+        Organization,
+        related_name="users",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        db_index=True,
+    )
     email = models.EmailField(unique=True)
     avatar = models.FileField(upload_to="profile/", blank=True, null=True)
-    
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-    objects= UserManager()
+    objects = UserManager()
 
     def save(self, *args, **kwargs):
         self.username = self.email

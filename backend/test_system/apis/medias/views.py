@@ -1,6 +1,10 @@
 from django.shortcuts import get_object_or_404
 from test_system.apps.medias.models import Medias
-from test_system.apis.medias.serializers import MediasGetSerializer, MediaSerializer, MediaChatGetCreateSerializer
+from test_system.apis.medias.serializers import (
+    MediasGetSerializer,
+    MediaSerializer,
+    MediaChatGetCreateSerializer,
+)
 from test_system.apis.chats.serializers import ChatsGetCreateSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,11 +19,14 @@ class UserMediasGetView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        """  Retrieve user created Media objects """
+        """Retrieve user created Media objects"""
         user = request.user
         team = user.team
         if not team:
-            return Response({"error": "User is not associated with any team yet"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "User is not associated with any team yet"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         medias = Medias.objects.filter(team_id=team.id)
         serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
@@ -36,10 +43,12 @@ class MediaChatGetCreateView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, medias_id):
-        """ Create a chat obj under a specified media obj """
+        """Create a chat obj under a specified media obj"""
         media = get_object_or_404(Medias, id=medias_id)
-        serializer = ChatsGetCreateSerializer(data=request.data, context={"request": request})
-        
+        serializer = ChatsGetCreateSerializer(
+            data=request.data, context={"request": request}
+        )
+
         if serializer.is_valid():
             serializer.save(media=media)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -51,22 +60,26 @@ class MediasGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        """ Retrieve all Media objects """
+        """Retrieve all Media objects"""
         medias = Medias.objects.all()
         serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        """ Create Media associated to User Team obj """
+        """Create Media associated to User Team obj"""
         user = request.user
         team_id = request.data.get("team_id")
         if not user.team.filter(id=team_id).exists():
-            return Response({"error": "User not associated with this team."}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = MediaSerializer(data=request.data, context={"request":request})
+            return Response(
+                {"error": "User not associated with this team."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        serializer = MediaSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class MediasGetUpdateDeleteView(APIView):
     permission_classes = [IsMediaOwner]

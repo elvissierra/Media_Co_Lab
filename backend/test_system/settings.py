@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     "test_system.apps.medias",
     "test_system.apps.chats",
     "django_extensions",
-    "test_system"
+    "test_system",
 ]
 
 MIDDLEWARE = [
@@ -68,14 +68,9 @@ TEMPLATES = [
 WSGI_APPLICATION = "test_system.wsgi.application"
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES":(
-        "knox.auth.TokenAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES":(
-        "rest_framework.permissions.IsAuthenticated",
-    ),
-    "DEFAULT_SCHEMA_CLASS":
-        "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # Database
@@ -92,7 +87,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = "users.CustomUser"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -113,8 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 GRAPH_MODELS = {
-  'all_applications': True,
-  'group_models': True,
+    "all_applications": True,
+    "group_models": True,
 }
 
 # Internationalization
@@ -138,9 +133,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-#user served
+# user served
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

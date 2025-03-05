@@ -9,18 +9,21 @@ from test_system.apps.chats.models import Chat
 class ChatsGetView(APIView):
 
     def get(self, request, format=None):
-        """ get all Chats """
+        """get all Chats"""
         user = request.user
         user_organization = user.organization
         if not user_organization:
-            return Response({"error": "User not associated with an organization."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "User not associated with an organization."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         Chats = Chat.objects.filter(owner__organization=user_organization)
         serializer = ChatsGetCreateSerializer(Chats, many=True)
         return Response(serializer.data)
-    
-    
+
+
 class ChatGetUpdateDeleteView(APIView):
-    
+
     def get_permissions(self):
         if self.request.method == "GET":
             return []
@@ -28,7 +31,9 @@ class ChatGetUpdateDeleteView(APIView):
 
     def get(self, request, Chat_id, format=None):
         Chat = get_object_or_404(Chat, id=Chat_id)
-        return Response(ChatGetUpdateDeleteSerializer(Chat, context={"request": request}).data)
+        return Response(
+            ChatGetUpdateDeleteSerializer(Chat, context={"request": request}).data
+        )
 
     def put(self, request, Chat_id, format=None):
         Chat = get_object_or_404(Chat, id=Chat_id)

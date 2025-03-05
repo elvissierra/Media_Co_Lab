@@ -1,0 +1,16 @@
+version: "2.30"
+
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env.ci
+  frontend:
+    build: ./frontend/mcl_ui
+    env_file:
+      - ./frontend/mcl_ui/.env.ci
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

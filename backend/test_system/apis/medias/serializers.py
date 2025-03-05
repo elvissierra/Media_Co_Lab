@@ -7,14 +7,24 @@ from test_system.apis.chats.serializers import ChatsGetCreateSerializer
 
 
 class MediaChatGetCreateSerializer(serializers.ModelSerializer):
-    """ media obj and associated chats """
+    """media obj and associated chats"""
+
     chat_count = serializers.ReadOnlyField()
     chats = ChatsGetCreateSerializer(many=True, read_only=True)
     content = serializers.SerializerMethodField()
 
     class Meta:
         model = Medias
-        fields = ["id", "title", "description", "content", "user", "team", "chats", "chat_count"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "content",
+            "user",
+            "team",
+            "chats",
+            "chat_count",
+        ]
 
     def get_content(self, obj):
         request = self.context.get("request")
@@ -31,13 +41,22 @@ class MediasSerializer(serializers.ModelSerializer):
         model = Medias
         fields = "__all__"
 
+
 class MediasGetSerializer(serializers.ModelSerializer):
     labels = LabelsSerializer(many=True, read_only=True)
     team_title = serializers.CharField(source="team.title", read_only=True)
 
     class Meta:
         model = Medias
-        fields = ["title", "description", "content", "labels", "user", "team_title", "id"]
+        fields = [
+            "title",
+            "description",
+            "content",
+            "labels",
+            "user",
+            "team_title",
+            "id",
+        ]
 
 
 class MediaSerializer(serializers.ModelSerializer):
@@ -52,4 +71,3 @@ class MediaSerializer(serializers.ModelSerializer):
         validated_data["user"] = user
         medias_obj = Medias.objects.create(**validated_data)
         return medias_obj
-    
