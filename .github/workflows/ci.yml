@@ -1,5 +1,4 @@
-name: CI Pipeline MCL
-
+# Define the triggers for this workflow
 on:
   push:
     branches:
@@ -18,12 +17,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose python3 python3-pip
-          pip install black
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -33,21 +26,33 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Copy CI Environment Files
+        run: |
+          cp ./backend/.env.ci ./backend/.env
+          cp ./frontend/mcl_ui/.env.ci ./frontend/mcl_ui/.env
+
+      - name: Set Environment Variables from Secrets
+        run: |
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> ./backend/.env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> ./backend/.env
+
       - name: Build and Start Services
-        run: docker compose -f docker-compose.ci.yml up --build -d
+        run: docker-compose -f docker-compose.yml up --build -d
 
       - name: Wait for Database to Be Ready
         run: |
-          until docker exec media_co_lab_db_ci pg_isready -U postgres; do
+          until docker exec media_co_lab_db pg_isready -U postgres; do
             echo "Waiting for PostgreSQL to be ready..."
             sleep 3
           done
 
-      - name: Run Linter
-        run: black --check ./backend
-
-      - name: Run Backend Tests
-        run: |
+      - name: Run Linter (Black)
+      - run: |
           pip install black
           black --check ./backend
 
@@ -55,5 +60,4 @@ jobs:
         run: echo "Skipping tests since none are defined"
 
       - name: Shutdown Services
-        if: always()
-        run: docker compose -f docker-compose.ci.yml down
+        run: docker-compose -f docker-compose.yml down
