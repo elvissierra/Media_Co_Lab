@@ -52,7 +52,7 @@ jobs:
           done
 
       - name: Run Linter (Black)
-         run: |
+        run: |
           pip install black
           black --check ./backend
 
