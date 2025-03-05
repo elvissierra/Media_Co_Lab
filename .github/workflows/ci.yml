@@ -60,4 +60,5 @@ jobs:
         run: echo "Skipping tests since none are defined"
 
       - name: Shutdown Services
+        if: always()
         run: docker-compose -f docker-compose.yml down
