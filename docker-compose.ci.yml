@@ -1,12 +1,11 @@
-version: "2.30"
+version: "2.3"
 
 services:
   test_system:
     build: 
       context: ./backend
-    container_name: test_system_ci
-    ports:
-      - "8000:8000"
+    container_name: test_system
+    # ports exposure not required unless tests require it.
     volumes:
       - ./backend:/app
       - ./backend/media:/app/media
@@ -20,11 +19,9 @@ services:
   mcl_ui:
     build:
       context: ./frontend/mcl_ui
-    container_name: mcl_ui_ci
+    container_name: mcl_ui
     env_file:
       - ./frontend/mcl_ui/.env.ci
-    ports:
-      - "8080:80"
     depends_on:
       - test_system
     networks:
@@ -32,19 +29,21 @@ services:
   
   db:
     image: postgres:latest
-    container_name: media_co_lab_db_ci
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-      POSTGRES_DB: test_db
+    container_name: media_co_lab_db
+    env_file:
+      - ./backend/.env.ci
     networks:
       - app-network
     volumes:
-      - db_data_ci:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      retries: 5
 
 networks:
   app-network:
     driver: bridge
 
 volumes:
-  db_data_ci:
+  db_data:
