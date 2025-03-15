@@ -5,7 +5,7 @@ from test_system import settings
 
 class ChatsGetCreateSerializer(serializers.ModelSerializer):
     owner_full_name = serializers.SerializerMethodField()
-    avatar = serializers.SerializerMethodField()  # new field
+    avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
