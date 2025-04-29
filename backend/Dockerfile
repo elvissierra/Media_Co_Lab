@@ -25,8 +25,8 @@ COPY . /app
 RUN mkdir -p /app/staticfiles
 #RUN python manage.py collectstatic --noinput
 
-# Command to run your application
-CMD ["gunicorn", "test_system.wsgi:application", "--bind", "0.0.0.0:8000"]
-
 # Expose the port the app runs on
 EXPOSE 8000
+
+# Command to run your application
+CMD ["gunicorn", "test_system.wsgi:application", "--bind", "0.0.0.0:8000"]
