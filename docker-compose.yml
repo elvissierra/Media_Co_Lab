@@ -1,26 +1,26 @@
-version: "2.30"  # compose version
+version: "2.30"
 
 services:
   test_system:
     build: 
-      context: ./backend # Path to the directory containing the Dockerfile
+      context: ./backend
     container_name: test_system
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app  # Map the current directory to /app in the container
+      - ./backend:/app
       - ./backend/media:/app/media
     env_file:
       - ./backend/.env
     depends_on:
       - db
-      #- condition: service_healthy
+      - condition: service_healthy
     networks:
       - app-network
 
   mcl_ui:
     build:
-      context: ./frontend/mcl_ui # Path to the directory containing the Dockerfile
+      context: ./frontend/mcl_ui
     container_name: mcl_ui
     env_file:
       - ./frontend/mcl_ui/.env
