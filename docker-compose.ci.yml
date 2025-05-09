@@ -5,6 +5,7 @@ services:
     build: 
       context: ./backend
     container_name: test_system
+    # ports exposure not required unless tests require it.
     volumes:
       - ./backend:/app
       - ./backend/media:/app/media
