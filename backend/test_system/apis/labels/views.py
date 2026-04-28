@@ -4,10 +4,12 @@ from test_system.apis.labels.serializers import LabelSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from test_system.permissions import IsLabelOwner
 
 
 class LabelsGetCreateView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         """retrieve all labels associated under a team object"""
@@ -44,12 +46,15 @@ class LabelGetUpdateDeleteView(APIView):
 
     def put(self, request, label_id, format=None):
         label = get_object_or_404(Label, id=label_id)
+        self.check_object_permissions(request, label)
         serializer = LabelSerializer(label, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, label_id):
         label = get_object_or_404(Label, id=label_id)
+        self.check_object_permissions(request, label)
         label.delete()
-        return Response(LabelSerializer(label).data)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -60,8 +60,15 @@ class MediasGetCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        """Retrieve all Media objects"""
-        medias = Medias.objects.all()
+        """Retrieve all Media objects within the user's organization"""
+        user = request.user
+        organization = user.organization
+        if not organization:
+            return Response(
+                {"error": "User not associated with an organization."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        medias = Medias.objects.filter(team__organization=organization)
         serializer = MediasGetSerializer(medias, many=True)
         return Response(serializer.data)
 
@@ -69,7 +76,7 @@ class MediasGetCreateView(APIView):
         """Create Media associated to User Team obj"""
         user = request.user
         team_id = request.data.get("team_id")
-        if not user.team.filter(id=team_id).exists():
+        if not user.team.filter(id=team_id, organization=user.organization).exists():
             return Response(
                 {"error": "User not associated with this team."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -93,14 +100,17 @@ class MediasGetUpdateDeleteView(APIView):
         media = get_object_or_404(Medias, id=medias_id)
         return Response(MediaSerializer(media, context={"request": request}).data)
 
-    def update(self, request, medias_id):
+    def put(self, request, medias_id):
         medias = get_object_or_404(Medias, id=medias_id)
+        self.check_object_permissions(request, medias)
         serializer = MediaSerializer(medias, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, medias_id):
+    def delete(self, request, medias_id):
         medias = get_object_or_404(Medias, id=medias_id)
+        self.check_object_permissions(request, medias)
         medias.delete()
-        return Response(MediaSerializer(medias).data)
+        return Response(status=status.HTTP_204_NO_CONTENT)

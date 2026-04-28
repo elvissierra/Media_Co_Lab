@@ -55,7 +55,7 @@
         try {
           this.error = null;
           const response = await this.$axios.post('/teams/', this.teamData);    
-          await this.$router.push({ name: 'TeamDetail', params: { id: response.data.id } });
+          await this.$router.push({ name: 'TeamDetail', params: { team_id: response.data.id } });
         } catch (error) {
           this.error = error.response?.data?.detail || 'Creation failed. Please try again.';
         }

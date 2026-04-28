@@ -17,6 +17,22 @@ services:
       - condition: service_healthy
     networks:
       - app-network
+  
+  db:
+    image: postgres:latest
+    container_name: media_co_lab_db
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d logger"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   mcl_ui:
     build:
@@ -30,16 +46,6 @@ services:
       - test_system
     networks:
       - app-network
-  
-  db:
-    image: postgres:latest
-    container_name: media_co_lab_db
-    env_file:
-      - ./backend/.env
-    networks:
-      - app-network
-    volumes:
-      - db_data:/var/lib/postgresql/data
 
 networks:
   app-network:

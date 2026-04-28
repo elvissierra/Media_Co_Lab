@@ -41,8 +41,8 @@ class Label(models.Model):
     def clean(self):
         if self.preset_type == PresetTypes.CUSTOM:
             if not self.custom_preset_type:
-                return ValidationError("Error, please enter custom type.")
+                raise ValidationError("Error, please enter custom type.")
             if not self.custom_preset_type.isalnum():
-                return ValidationError("Invalid input.")
+                raise ValidationError("Invalid input.")
         else:
-            self.custom_preset_type is None
+            self.custom_preset_type = None

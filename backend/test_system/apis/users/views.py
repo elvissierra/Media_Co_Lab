@@ -12,7 +12,6 @@ from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny, IsAdminUser
 from test_system.permissions import IsUser
-from test_system.apps.organizations.models import Organization
 
 
 class UserCreateView(APIView):
@@ -20,14 +19,11 @@ class UserCreateView(APIView):
 
     def post(self, request, format=None):
         """Create a new user"""
-        serializer = UserRegistrationSerializer(data=request.data)
+        serializer = UserRegistrationSerializer(
+            data=request.data, context={"request": request}
+        )
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            organization_id = request.data.get("organization")
-            if organization_id:
-                organization = Organization.objects.get(id=organization_id)
-                user.organization = organization
-                user.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
