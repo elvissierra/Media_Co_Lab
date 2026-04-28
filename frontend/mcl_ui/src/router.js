@@ -13,6 +13,13 @@ import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
 import Labels from './components/Labels.vue'
 
+const requireAuth = (_to, _from, next) => {
+  if (!localStorage.getItem('authToken')) {
+    next({ name: 'UserLogin' });
+  } else {
+    next();
+  }
+};
 
 const routes = [
   {
@@ -29,12 +36,11 @@ const routes = [
     path: '/login',
     name: 'UserLogin',
     component: UserLogin,
-    beforeEnter: (to, from,
-      next) => {
-      if (localStorage.getItem('authToken')){
-        next({ name: 'HomePage'})
+    beforeEnter: (_to, _from, next) => {
+      if (localStorage.getItem('authToken')) {
+        next({ name: 'HomePage' });
       } else {
-        next()
+        next();
       }
     }
   },
@@ -42,51 +48,61 @@ const routes = [
     path: '/organization',
     name: 'mclOrganization',
     component: Organization,
+    beforeEnter: requireAuth,
   },
   {
     path: '/organizations/reg',
     name: 'RegisterOrganization',
     component: OrgRegister,
+    beforeEnter: requireAuth,
   },
   {
     path: '/organizations/ov',
     name: 'OrganizationOverview',
     component: Organization,
+    beforeEnter: requireAuth,
   },
   {
     path: '/organizations/demo',
     name: 'DemoOrganization',
     component: DemoOrganization,
+    beforeEnter: requireAuth,
   },
   {
     path: '/team/create',
     name: 'mclTeam',
     component: TeamCreate,
+    beforeEnter: requireAuth,
   },
   {
     path: '/teams',
     name: 'mclTeams',
     component: Teams,
+    beforeEnter: requireAuth,
   },
   {
     path: '/teams/:team_id',
     name: 'TeamDetail',
     component: TeamDetail,
+    beforeEnter: requireAuth,
   },
   {
     path: '/medias',
     name: 'mclMedia',
     component: Media,
+    beforeEnter: requireAuth,
   },
   {
     path: '/medias/:medias_id',
     name: 'MediaDetail',
     component: MediaDetail,
+    beforeEnter: requireAuth,
   },
   {
     path: '/labels',
     name: 'mclLabels',
     component: Labels,
+    beforeEnter: requireAuth,
   },
 ];
 const router = createRouter({

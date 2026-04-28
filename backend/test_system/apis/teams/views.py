@@ -50,7 +50,7 @@ class TeamGetUpdateDeleteView(APIView):
         return Response(serializer.data)
 
     def put(self, request, team_id, format=None):
-        team = self.get_object(team_id)
+        team = get_object_or_404(Team, id=team_id)
         self.check_object_permissions(request, team)
         serializer = TeamSerializer(team, data=request.data)
         if serializer.is_valid():
@@ -59,7 +59,7 @@ class TeamGetUpdateDeleteView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, team_id):
-        team = self.get_object(team_id)
+        team = get_object_or_404(Team, id=team_id)
         self.check_object_permissions(request, team)
         team.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

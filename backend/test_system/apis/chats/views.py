@@ -3,10 +3,12 @@ from .serializers import ChatsGetCreateSerializer, ChatGetUpdateDeleteSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from test_system.apps.chats.models import Chat
 
 
 class ChatsGetView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         """get all Chats"""
@@ -29,20 +31,20 @@ class ChatGetUpdateDeleteView(APIView):
             return []
         return super().get_permissions()
 
-    def get(self, request, Chat_id, format=None):
-        Chat = get_object_or_404(Chat, id=Chat_id)
+    def get(self, request, chat_id, format=None):
+        chat = get_object_or_404(Chat, id=chat_id)
         return Response(
-            ChatGetUpdateDeleteSerializer(Chat, context={"request": request}).data
+            ChatGetUpdateDeleteSerializer(chat, context={"request": request}).data
         )
 
-    def put(self, request, Chat_id, format=None):
-        Chat = get_object_or_404(Chat, id=Chat_id)
-        serializer = ChatGetUpdateDeleteSerializer(Chat, data=request.data)
+    def put(self, request, chat_id, format=None):
+        chat = get_object_or_404(Chat, id=chat_id)
+        serializer = ChatGetUpdateDeleteSerializer(chat, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
 
-    def delete(self, request, Chat_id):
-        Chat = get_object_or_404(Chat, id=Chat_id)
-        Chat.delete()
-        return Response(ChatGetUpdateDeleteSerializer(Chat).data)
+    def delete(self, request, chat_id):
+        chat = get_object_or_404(Chat, id=chat_id)
+        chat.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

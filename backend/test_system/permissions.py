@@ -19,15 +19,13 @@ class TeamPermission(BasePermission):
 
 
 class IsLabelOwner(BasePermission):
-    def has_permission(self, request, view):
-        user_id = view.kwargs.get("user_id")
-        return request.user.id == user_id
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
 
 
 class IsMediaOwner(BasePermission):
-    def has_permission(self, request, view):
-        user_id = view.kwargs.get("user_id")
-        return request.user.id == user_id
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
 
 
 class IsUser(BasePermission):
