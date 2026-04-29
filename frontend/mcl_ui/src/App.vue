@@ -1,28 +1,80 @@
 <template>
-  <div id="app">
-    <div class="header">
-      <h1>Welcome to Media Co Lab!</h1>
-      <div v-if="!isLoggedIn">
-        <button class="combined-button">
-          <span @click="goToRegister">Register</span>/
-          <span @click="loginUser">Login</span>
-        </button>
-      </div>
-      <button v-if="isLoggedIn" @click="logoutUser">Logout</button>
-    </div>
+  <v-app>
+    <v-app-bar elevation="4" color="primary">
+      <v-app-bar-title class="font-weight-bold">Media Co Lab</v-app-bar-title>
+      <v-spacer></v-spacer>
 
-    <nav class="navbar">
-      <ul class="navbar-list">
-        <li><router-link to="/organizations/demo">Demo</router-link></li>
-        <li v-if="!isHomePage"><router-link to="/">Home</router-link></li>
-        <li><router-link to="/organizations/ov">Organization</router-link></li>
-        <li><router-link to="/teams">Teams</router-link></li>
-        <li><router-link to="/medias">Media</router-link></li>
-      </ul>
-    </nav>
+      <nav class="d-flex gap-2 align-center">
+        <v-btn
+          v-if="!isHomePage"
+          text
+          to="/"
+          class="text-white"
+        >
+          Home
+        </v-btn>
+        <v-btn
+          text
+          to="/organizations/demo"
+          class="text-white"
+        >
+          Demo
+        </v-btn>
+        <v-btn
+          text
+          to="/organizations/ov"
+          class="text-white"
+        >
+          Organization
+        </v-btn>
+        <v-btn
+          text
+          to="/teams"
+          class="text-white"
+        >
+          Teams
+        </v-btn>
+        <v-btn
+          text
+          to="/medias"
+          class="text-white"
+        >
+          Media
+        </v-btn>
+      </nav>
 
-    <router-view />
-  </div>
+      <v-divider vertical class="mx-3 opacity-30"></v-divider>
+
+      <v-btn
+        v-if="!isLoggedIn"
+        text
+        @click="loginUser"
+        class="text-white"
+      >
+        Login
+      </v-btn>
+      <v-btn
+        v-if="!isLoggedIn"
+        variant="tonal"
+        @click="goToRegister"
+        class="mx-2"
+      >
+        Register
+      </v-btn>
+      <v-btn
+        v-if="isLoggedIn"
+        text
+        @click="logoutUser"
+        class="text-white"
+      >
+        Logout
+      </v-btn>
+    </v-app-bar>
+
+    <v-main class="bg-background">
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 
@@ -65,153 +117,8 @@ export default {
 </script>
 
 
-<style>
-@media (max-width: 768px){
-  #app {
-    margin-top: 20px;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .navbar-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 0;
-    margin: 0;
-  }
-
-  .navbar-list li {
-    margin: 5px;
-    flex: 1 1 8px;
-    text-align: center;
-  }
-
-  .combined-button {
-    position: static;
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-  }
+<style scoped>
+.gap-2 {
+  gap: 0.5rem;
 }
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-.top_page {
-  text-align: center;
-  margin-top: 50px;
-}
-
-
-.header {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  position: relative;
-}
-
-
-.header button,
-.combined-button {
-  align-self: flex-end; 
-  margin-top: auto; 
-  background-color: #ff5722;
-  color: white;
-  padding: 1rem 2rem;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px 8px 0 0;
-  font-weight: bold;
-  display: inline-flex;
-}
-
-.combined-button {
-  position: absolute;
-  bottom: 0px; 
-  right: 1px; 
-}
-
-.header button:hover,
-.combined-button:hover {
-  background-color: #e64a19; 
-}
-
-
-.combined-button span {
-  cursor: pointer;
-  text-decoration: underline; 
-}
-
-.combined-button span:hover {
-  color: #fff;
-}
-
-
-h1 {
-  text-align: center;
-  font-size: 2.5em;
-  color: #4caf50;
-  margin-bottom: auto;
-}
-
-
-p {
-  font-size: 1.2em;
-}
-
-.navbar {
-    background-color: #333;
-    padding: 10px;
-    
-  }
-  
-  .navbar {
-  position: relative;
-  background-color: #333;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 2rem;
-  color: white;
-  margin: 0;
-  }
-
-  .navbar-list {
-  display: flex;
-  list-style: none;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  }
-
-  .navbar-list li {
-    margin: 0 20px;
-  }
-
-  .navbar-list li a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2em;
-    padding: 10px 20px;
-  }
-
-  .navbar-list li a:hover {
-    background-color: #555;
-    border-radius: 5px;
-  }
 </style>
