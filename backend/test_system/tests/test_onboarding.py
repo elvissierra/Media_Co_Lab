@@ -1,9 +1,11 @@
 from django.test import TestCase, RequestFactory
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AnonymousUser
+from rest_framework.test import APIRequestFactory
 from test_system.apps.users.models import CustomUser
 from test_system.apps.organizations.models import Organization
 from test_system.permissions import IsPlatformAdmin, IsOrgAdmin
+from test_system.apis.users.serializers import UserRegistrationSerializer
 
 
 class CustomUserFieldsTest(TestCase):
@@ -106,3 +108,47 @@ class IsOrgAdminTest(TestCase):
         request = self.factory.get("/")
         request.user = AnonymousUser()
         self.assertFalse(IsOrgAdmin().has_permission(request, None))
+
+
+class RegistrationSerializerTest(TestCase):
+    def setUp(self):
+        self.org = Organization.objects.create(title="Approved Org", is_approved=True)
+        self.factory = APIRequestFactory()
+
+    def test_join_path_sets_org_status_pending(self):
+        request = self.factory.post("/")
+        request.user = type("AnonymousUser", (), {"is_superuser": False})()
+        data = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "jane@test.com",
+            "password": "securepass123",
+            "organization_id": str(self.org.id),
+            "registration_type": "join",
+        }
+        serializer = UserRegistrationSerializer(
+            data=data, context={"request": request}
+        )
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        user = serializer.save()
+        self.assertEqual(user.org_status, "pending")
+        self.assertFalse(user.is_org_admin)
+
+    def test_create_org_path_sets_org_admin(self):
+        request = self.factory.post("/")
+        request.user = type("AnonymousUser", (), {"is_superuser": False})()
+        data = {
+            "first_name": "John",
+            "last_name": "Smith",
+            "email": "john@test.com",
+            "password": "securepass123",
+            "organization_id": str(self.org.id),
+            "registration_type": "create_org",
+        }
+        serializer = UserRegistrationSerializer(
+            data=data, context={"request": request}
+        )
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        user = serializer.save()
+        self.assertEqual(user.org_status, "approved")
+        self.assertTrue(user.is_org_admin)

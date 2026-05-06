@@ -6,7 +6,10 @@ from test_system.apps.teams.models import Team
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    organization_id = serializers.UUIDField(write_only=True, required=False)
+    organization_id = serializers.UUIDField(write_only=True, required=False, allow_null=True)
+    registration_type = serializers.ChoiceField(
+        choices=["join", "create_org"], write_only=True, default="join"
+    )
 
     class Meta:
         model = CustomUser
@@ -18,6 +21,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "organization_id",
             "email",
             "password",
+            "registration_type",
         ]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -26,29 +30,32 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if value is None:
             if request and request.user.is_superuser:
                 return value
-            else:
-                raise serializers.ValidationError(
-                    "Organization is required for non-admin users."
-                )
+            raise serializers.ValidationError("Organization is required.")
         try:
-            organization = Organization.objects.get(id=value)
-            if not organization.is_approved:
-                raise serializers.ValidationError(
-                    "Organization has yet to be approved."
-                )
+            org = Organization.objects.get(id=value)
         except Organization.DoesNotExist:
-            raise serializers.ValidationError("Organization doesnt yet exist.")
+            raise serializers.ValidationError("Organization not found.")
+        if not org.is_approved:
+            raise serializers.ValidationError("Organization is not approved.")
         return value
 
     def create(self, validated_data):
         organization_id = validated_data.pop("organization_id", None)
+        registration_type = validated_data.pop("registration_type", "join")
+        organization = None
         if organization_id:
             organization = Organization.objects.get(id=organization_id)
-        else:
-            organization = None
+
+        is_org_admin = registration_type == "create_org"
+        org_status = "approved" if is_org_admin else "pending"
+
         user = CustomUser.objects.create_user(
-            organization=organization, **validated_data
+            organization=organization,
+            **validated_data,
         )
+        user.is_org_admin = is_org_admin
+        user.org_status = org_status
+        user.save()
         return user
 
 
