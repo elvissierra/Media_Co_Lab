@@ -1,142 +1,116 @@
 <template>
-  <v-container class="d-flex align-center justify-center fill-height">
-    <v-card v-if="!isAuthenticated" class="w-100" style="max-width: 450px" elevation="8">
-      <v-card-item>
-        <div class="text-h5 font-weight-bold mb-1">Welcome Back</div>
-        <p class="text-subtitle2 text-medium-emphasis">Sign in to your account</p>
-      </v-card-item>
+  <v-container class="py-8" max-width="480">
+    <v-card class="pa-8" elevation="2">
+      <h1 class="text-h4 mb-2 text-center">Sign In</h1>
 
-      <v-divider></v-divider>
+      <v-alert v-if="registeredMsg" type="success" class="mb-4">{{ registeredMsg }}</v-alert>
+      <v-alert v-if="error" type="error" class="mb-4">{{ error }}</v-alert>
 
-      <v-card-text class="py-6">
-        <form @submit.prevent="loginUser" class="space-y-4">
-          <v-text-field
-            v-model="email"
-            label="Email"
-            type="email"
-            placeholder="your.email@example.com"
-            variant="outlined"
-            required
-            density="comfortable"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="password"
-            label="Password"
-            type="password"
-            placeholder="Enter your password"
-            variant="outlined"
-            required
-            density="comfortable"
-          ></v-text-field>
-
-          <v-alert v-if="error" type="error" variant="tonal" class="mb-4">
-            {{ error }}
-          </v-alert>
-
-          <v-btn
-            type="submit"
-            color="primary"
-            size="large"
-            block
-            variant="elevated"
-            :loading="loading"
-          >
-            Sign In
-          </v-btn>
-        </form>
-      </v-card-text>
-
-      <v-divider></v-divider>
-
-      <v-card-actions class="justify-center py-4">
-        <span class="text-body2">Don't have an account?</span>
-        <v-btn
-          text
-          color="primary"
-          to="/register"
-          class="text-capitalize"
-        >
-          Sign up here
+      <v-form @submit.prevent="submit" ref="form">
+        <v-text-field
+          v-model="email"
+          label="Email"
+          type="email"
+          :rules="emailRules"
+          variant="outlined"
+          class="mb-3"
+          required
+        />
+        <v-text-field
+          v-model="password"
+          label="Password"
+          type="password"
+          :rules="[v => !!v || 'Password is required']"
+          variant="outlined"
+          class="mb-6"
+          required
+        />
+        <v-btn type="submit" color="primary" block :loading="loading" size="large">
+          Sign In
         </v-btn>
-      </v-card-actions>
-    </v-card>
+      </v-form>
 
-    <v-card v-else class="w-100" style="max-width: 450px" elevation="8">
-      <v-card-item>
-        <div class="text-h5 font-weight-bold">Already Logged In</div>
-      </v-card-item>
-      <v-divider></v-divider>
-      <v-card-text class="py-6">
-        <p class="mb-4">You are already logged in.</p>
-        <v-btn
-          to="/"
-          color="primary"
-          block
-          variant="elevated"
-        >
-          Go to Homepage
-        </v-btn>
-      </v-card-text>
+      <div class="text-center mt-4">
+        <span class="text-body-2">Don't have an account? </span>
+        <router-link to="/register" class="text-primary">Register</router-link>
+      </div>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import axiosPublic from "@/axiosPublic";
+import axios from "@/axios";
 
 export default {
   name: "UserLogin",
   data() {
     return {
-      email: '',
-      password: '',
-      error: null,
+      email: "",
+      password: "",
       loading: false,
+      error: null,
+      emailRules: [
+        (v) => !!v || "Email is required",
+        (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Must be a valid email",
+      ],
     };
   },
   computed: {
-    ...mapGetters(['isLoggedIn']),
-    isAuthenticated() {
-      return this.isLoggedIn;
-    }
+    registeredMsg() {
+      const type = this.$route.query.registered;
+      if (type === "org") return "Organization registered! Sign in to continue — platform approval may take 1-2 business days.";
+      if (type === "member") return "Request submitted! Sign in to check your status.";
+      return null;
+    },
   },
   methods: {
-    ...mapMutations(['setAuthToken']),
-    async loginUser() {
+    async submit() {
+      const { valid } = await this.$refs.form.validate();
+      if (!valid) return;
+
+      this.loading = true;
+      this.error = null;
+
       try {
-        this.loading = true;
-        this.error = null;
-        const response = await this.$axios.post('auth/login/', {
+        const loginResponse = await axiosPublic.post("/api/auth/login/", {
           email: this.email,
           password: this.password,
         });
-        const token = response.data.token;
 
-        this.setAuthToken(token);
+        const token = loginResponse.data.token;
+        this.$store.commit("setAuthToken", token);
 
-        this.$router.push({ name: 'HomePage' });
-      } catch (error) {
-        this.error = 'Invalid email or password';
+        // Fetch full user to determine routing
+        const meResponse = await axios.get("/api/users/me/");
+        const user = meResponse.data;
+        this.$store.commit("setUser", user);
+
+        this.routeAfterLogin(user);
+      } catch (err) {
+        this.error =
+          err.response?.data?.error ||
+          err.response?.data?.detail ||
+          "Invalid credentials.";
       } finally {
         this.loading = false;
+      }
+    },
+    routeAfterLogin(user) {
+      if (user.is_staff) {
+        this.$router.push("/platform-admin");
+      } else if (!user.organization) {
+        this.$router.push("/organizations/reg");
+      } else if (!user.organization.is_approved) {
+        this.$router.push("/pending?type=org");
+      } else if (user.org_status === "pending") {
+        this.$router.push("/pending?type=member");
+      } else if (user.org_status === "denied") {
+        this.$router.push("/denied");
+      } else {
+        this.$router.push("/medias");
       }
     },
   },
 };
 </script>
-
-
-<style scoped>
-.fill-height {
-  min-height: 100vh;
-}
-
-.w-100 {
-  width: 100%;
-}
-
-.space-y-4 > * + * {
-  margin-top: 1rem;
-}
-</style>

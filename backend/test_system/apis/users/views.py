@@ -10,7 +10,7 @@ from rest_framework import status
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import get_user_model, authenticate, login
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from knox.auth import TokenAuthentication
 from test_system.permissions import IsUser, IsOrgAdmin
 
@@ -119,3 +119,12 @@ class UserDenyView(APIView):
         target.org_status = "denied"
         target.save()
         return Response({"detail": "User denied."}, status=status.HTTP_200_OK)
+
+
+class CurrentUserView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UsersGetSerializer(request.user, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
