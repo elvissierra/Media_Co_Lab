@@ -78,13 +78,14 @@ The `apps/` layer owns models; `apis/` owns serialization and HTTP handling. Kee
 - Query scoping: Chats via `owner__organization`; Medias via `team__organization`; Teams via `organization`; Labels via `medias__team__in=user_teams`; user-owned medias via `user.team.id`
 - Custom permissions live in `test_system/permissions.py`: `OrganizationPermission`, `TeamPermission`, `IsMediaOwner`, `IsLabelOwner`, `IsUser`
 - `IsMediaOwner` and `IsLabelOwner` use `has_object_permission` (check `obj.user == request.user`); `IsUser` uses `has_permission` (checks `user_id` URL kwarg)
-- **Object-level permission check**: call `self.check_object_permissions(request, obj)` explicitly in views using `TeamPermission`, `IsMediaOwner`, or `IsLabelOwner`; `TeamGetUpdateDeleteView` calls it on GET, PUT, and DELETE
-- **Read-only public access**: override `get_permissions()` to return `[]` when `self.request.method == "GET"` on detail views; `TeamMediasGetView` has no auth at all
+- **Object-level permission check**: call `self.check_object_permissions(request, obj)` explicitly in views using `TeamPermission`, `IsMediaOwner`, or `IsLabelOwner`; `TeamGetUpdateDeleteView` calls it on GET, PUT, and DELETE — all three methods require `TeamPermission` (no public GET on team detail)
+- **Read-only public access**: override `get_permissions()` to return `[]` when `self.request.method == "GET"` on detail views (`ChatGetUpdateDeleteView`, `LabelGetUpdateDeleteView`, `MediasGetUpdateDeleteView`); `TeamMediasGetView` has no auth at all
+- **Chat mutation auth gap**: `ChatGetUpdateDeleteView` has no `permission_classes` on the class — PUT/DELETE require no authentication and no ownership check; any request can mutate any chat
 - **Team POST injection**: auto-set `request.data["organization"]` from `request.user.organization.id` before passing to serializer
 - Media upload views use `parser_classes = [MultiPartParser, FormParser]`
 - **Media POST team validation**: `MediasGetCreateView.post` validates the submitted `team_id` belongs to the user's organization via `user.team.filter(id=team_id, organization=user.organization).exists()` before creating
 - User registration delegates organization assignment to the serializer via `context={"request": request}`
-- **Chat mutation ownership**: `ChatGetUpdateDeleteView` does not restrict PUT/DELETE by ownership — any authenticated user can update or delete any chat
+- `UserGetPatchDeleteView` supports GET, PATCH, DELETE (not PUT); all three call `self.check_object_permissions(request, user)`
 <!-- END AUTO-MANAGED -->
 
 ### Data Model Relationships
@@ -98,21 +99,28 @@ The `apps/` layer owns models; `apis/` owns serialization and HTTP handling. Kee
 Knox token auth. Login → receive token → send as `Authorization: Token <token>` header. Knox supports per-device token revocation and logout-all. Endpoints: `/api/login/`, `/api/logout/`, `/api/logoutall/`.
 
 ### Frontend State
-Vuex store mirrors the backend resource tree (users, orgs, teams, medias, labels, chats). Axios base URL and auth token injection are configured in `src/axios.js`.
+Vuex store mirrors the backend resource tree (users, orgs, teams, medias, labels, chats). Axios base URL and auth token injection are configured in `src/axios.js`. A separate unauthenticated instance `src/axiosPublic.js` is used for public endpoints (org list, user registration) — used by `UserRegister.vue`, `OrgRegister.vue`, and `DemoOrganization.vue`.
 
 ### Frontend Routing
-Vue Router (`src/router.js`) uses `createWebHistory`. Auth guard (`requireAuth`) checks `localStorage.getItem('authToken')`; redirects to `UserLogin` if missing. Login route has a reverse guard: redirects to `HomePage` if already authenticated.
+Vue Router (`src/router.js`) uses `createWebHistory`. Auth guard (`requireAuth`) checks `localStorage.getItem('authToken')`; redirects to `UserLogin` if missing. Login route has a reverse guard: redirects to `HomePage` if already authenticated. `/register` is fully public — no `beforeEnter` guard.
 
 Routes:
-- `/` — `HomePage` (public)
-- `/register`, `/login` — `UserRegister`, `UserLogin` (public)
+- `/` — `HomePage` (public, no guard)
+- `/register` — `UserRegister` (public, no guard)
+- `/login` — `UserLogin` (public; reverse guard redirects to `HomePage` if already logged in)
 - `/organization`, `/organizations/reg`, `/organizations/ov`, `/organizations/demo` — org views (auth required)
 - `/team/create`, `/teams`, `/teams/:team_id` — team views (auth required)
 - `/medias`, `/medias/:medias_id` — media views (auth required)
 - `/labels` — labels view (auth required)
 
 ### Frontend UI
-Vuetify 3 with custom light/dark themes (`src/plugins/vuetify.js`). Default theme: `light` (primary `#1976D2`). Dark theme primary: `#BB86FC`. `App.vue` nav bar uses `isLoggedIn` Vuex getter to toggle Login/Register vs Logout; hides Home link when on the homepage via `isHomePage` computed.
+Vuetify 3 with custom light/dark themes (`src/plugins/vuetify.js`). Default theme: `light`.
+
+Light theme colors: primary `#1976D2`, secondary `#6C757D`, accent `#00BCD4`, success `#4CAF50`, warning `#FF9800`, error `#F44336`, info `#2196F3`, surface `#FFFFFF`, background `#F5F5F5`.
+
+Dark theme colors: primary `#BB86FC`, secondary `#03DAC6`, accent `#00BCD4`, success `#4CAF50`, warning `#FF9800`, error `#CF6679`, info `#90CAF9`, surface `#1E1E1E`, background `#121212`.
+
+`App.vue` nav bar always shows Demo, Organization, Teams, Media links; Home link is hidden on the homepage via `isHomePage` computed (`$route.path === '/'`). Auth section uses `isLoggedIn` Vuex getter to toggle Login/Register vs Logout. `UserLogin.vue` renders an "Already Logged In" card inline when `isLoggedIn` is true (in addition to the router-level reverse guard).
 
 ### Real-time
 Django Channels handles WebSocket connections. `CHANNEL_LAYERS` uses Redis in production; Redis must be running for chat features. ASGI entry: `test_system/asgi.py`.
