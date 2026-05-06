@@ -13,6 +13,7 @@ import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
 import Labels from './components/Labels.vue'
 import PendingApproval from './components/PendingApproval.vue'
+import PlatformAdmin from './components/PlatformAdmin.vue'
 
 const requireAuth = (_to, _from, next) => {
   if (!localStorage.getItem('authToken')) {
@@ -110,6 +111,16 @@ const routes = [
     name: 'PendingApproval',
     component: PendingApproval,
     beforeEnter: requireAuth,
+  },
+  {
+    path: '/platform-admin',
+    name: 'PlatformAdmin',
+    component: PlatformAdmin,
+    beforeEnter: (to, from, next) => {
+      const token = localStorage.getItem('authToken');
+      if (!token) return next('/login');
+      next(); // server will 403 if not staff; component handles it
+    },
   },
   {
     path: '/denied',
