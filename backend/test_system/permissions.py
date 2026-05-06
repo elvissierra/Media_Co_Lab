@@ -36,13 +36,16 @@ class IsUser(BasePermission):
 
 class IsPlatformAdmin(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated and request.user.is_staff)
+        return bool(
+            request.user is not None
+            and request.user.is_staff
+        )
 
 
 class IsOrgAdmin(BasePermission):
     def has_permission(self, request, view):
         return bool(
-            request.user
+            request.user is not None
             and request.user.is_authenticated
             and request.user.is_org_admin
             and request.user.organization is not None

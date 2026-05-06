@@ -1,5 +1,6 @@
 from django.test import TestCase, RequestFactory
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import AnonymousUser
 from test_system.apps.users.models import CustomUser
 from test_system.apps.organizations.models import Organization
 from test_system.permissions import IsPlatformAdmin, IsOrgAdmin
@@ -61,6 +62,11 @@ class IsPlatformAdminTest(TestCase):
         request.user = user
         self.assertFalse(IsPlatformAdmin().has_permission(request, None))
 
+    def test_anonymous_user_denied(self):
+        request = self.factory.get("/")
+        request.user = AnonymousUser()
+        self.assertFalse(IsPlatformAdmin().has_permission(request, None))
+
 
 class IsOrgAdminTest(TestCase):
     def setUp(self):
@@ -94,4 +100,9 @@ class IsOrgAdminTest(TestCase):
         user.save()
         request = self.factory.get("/")
         request.user = user
+        self.assertFalse(IsOrgAdmin().has_permission(request, None))
+
+    def test_anonymous_user_denied(self):
+        request = self.factory.get("/")
+        request.user = AnonymousUser()
         self.assertFalse(IsOrgAdmin().has_permission(request, None))
