@@ -1,179 +1,216 @@
 <template>
-  <v-container class="d-flex align-center justify-center fill-height">
-    <v-card class="w-100" style="max-width: 500px" elevation="8">
-      <v-card-item>
-        <div class="text-h5 font-weight-bold mb-1">Create Account</div>
-        <p class="text-subtitle2 text-medium-emphasis">Join us and start collaborating</p>
-      </v-card-item>
-
-      <v-divider></v-divider>
-
-      <v-card-text class="py-6">
-        <v-form ref="form" v-model="valid">
-          <v-text-field
-            v-model="user.first_name"
-            :rules="rules.required"
-            label="First Name"
-            variant="outlined"
-            placeholder="John"
-            density="comfortable"
-            required
-            class="mb-4"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="user.last_name"
-            :rules="rules.required"
-            label="Last Name"
-            variant="outlined"
-            placeholder="Doe"
-            density="comfortable"
-            required
-            class="mb-4"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="user.email"
-            :rules="[rules.required, rules.email]"
-            label="Email"
-            type="email"
-            variant="outlined"
-            placeholder="john.doe@example.com"
-            density="comfortable"
-            required
-            class="mb-4"
-          ></v-text-field>
-
-          <v-text-field
-            v-model="user.password"
-            :rules="rules.required"
-            label="Password"
-            type="password"
-            variant="outlined"
-            placeholder="Enter a strong password"
-            density="comfortable"
-            required
-            class="mb-4"
-          ></v-text-field>
-
-          <v-select
-            v-model="user.organization"
-            :items="organizations"
-            item-title="title"
-            item-value="id"
-            :rules="rules.required"
-            label="Select Organization"
-            variant="outlined"
-            density="comfortable"
-            required
-            class="mb-6"
-          ></v-select>
-
-          <v-alert v-if="error" type="error" variant="tonal" class="mb-6">
-            {{ error }}
-          </v-alert>
-
-          <v-btn
-            @click="registerUser"
-            color="primary"
-            size="large"
-            block
-            variant="elevated"
-            :loading="loading"
+  <v-container class="py-8" max-width="560">
+    <!-- Path chooser -->
+    <div v-if="!registrationPath" class="text-center">
+      <h1 class="text-h4 mb-2">Get Started</h1>
+      <p class="text-body-1 mb-8 text-medium-emphasis">How would you like to use Media Co-Lab?</p>
+      <v-row justify="center" class="gap-4">
+        <v-col cols="12" sm="5">
+          <v-card
+            class="pa-6 text-center cursor-pointer"
+            elevation="2"
+            hover
+            @click="registrationPath = 'create_org'"
           >
-            Create Account
-          </v-btn>
-        </v-form>
-      </v-card-text>
+            <v-icon size="48" color="primary" class="mb-3">mdi-domain</v-icon>
+            <div class="text-h6 mb-1">Create an Organization</div>
+            <div class="text-body-2 text-medium-emphasis">Register a new org — you'll be its admin</div>
+          </v-card>
+        </v-col>
+        <v-col cols="12" sm="5">
+          <v-card
+            class="pa-6 text-center cursor-pointer"
+            elevation="2"
+            hover
+            @click="registrationPath = 'join'"
+          >
+            <v-icon size="48" color="secondary" class="mb-3">mdi-account-group</v-icon>
+            <div class="text-h6 mb-1">Join an Organization</div>
+            <div class="text-body-2 text-medium-emphasis">Request access to an existing org</div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
 
-      <v-divider></v-divider>
+    <!-- Registration form -->
+    <v-card v-else class="pa-8" elevation="2">
+      <v-btn variant="text" class="mb-4" @click="registrationPath = null">
+        <v-icon start>mdi-arrow-left</v-icon> Back
+      </v-btn>
 
-      <v-card-actions class="justify-center py-4">
-        <span class="text-body2">Already have an account?</span>
-        <v-btn
-          text
-          color="primary"
-          to="/login"
-          class="text-capitalize"
-        >
-          Sign in instead
+      <h2 class="text-h5 mb-6">
+        {{ registrationPath === 'create_org' ? 'Register Your Organization' : 'Join an Organization' }}
+      </h2>
+
+      <v-alert v-if="error" type="error" class="mb-4">{{ error }}</v-alert>
+
+      <v-form @submit.prevent="submit" ref="form">
+        <!-- Org name (create_org path only) -->
+        <v-text-field
+          v-if="registrationPath === 'create_org'"
+          v-model="orgName"
+          label="Organization Name"
+          :rules="[v => !!v || 'Organization name is required']"
+          variant="outlined"
+          class="mb-3"
+          required
+        />
+
+        <!-- Org selector (join path only) -->
+        <v-select
+          v-if="registrationPath === 'join'"
+          v-model="selectedOrgId"
+          :items="approvedOrgs"
+          item-title="title"
+          item-value="id"
+          label="Select Organization"
+          :rules="[v => !!v || 'Please select an organization']"
+          variant="outlined"
+          class="mb-3"
+          :loading="orgsLoading"
+          required
+        />
+
+        <v-text-field
+          v-model="firstName"
+          label="First Name"
+          :rules="[v => !!v || 'First name is required']"
+          variant="outlined"
+          class="mb-3"
+          required
+        />
+        <v-text-field
+          v-model="lastName"
+          label="Last Name"
+          :rules="[v => !!v || 'Last name is required']"
+          variant="outlined"
+          class="mb-3"
+          required
+        />
+        <v-text-field
+          v-model="email"
+          label="Email"
+          type="email"
+          :rules="emailRules"
+          variant="outlined"
+          class="mb-3"
+          required
+        />
+        <v-text-field
+          v-model="password"
+          label="Password"
+          type="password"
+          :rules="[v => !!v || 'Password is required', v => v.length >= 8 || 'Minimum 8 characters']"
+          variant="outlined"
+          class="mb-6"
+          required
+        />
+
+        <v-btn type="submit" color="primary" block :loading="loading" size="large">
+          {{ registrationPath === 'create_org' ? 'Register Organization' : 'Request Access' }}
         </v-btn>
-      </v-card-actions>
+      </v-form>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import axiosPublic from '@/axiosPublic';
+import axiosPublic from "@/axiosPublic";
+import axios from "@/axios";
 
 export default {
+  name: "UserRegister",
   data() {
     return {
-      valid: false,
+      registrationPath: null,
+      orgName: "",
+      selectedOrgId: null,
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      approvedOrgs: [],
+      orgsLoading: false,
       loading: false,
-      user: {
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: '',
-        organization: null,
-      },
-      organizations: [],
       error: null,
-      rules: {
-        required: (value) => !!value || 'This field is required.',
-        email: (value) => {
-          const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          return pattern.test(value) || 'Please enter a valid email address.';
-        },
-      },
+      emailRules: [
+        (v) => !!v || "Email is required",
+        (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Must be a valid email",
+      ],
     };
   },
-  async created() {
-    await this.fetchOrganizations();
-  },
-  methods: {
-    async fetchOrganizations(){
-      try {
-        const response = await axiosPublic.get('/organizations/');
-        this.organizations = response.data;
-      } catch (error) {
-        this.error = 'Unable to load organizations. Please try again later.';
+  watch: {
+    registrationPath(val) {
+      if (val === "join" && this.approvedOrgs.length === 0) {
+        this.fetchOrgs();
       }
     },
-    async registerUser() {
-      if (!this.$refs.form.validate()) {
-        return;
-      }
+  },
+  methods: {
+    async fetchOrgs() {
+      this.orgsLoading = true;
       try {
-        this.loading = true;
-        this.error = null;
-        await axiosPublic.post('/users/create/', this.user);
-        this.$router.push({ name: 'UserLogin' });
-      } catch (error) {
-        this.error = error.response?.data?.detail || 'Registration failed. Please try again.';
+        const response = await axiosPublic.get("/api/organizations/");
+        this.approvedOrgs = response.data;
+      } catch {
+        this.error = "Failed to load organizations.";
+      } finally {
+        this.orgsLoading = false;
+      }
+    },
+    async submit() {
+      const { valid } = await this.$refs.form.validate();
+      if (!valid) return;
+
+      this.loading = true;
+      this.error = null;
+
+      try {
+        if (this.registrationPath === "create_org") {
+          await this.registerWithOrg();
+        } else {
+          await this.joinOrg();
+        }
+      } catch (err) {
+        this.error =
+          err.response?.data?.detail ||
+          Object.values(err.response?.data || {})[0]?.[0] ||
+          "Registration failed. Please try again.";
       } finally {
         this.loading = false;
       }
     },
+    async registerWithOrg() {
+      // Step 1: create the org
+      const orgResponse = await axiosPublic.post("/api/organizations/register/", {
+        title: this.orgName,
+      });
+      const orgId = orgResponse.data.id;
+
+      // Step 2: register the user as org admin
+      await axiosPublic.post("/api/users/create/", {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        password: this.password,
+        organization_id: orgId,
+        registration_type: "create_org",
+      });
+
+      this.$router.push("/login?registered=org");
+    },
+    async joinOrg() {
+      await axiosPublic.post("/api/users/create/", {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        email: this.email,
+        password: this.password,
+        organization_id: this.selectedOrgId,
+        registration_type: "join",
+      });
+
+      this.$router.push("/login?registered=member");
+    },
   },
 };
 </script>
-
-<style scoped>
-.fill-height {
-  min-height: 100vh;
-}
-
-.w-100 {
-  width: 100%;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
-}
-
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-</style>
