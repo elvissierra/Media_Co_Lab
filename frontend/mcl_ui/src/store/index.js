@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
+import axios from '@/axios';
 
 const store = createStore({
   state: {
@@ -7,14 +7,20 @@ const store = createStore({
     authToken: localStorage.getItem('authToken') || null,
   },
   getters: {
-    userHasOrganization: state => !!state.user?.organization,
     isLoggedIn: state => !!state.authToken,
+    userHasOrganization: state => !!state.user?.organization,
+    isOrgAdmin: state => !!state.user?.is_org_admin,
+    isPlatformAdmin: state => !!state.user?.is_staff,
+    isPendingApproval: state => state.user?.org_status === 'pending',
+    isDenied: state => state.user?.org_status === 'denied',
+    orgIsApproved: state => !!state.user?.organization?.is_approved,
   },
   actions: {
     async fetchUser({ commit }, userId) {
       try {
-        const response = await axios.get(`/api/users/${userId}`);
+        const response = await axios.get(`/api/users/${userId}/`);
         commit('setUser', response.data);
+        return response.data;
       } catch (error) {
         console.error('Error fetching user:', error);
       }
