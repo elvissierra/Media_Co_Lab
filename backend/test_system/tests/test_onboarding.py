@@ -152,3 +152,63 @@ class RegistrationSerializerTest(TestCase):
         user = serializer.save()
         self.assertEqual(user.org_status, "approved")
         self.assertTrue(user.is_org_admin)
+
+
+class PlatformAdminOrgApprovalTest(TestCase):
+    def setUp(self):
+        from rest_framework.test import APIClient
+        from knox.models import AuthToken
+
+        self.client = APIClient()
+        self.pending_org = Organization.objects.create(
+            title="Pending Org", is_approved=False
+        )
+        self.staff_user = CustomUser.objects.create_user(
+            email="staff@test.com", password="testpass123"
+        )
+        self.staff_user.is_staff = True
+        self.staff_user.save()
+        self.regular_user = CustomUser.objects.create_user(
+            email="regular@test.com",
+            password="testpass123",
+            organization=Organization.objects.create(title="Other", is_approved=True),
+        )
+        _, self.staff_token = AuthToken.objects.create(self.staff_user)
+        _, self.regular_token = AuthToken.objects.create(self.regular_user)
+
+    def test_pending_orgs_list_requires_staff(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.regular_token}")
+        response = self.client.get("/api/organizations/pending/")
+        self.assertEqual(response.status_code, 403)
+
+    def test_staff_can_list_pending_orgs(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.staff_token}")
+        response = self.client.get("/api/organizations/pending/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+
+    def test_staff_can_approve_org(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.staff_token}")
+        response = self.client.post(
+            f"/api/organizations/{self.pending_org.id}/approve/"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.pending_org.refresh_from_db()
+        self.assertTrue(self.pending_org.is_approved)
+
+    def test_staff_can_deny_org(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.staff_token}")
+        response = self.client.post(
+            f"/api/organizations/{self.pending_org.id}/deny/"
+        )
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(
+            Organization.objects.filter(id=self.pending_org.id).exists()
+        )
+
+    def test_non_staff_cannot_approve_org(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.regular_token}")
+        response = self.client.post(
+            f"/api/organizations/{self.pending_org.id}/approve/"
+        )
+        self.assertEqual(response.status_code, 403)

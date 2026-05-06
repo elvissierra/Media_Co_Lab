@@ -4,13 +4,15 @@ from test_system.apis.organizations.serializers import (
     OrganizationSerializer,
     OrganizationGetSerializer,
     DemoOrgSerializer,
+    PendingOrganizationSerializer,
 )
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from test_system.permissions import OrganizationPermission
+from test_system.permissions import OrganizationPermission, IsPlatformAdmin
 from rest_framework.permissions import AllowAny
+from knox.auth import TokenAuthentication
 
 
 class UserOrganizationView(APIView):
@@ -80,4 +82,35 @@ class OrganizationGetUpdateDeleteView(APIView):
         organization = get_object_or_404(Organization, id=organization_id)
         self.check_object_permissions(request, organization)
         organization.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PendingOrganizationsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsPlatformAdmin]
+
+    def get(self, request):
+        orgs = Organization.objects.filter(is_approved=False)
+        serializer = PendingOrganizationSerializer(orgs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrganizationApproveView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsPlatformAdmin]
+
+    def post(self, request, organization_id):
+        org = get_object_or_404(Organization, id=organization_id)
+        org.is_approved = True
+        org.save()
+        return Response({"detail": "Organization approved."}, status=status.HTTP_200_OK)
+
+
+class OrganizationDenyView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsPlatformAdmin]
+
+    def post(self, request, organization_id):
+        org = get_object_or_404(Organization, id=organization_id)
+        org.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
