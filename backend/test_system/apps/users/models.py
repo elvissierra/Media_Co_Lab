@@ -43,6 +43,12 @@ class CustomUser(AbstractUser):
     )
     email = models.EmailField(unique=True)
     avatar = models.FileField(upload_to="profile/", blank=True, null=True)
+    is_org_admin = models.BooleanField(default=False)
+    org_status = models.CharField(
+        max_length=10,
+        choices=[("pending", "Pending"), ("approved", "Approved"), ("denied", "Denied")],
+        default="approved",
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
