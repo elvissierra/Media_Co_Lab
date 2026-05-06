@@ -74,6 +74,9 @@ class UsersGetSerializer(serializers.ModelSerializer):
             "organization",
             "labels",
             "avatar",
+            "is_org_admin",
+            "org_status",
+            "is_staff",
         ]
 
     def to_representation(self, instance):
