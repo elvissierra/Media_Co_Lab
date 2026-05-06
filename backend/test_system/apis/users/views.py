@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate, login
 from rest_framework.permissions import AllowAny, IsAdminUser
 from test_system.permissions import IsUser
 
@@ -34,22 +34,14 @@ class LoginView(KnoxLoginView):
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
-        User = get_user_model()
-
-        try:
-            user = User.objects.get(email=email)
-            if user.check_password(password):
-                _, token = AuthToken.objects.create(user)
-                return Response({"token": token})
-            else:
-                return Response(
-                    {"error": "Invalid credentials."},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-        except User.DoesNotExist:
+        user = authenticate(request, username=email, password=password)
+        if not user:
             return Response(
-                {"error": "Invalid input."}, status=status.HTTP_401_UNAUTHORIZED
+                {"error": "Invalid credentials."},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
+        login(request, user)
+        return super().post(request, format=None)
 
 
 class UsersGetView(APIView):
