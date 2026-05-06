@@ -5,6 +5,12 @@ import uuid
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
+class OrgStatus(models.TextChoices):
+    PENDING = "pending", "Pending"
+    APPROVED = "approved", "Approved"
+    DENIED = "denied", "Denied"
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, organization=None, **extra_fields):
         if not email:
@@ -46,8 +52,8 @@ class CustomUser(AbstractUser):
     is_org_admin = models.BooleanField(default=False)
     org_status = models.CharField(
         max_length=10,
-        choices=[("pending", "Pending"), ("approved", "Approved"), ("denied", "Denied")],
-        default="approved",
+        choices=OrgStatus.choices,
+        default=OrgStatus.APPROVED,
     )
 
     USERNAME_FIELD = "email"
