@@ -28,3 +28,7 @@
 /Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/organizations/views.py
 /Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/organizations/urls.py
 /Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/users/urls.py
+/Users/g27/Desktop/Media_Co_Lab/frontend/mcl_ui/src/store/index.js
+/Users/g27/Desktop/Media_Co_Lab/frontend/mcl_ui/src/components/PendingApproval.vue
+/Users/g27/Desktop/Media_Co_Lab/frontend/mcl_ui/src/components/PlatformAdmin.vue
+/Users/g27/Desktop/Media_Co_Lab/frontend/mcl_ui/src/components/Organization.vue
