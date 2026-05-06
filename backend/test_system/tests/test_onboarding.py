@@ -127,9 +127,7 @@ class RegistrationSerializerTest(TestCase):
             "organization_id": str(self.org.id),
             "registration_type": "join",
         }
-        serializer = UserRegistrationSerializer(
-            data=data, context={"request": request}
-        )
+        serializer = UserRegistrationSerializer(data=data, context={"request": request})
         self.assertTrue(serializer.is_valid(), serializer.errors)
         user = serializer.save()
         self.assertEqual(user.org_status, "pending")
@@ -146,9 +144,7 @@ class RegistrationSerializerTest(TestCase):
             "organization_id": str(self.org.id),
             "registration_type": "create_org",
         }
-        serializer = UserRegistrationSerializer(
-            data=data, context={"request": request}
-        )
+        serializer = UserRegistrationSerializer(data=data, context={"request": request})
         self.assertTrue(serializer.is_valid(), serializer.errors)
         user = serializer.save()
         self.assertEqual(user.org_status, "approved")
@@ -199,13 +195,9 @@ class PlatformAdminOrgApprovalTest(TestCase):
 
     def test_staff_can_deny_org(self):
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.staff_token}")
-        response = self.client.post(
-            f"/api/organizations/{self.pending_org.id}/deny/"
-        )
+        response = self.client.post(f"/api/organizations/{self.pending_org.id}/deny/")
         self.assertEqual(response.status_code, 204)
-        self.assertFalse(
-            Organization.objects.filter(id=self.pending_org.id).exists()
-        )
+        self.assertFalse(Organization.objects.filter(id=self.pending_org.id).exists())
 
     def test_non_staff_cannot_approve_org(self):
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.regular_token}")
@@ -236,9 +228,13 @@ class OrgAdminMemberApprovalTest(TestCase):
         self.pending_user.org_status = "pending"
         self.pending_user.save()
 
-        self.other_org = Organization.objects.create(title="Other Org", is_approved=True)
+        self.other_org = Organization.objects.create(
+            title="Other Org", is_approved=True
+        )
         self.other_admin = CustomUser.objects.create_user(
-            email="otheradmin@test.com", password="testpass123", organization=self.other_org
+            email="otheradmin@test.com",
+            password="testpass123",
+            organization=self.other_org,
         )
         self.other_admin.is_org_admin = True
         self.other_admin.org_status = "approved"
@@ -262,18 +258,14 @@ class OrgAdminMemberApprovalTest(TestCase):
 
     def test_org_admin_can_approve_member(self):
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token}")
-        response = self.client.post(
-            f"/api/users/{self.pending_user.id}/approve/"
-        )
+        response = self.client.post(f"/api/users/{self.pending_user.id}/approve/")
         self.assertEqual(response.status_code, 200)
         self.pending_user.refresh_from_db()
         self.assertEqual(self.pending_user.org_status, "approved")
 
     def test_org_admin_can_deny_member(self):
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token}")
-        response = self.client.post(
-            f"/api/users/{self.pending_user.id}/deny/"
-        )
+        response = self.client.post(f"/api/users/{self.pending_user.id}/deny/")
         self.assertEqual(response.status_code, 200)
         self.pending_user.refresh_from_db()
         self.assertEqual(self.pending_user.org_status, "denied")

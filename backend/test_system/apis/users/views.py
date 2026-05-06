@@ -86,7 +86,9 @@ class PendingMembersView(APIView):
     def get(self, request):
         org = request.user.organization
         pending = CustomUser.objects.filter(organization=org, org_status="pending")
-        serializer = UsersGetSerializer(pending, many=True, context={"request": request})
+        serializer = UsersGetSerializer(
+            pending, many=True, context={"request": request}
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -96,6 +98,7 @@ class UserApproveView(APIView):
 
     def post(self, request, user_id):
         from test_system.apps.teams.models import Team
+
         target = get_object_or_404(
             CustomUser, id=user_id, organization=request.user.organization
         )

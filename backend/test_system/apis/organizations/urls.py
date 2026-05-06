@@ -11,7 +11,11 @@ urlpatterns = [
         name="OrganizationCreateView",
     ),
     path("demo/", views.DemoOrgCreateView.as_view(), name="DemoOrgCreateView"),
-    path("pending/", views.PendingOrganizationsView.as_view(), name="PendingOrganizationsView"),
+    path(
+        "pending/",
+        views.PendingOrganizationsView.as_view(),
+        name="PendingOrganizationsView",
+    ),
     path("members/pending/", PendingMembersView.as_view(), name="PendingMembersView"),
     path(
         "<uuid:organization_id>/",

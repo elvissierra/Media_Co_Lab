@@ -6,7 +6,9 @@ from test_system.apps.teams.models import Team
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    organization_id = serializers.UUIDField(write_only=True, required=False, allow_null=True)
+    organization_id = serializers.UUIDField(
+        write_only=True, required=False, allow_null=True
+    )
     registration_type = serializers.ChoiceField(
         choices=["join", "create_org"], write_only=True, default="join"
     )

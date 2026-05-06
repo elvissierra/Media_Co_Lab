@@ -25,7 +25,9 @@ class ChatsGetView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         chats = Chat.objects.filter(owner__organization=user_organization)
-        serializer = ChatsGetCreateSerializer(chats, many=True, context={"request": request})
+        serializer = ChatsGetCreateSerializer(
+            chats, many=True, context={"request": request}
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -49,7 +51,9 @@ class ChatGetUpdateDeleteView(APIView):
                 {"error": "You do not have permission to edit this chat."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        serializer = ChatGetUpdateDeleteSerializer(chat, data=request.data, partial=True)
+        serializer = ChatGetUpdateDeleteSerializer(
+            chat, data=request.data, partial=True
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

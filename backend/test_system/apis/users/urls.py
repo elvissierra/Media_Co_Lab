@@ -1,7 +1,11 @@
 from django.urls import path
 from test_system.apis.users.views import (
-    UsersGetView, UserCreateView, UserGetPatchDeleteView,
-    UserApproveView, UserDenyView, CurrentUserView,
+    UsersGetView,
+    UserCreateView,
+    UserGetPatchDeleteView,
+    UserApproveView,
+    UserDenyView,
+    CurrentUserView,
 )
 
 urlpatterns = [
