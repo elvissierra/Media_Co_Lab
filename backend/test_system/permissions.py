@@ -1,4 +1,18 @@
 from rest_framework.permissions import BasePermission
+from rest_framework.response import Response
+from rest_framework import status
+
+
+def check_org_membership_approved(request):
+    """Returns a 403 Response if user's org_status is not approved, else None."""
+    if not hasattr(request.user, "org_status"):
+        return None
+    if request.user.org_status != "approved":
+        return Response(
+            {"detail": "Your membership is pending approval."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+    return None
 
 
 class OrganizationPermission(BasePermission):

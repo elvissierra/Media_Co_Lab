@@ -98,3 +98,30 @@ class LoginEnumerationTest(TestCase):
         self.assertEqual(r1.status_code, 401)
         self.assertEqual(r2.status_code, 401)
         self.assertEqual(r1.data, r2.data)
+
+
+class PendingUserAccessTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.org = Organization.objects.create(title="Test Org", is_approved=True)
+        self.pending_user = CustomUser.objects.create_user(
+            email="pending@test.com", password="testpass123", organization=self.org
+        )
+        self.pending_user.org_status = "pending"
+        self.pending_user.save()
+        _, self.token = AuthToken.objects.create(self.pending_user)
+
+    def test_pending_user_cannot_access_medias(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token}")
+        response = self.client.get("/api/medias/")
+        self.assertEqual(response.status_code, 403)
+
+    def test_pending_user_cannot_access_teams(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token}")
+        response = self.client.get("/api/teams/")
+        self.assertEqual(response.status_code, 403)
+
+    def test_pending_user_cannot_access_labels(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token}")
+        response = self.client.get("/api/labels/")
+        self.assertEqual(response.status_code, 403)

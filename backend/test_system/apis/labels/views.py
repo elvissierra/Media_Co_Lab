@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from test_system.permissions import IsLabelOwner
+from test_system.permissions import IsLabelOwner, check_org_membership_approved
 
 
 class LabelsGetCreateView(APIView):
@@ -14,6 +14,9 @@ class LabelsGetCreateView(APIView):
     def get(self, request, format=None):
         """retrieve all labels associated under a team object"""
         user = request.user
+        blocked = check_org_membership_approved(request)
+        if blocked:
+            return blocked
         user_teams = user.team.all()
         if not user_teams:
             return Response(
@@ -25,6 +28,9 @@ class LabelsGetCreateView(APIView):
 
     def post(self, request, format=None):
         """create a label instance under a media object"""
+        blocked = check_org_membership_approved(request)
+        if blocked:
+            return blocked
         serializer = LabelSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()

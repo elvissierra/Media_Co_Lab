@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from test_system.permissions import IsMediaOwner
+from test_system.permissions import IsMediaOwner, check_org_membership_approved
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 
@@ -62,6 +62,9 @@ class MediasGetCreateView(APIView):
     def get(self, request):
         """Retrieve all Media objects within the user's organization"""
         user = request.user
+        blocked = check_org_membership_approved(request)
+        if blocked:
+            return blocked
         organization = user.organization
         if not organization:
             return Response(
@@ -75,6 +78,9 @@ class MediasGetCreateView(APIView):
     def post(self, request, format=None):
         """Create Media associated to User Team obj"""
         user = request.user
+        blocked = check_org_membership_approved(request)
+        if blocked:
+            return blocked
         team_id = request.data.get("team_id")
         if not user.team.filter(id=team_id, organization=user.organization).exists():
             return Response(

@@ -9,7 +9,7 @@ from test_system.apis.teams.serializers import (
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from test_system.permissions import TeamPermission
+from test_system.permissions import TeamPermission, check_org_membership_approved
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -19,6 +19,9 @@ class TeamsGetCreateView(APIView):
     def get(self, request, format=None):
         """Retrieve all Team objects"""
         user = request.user
+        blocked = check_org_membership_approved(request)
+        if blocked:
+            return blocked
         organization = user.organization
         if not organization:
             return Response(
@@ -31,6 +34,10 @@ class TeamsGetCreateView(APIView):
 
     def post(self, request, format=None):
         """Create and associate the obj with the user's organization"""
+        user = request.user
+        blocked = check_org_membership_approved(request)
+        if blocked:
+            return blocked
         user_organization = request.user.organization.id
         request.data["organization"] = user_organization
         serializer = TeamSerializer(data=request.data)
