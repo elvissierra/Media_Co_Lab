@@ -12,6 +12,7 @@ import TeamDetail from './components/TeamDetail.vue'
 import Media from './components/Media.vue'
 import MediaDetail from './components/MediaDetail.vue'
 import Labels from './components/Labels.vue'
+import PendingApproval from './components/PendingApproval.vue'
 
 const requireAuth = (_to, _from, next) => {
   if (!localStorage.getItem('authToken')) {
@@ -102,6 +103,29 @@ const routes = [
     path: '/labels',
     name: 'mclLabels',
     component: Labels,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/pending',
+    name: 'PendingApproval',
+    component: PendingApproval,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/denied',
+    name: 'DeniedAccess',
+    component: {
+      template: `
+        <v-container class="fill-height d-flex align-center justify-center">
+          <v-card max-width="480" class="pa-8 text-center">
+            <v-icon size="64" color="error" class="mb-4">mdi-account-cancel</v-icon>
+            <v-card-title class="text-h5 mb-2">Access Denied</v-card-title>
+            <v-card-text>Your membership request was denied. Contact the organization admin for more information.</v-card-text>
+            <v-btn variant="outlined" color="primary" @click="$router.push('/login')">Back to Login</v-btn>
+          </v-card>
+        </v-container>
+      `,
+    },
     beforeEnter: requireAuth,
   },
 ];
