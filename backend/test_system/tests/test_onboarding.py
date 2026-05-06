@@ -1,11 +1,12 @@
 from django.test import TestCase, RequestFactory
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AnonymousUser
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, APIClient
 from test_system.apps.users.models import CustomUser
 from test_system.apps.organizations.models import Organization
 from test_system.permissions import IsPlatformAdmin, IsOrgAdmin
 from test_system.apis.users.serializers import UserRegistrationSerializer
+from knox.models import AuthToken
 
 
 class CustomUserFieldsTest(TestCase):
@@ -211,4 +212,77 @@ class PlatformAdminOrgApprovalTest(TestCase):
         response = self.client.post(
             f"/api/organizations/{self.pending_org.id}/approve/"
         )
+        self.assertEqual(response.status_code, 403)
+
+
+class OrgAdminMemberApprovalTest(TestCase):
+    def setUp(self):
+        from rest_framework.test import APIClient
+        from knox.models import AuthToken
+
+        self.client = APIClient()
+        self.org = Organization.objects.create(title="Test Org", is_approved=True)
+
+        self.org_admin = CustomUser.objects.create_user(
+            email="orgadmin@test.com", password="testpass123", organization=self.org
+        )
+        self.org_admin.is_org_admin = True
+        self.org_admin.org_status = "approved"
+        self.org_admin.save()
+
+        self.pending_user = CustomUser.objects.create_user(
+            email="pending@test.com", password="testpass123", organization=self.org
+        )
+        self.pending_user.org_status = "pending"
+        self.pending_user.save()
+
+        self.other_org = Organization.objects.create(title="Other Org", is_approved=True)
+        self.other_admin = CustomUser.objects.create_user(
+            email="otheradmin@test.com", password="testpass123", organization=self.other_org
+        )
+        self.other_admin.is_org_admin = True
+        self.other_admin.org_status = "approved"
+        self.other_admin.save()
+
+        _, self.admin_token = AuthToken.objects.create(self.org_admin)
+        _, self.other_admin_token = AuthToken.objects.create(self.other_admin)
+
+    def test_org_admin_can_list_pending_members(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token}")
+        response = self.client.get("/api/organizations/members/pending/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["email"], "pending@test.com")
+
+    def test_org_admin_cannot_see_other_org_pending_members(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.other_admin_token}")
+        response = self.client.get("/api/organizations/members/pending/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)
+
+    def test_org_admin_can_approve_member(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token}")
+        response = self.client.post(
+            f"/api/users/{self.pending_user.id}/approve/"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.pending_user.refresh_from_db()
+        self.assertEqual(self.pending_user.org_status, "approved")
+
+    def test_org_admin_can_deny_member(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.admin_token}")
+        response = self.client.post(
+            f"/api/users/{self.pending_user.id}/deny/"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.pending_user.refresh_from_db()
+        self.assertEqual(self.pending_user.org_status, "denied")
+
+    def test_non_org_admin_cannot_approve_member(self):
+        non_admin = CustomUser.objects.create_user(
+            email="member@test.com", password="testpass123", organization=self.org
+        )
+        _, token = AuthToken.objects.create(non_admin)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token}")
+        response = self.client.post(f"/api/users/{self.pending_user.id}/approve/")
         self.assertEqual(response.status_code, 403)

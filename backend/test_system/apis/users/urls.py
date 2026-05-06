@@ -9,4 +9,14 @@ urlpatterns = [
         views.UserGetPatchDeleteView.as_view(),
         name="UsersGetPatchDeleteView",
     ),
+    path(
+        "<uuid:user_id>/approve/",
+        views.UserApproveView.as_view(),
+        name="UserApproveView",
+    ),
+    path(
+        "<uuid:user_id>/deny/",
+        views.UserDenyView.as_view(),
+        name="UserDenyView",
+    ),
 ]

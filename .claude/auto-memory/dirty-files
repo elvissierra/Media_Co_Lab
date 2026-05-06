@@ -18,3 +18,13 @@
 /Users/g27/Desktop/Media_Co_Lab/docker-compose.yml
 /Users/g27/Desktop/Media_Co_Lab/docs/superpowers/specs/2026-05-06-onboarding-flow-design.md
 /Users/g27/Desktop/Media_Co_Lab/docs/superpowers/plans/2026-05-06-onboarding-flow.md
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/tests/__init__.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/tests/test_onboarding.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apps/users/models.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/tests/test_security.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/chats/routing.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/users/serializers.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/organizations/serializers.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/organizations/views.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/organizations/urls.py
+/Users/g27/Desktop/Media_Co_Lab/backend/test_system/apis/users/urls.py

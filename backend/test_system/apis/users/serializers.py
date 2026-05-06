@@ -88,8 +88,13 @@ class UsersGetSerializer(serializers.ModelSerializer):
         else:
             data["avatar"] = f"{settings.MEDIA_URL}default.jpg"
 
+        # Allow org admins to see email; restrict for regular users
         if request and not request.user.is_superuser:
-            sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
+            is_org_admin = getattr(request.user, "is_org_admin", False)
+            if not is_org_admin:
+                sensitive_fields = ["password", "is_superuser", "is_staff", "email"]
+            else:
+                sensitive_fields = ["password", "is_superuser", "is_staff"]
             for field in sensitive_fields:
                 data.pop(field, None)
 

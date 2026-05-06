@@ -11,7 +11,8 @@ from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import get_user_model, authenticate, login
 from rest_framework.permissions import AllowAny, IsAdminUser
-from test_system.permissions import IsUser
+from knox.auth import TokenAuthentication
+from test_system.permissions import IsUser, IsOrgAdmin
 
 
 class UserCreateView(APIView):
@@ -76,3 +77,45 @@ class UserGetPatchDeleteView(APIView):
         self.check_object_permissions(request, user)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PendingMembersView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsOrgAdmin]
+
+    def get(self, request):
+        org = request.user.organization
+        pending = CustomUser.objects.filter(organization=org, org_status="pending")
+        serializer = UsersGetSerializer(pending, many=True, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserApproveView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsOrgAdmin]
+
+    def post(self, request, user_id):
+        from test_system.apps.teams.models import Team
+        target = get_object_or_404(
+            CustomUser, id=user_id, organization=request.user.organization
+        )
+        target.org_status = "approved"
+        target.save()
+        # Auto-add to the org's first team so the user can access resources
+        first_team = Team.objects.filter(organization=request.user.organization).first()
+        if first_team:
+            target.team.add(first_team)
+        return Response({"detail": "User approved."}, status=status.HTTP_200_OK)
+
+
+class UserDenyView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsOrgAdmin]
+
+    def post(self, request, user_id):
+        target = get_object_or_404(
+            CustomUser, id=user_id, organization=request.user.organization
+        )
+        target.org_status = "denied"
+        target.save()
+        return Response({"detail": "User denied."}, status=status.HTTP_200_OK)
