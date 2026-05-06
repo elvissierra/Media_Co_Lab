@@ -32,3 +32,18 @@ class IsUser(BasePermission):
     def has_permission(self, request, view):
         user_id = view.kwargs.get("user_id")
         return request.user.id == user_id
+
+
+class IsPlatformAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated and request.user.is_staff)
+
+
+class IsOrgAdmin(BasePermission):
+    def has_permission(self, request, view):
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and request.user.is_org_admin
+            and request.user.organization is not None
+        )
