@@ -116,7 +116,6 @@
 
 <script>
 import axiosPublic from "@/axiosPublic";
-import axios from "@/axios";
 
 export default {
   name: "UserRegister",

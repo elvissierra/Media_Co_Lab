@@ -101,7 +101,11 @@ The `apps/` layer owns models; `apis/` owns serialization and HTTP handling. Kee
 ### Org & Member Approval Flows
 - **Platform admin (staff) manages orgs**: `GET /api/organizations/pending/` lists unapproved orgs; `POST /api/organizations/<id>/approve/` sets `is_approved=True`; `POST /api/organizations/<id>/deny/` hard-deletes org; all require `IsPlatformAdmin`
 - **Org admin manages members**: `GET /api/organizations/members/pending/` lists users with `org_status=pending`; `POST /api/users/<id>/approve/` sets `org_status=approved` and auto-adds user to org's first team; `POST /api/users/<id>/deny/` sets `org_status=denied`; all require `IsOrgAdmin`
-- **Demo orgs**: `POST /api/organizations/demo/` (AllowAny) creates org with `is_demo=True`; appends " demo" to title if not already present
+- **Demo orgs**: `POST /api/organizations/demo/` (AllowAny) creates org with `is_demo=True`; appends " demo" to title if it doesn't already end with "demo"
+
+### Test Coverage
+- `test_onboarding.py`: `CustomUserFields` (is_org_admin/org_status defaults), `IsPlatformAdmin`, `IsOrgAdmin`, `RegistrationSerializer` (join vs create_org paths), `PlatformAdminOrgApproval` (pending list, approve, deny)
+- `test_security.py`: `ChatOwnership` (unauthenticated→401, non-owner→403, owner→200/204), `LoginEnumeration` (wrong email and wrong password return identical 401), `PendingUserAccess` (pending org_status blocked from medias/teams/labels with 403)
 
 ### Auth
 Knox token auth. Login → receive token → send as `Authorization: Token <token>` header. Knox supports per-device token revocation and logout-all. Endpoints: `/api/auth/login/`, `/api/auth/logout/`, `/api/auth/logoutall/`. Current user data: `GET /api/users/me/` (CurrentUserView, IsAuthenticated).
